@@ -1,0 +1,14 @@
+.container{
+    overflow: auto;
+    margin-bottom: 0.5rem;
+    width: 100%;
+}
+
+.hideScrollBar{
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}

@@ -1,0 +1,33 @@
+.container{
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--clr-background);
+    border-bottom: 1px solid var(--clr-light-transparent);
+    z-index: 1;
+
+    a, button{
+        padding: 0.5rem;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        min-height: 40px;
+        min-width: 40px;
+
+        &:hover{
+            background-color: var(--clr-dark-transparent);
+        }
+    }
+
+    svg{
+        font-size: 1.4rem;
+    }
+
+    .right, .left{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+}

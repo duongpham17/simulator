@@ -1,0 +1,40 @@
+.container{
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    border: 2px solid var(--clr-light-transparent);
+    border-radius: 5px;
+    transition: 0.3s ease-in-out;
+    position: relative;
+
+    &:hover{
+        border-color: var(--clr-main);
+    }
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.noPadding{
+    padding: 0;
+}
+
+.noBorder{
+    border: 0px solid transparent
+}
+
+.border{
+    border-color: var(--clr-main);
+}
+
+.light{
+    background-color: var(--clr-light-transparent);
+}
+
+.dark{
+    background-color: var(--clr-dark-transparent);
+}
+
+.selected{
+    border-color: var(--clr-main);
+}

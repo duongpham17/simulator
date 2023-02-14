@@ -1,0 +1,47 @@
+.container{
+    .upload{
+        .inputFile{
+            display: none;
+        }
+        label{
+            display: block;
+            text-align: center;
+            border: 1px dotted var(--clr-light);
+            padding: 1rem;
+            cursor: pointer;
+            &:hover{
+                border-color: var(--clr-main);
+            }
+        }
+    }
+    .preview{
+        margin-top: 0.5rem;
+        display: inline-flex;
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.3rem;
+        img{
+            width: 60px;
+            height: 60px;
+            border: 1px solid transparent;
+
+            &:hover{
+                border-color: var(--clr-red);
+            }
+        }
+    }
+    .uploadBtn{
+        width: 100%;
+        border: 1px solid var(--clr-light);
+        padding: 0.5rem;
+        border-radius: 5px;
+        margin-top: 0.5rem;
+        background-color: var(--clr-dark-transparent);
+        color: white;
+
+        &:hover{
+            border-color: var(--clr-main);
+        }
+    }
+}

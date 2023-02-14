@@ -1,0 +1,37 @@
+.container{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    line-height: 1.2rem;
+    
+    span:first-child{
+        text-align: left;
+    }
+    span:last-child{
+        text-align: right;
+    }
+}
+
+.red{
+    span{
+        color: var(--clr-red);
+    }
+}
+
+.green{
+    span{
+        color: var(--clr-green);
+    }
+}
+
+.main{
+    span{
+        color: var(--clr-main);
+    }
+}
+
+.light{
+    span{
+        color: var(--clr-text-light);
+    }
+}

@@ -1,0 +1,45 @@
+.container{
+    .dropdownBtn{
+        border: 1px solid var(--clr-light);
+        padding: 0.5rem;
+        width: 100%;
+        transition: 0.2s ease-in-out;
+        border-radius: 5px;
+        display: flex;
+        background-color: white;
+
+        svg{
+            font-size: 1.1rem;
+        }
+
+        &:focus{
+            background-color: var(--clr-dark-transparent);
+            svg{
+                color: white;
+            }
+        }
+    
+        &:hover{
+            border-color: var(--clr-main);
+        }
+    }
+
+    .dropdownBtn:focus + .children, .children:active{
+        display: block;
+    }
+
+    .children{
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: white;
+        border: 1px solid var(--clr-light);
+        margin-top: 0.1rem;
+        width: 100px;
+        background-color: black;
+
+        button{
+            color: white;
+        }
+    }
+}

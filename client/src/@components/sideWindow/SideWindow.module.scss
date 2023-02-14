@@ -1,0 +1,106 @@
+.container{
+    position: relative;
+
+    .menuBtn{
+        display: flex;
+        padding: 0.5rem;
+        border-radius: 5px;
+         
+        svg{
+            color: var(--clr-text);
+            font-size: 1.1rem;
+        }
+
+        &:hover{
+            opacity: 0.7;
+        }
+    }
+
+    .menuBtn:focus + .cover, .cover:active{
+        display: block;
+    }
+
+    .cover{
+        position: fixed;
+        background-color: rgba(0, 0, 0, 0.755);
+        left: 0;
+        right: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        z-index: 10000;
+
+        .children{
+            background-color: var(--clr-background);
+            padding: 0.5rem;
+            position: fixed;
+            width: 200px;
+            top: 0;
+            transition: ease-in 0.2s;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            animation: in 0.2s linear forwards;
+
+            button, a{
+                margin-bottom: 0.5rem;
+            }
+
+        }
+
+        @keyframes in {
+            from {
+                right: -200px;
+            }
+            to{
+                right: 0px;
+            }
+        }
+    }
+
+
+
+    // .menuBtn:focus + .cover, .cover:active{
+    //     right: 0px;
+    //     width: 200px;
+    //     display: block;
+        
+    // }
+
+    // .children{
+    //     background-color: var(--clr-background);
+    //     padding: 0.5rem;
+    //     position: fixed;
+    //     right: -20px;
+    //     top: 0;
+    //     width: 0;
+    //     transition: ease-in 0.2s;
+    //     box-sizing: border-box;
+    //     height: 100vh;
+    //     overflow-y: auto;
+    //     overflow-x: hidden;
+
+    //     .drop{
+    //         position: relative;
+    //         z-index: 1;
+    //     }
+
+    //     button, a{
+    //         margin-bottom: 0.5rem;
+    //     }
+    // }
+
+    // .cover{
+    //     position: fixed;
+    //     background-color: rgba(0, 0, 0, 0.755);
+    //     left: 0;
+    //     right: 0;
+    //     top: 0;
+    //     width: 100%;
+    //     height: 100%;
+    //     display: none;
+    // }
+
+        
+}

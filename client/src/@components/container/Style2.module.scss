@@ -1,0 +1,20 @@
+.container{
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    border: 2px solid var(--clr-dark-transparent);
+    border-radius: 5px;
+    position: relative;
+    background-color: var(--clr-light-transparent);
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.noPadding{
+    padding: 0;
+}
+
+.dark{
+    background-color: var(--clr-dark-transparent);
+}

@@ -1,0 +1,25 @@
+.container{
+    transition: ease-in-out 0.2s;
+    &:hover{
+        background-color: var(--clr-light-transparent);
+    }
+}
+
+.border{
+    border-bottom: 2px dashed var(--clr-light-transparent);
+    padding: 0.3rem 0;
+
+    &:hover{
+        border-color: var(--clr-main);
+    }
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.selected{
+    border-color: var(--clr-main);
+    border-bottom: 1px dashed var(--clr-light);
+    background-color: var(--clr-dark-transparent);
+}

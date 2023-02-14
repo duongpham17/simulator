@@ -1,0 +1,25 @@
+.container{
+    display: flex;
+    justify-content: center;
+
+    .small{
+        
+        img{
+            cursor: pointer;
+            border: 2px solid transparent;
+            display: flex;
+            margin-bottom: 0.2rem;
+            margin-right: 0.2rem;
+            opacity: 0.5;
+
+            &:hover{
+                opacity: 1;
+            }
+        }
+
+        .selected{
+            opacity: 1;
+            border-color: var(--clr-selected);
+        }
+    }
+}

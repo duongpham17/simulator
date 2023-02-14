@@ -1,0 +1,28 @@
+.container{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    line-height: 1.2rem;
+
+    span:nth-child(1){
+        color: var(--clr-text);
+    }
+}
+
+.name-light{
+    span:nth-child(1){
+        color: var(--clr-text-light);
+    }
+}
+
+.value-red{
+    span{
+        color: var(--clr-red);
+    }
+}
+
+.value-green{
+    span{
+        color: var(--clr-green);
+    }
+}

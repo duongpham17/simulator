@@ -1,0 +1,34 @@
+.container{
+    display: grid;
+    grid-template-columns: 0.2fr minmax(300px, 1fr) 1fr;
+    gap: 0.5rem;
+    overflow: hidden;
+    grid-template-areas: 
+        "content1 content2 content3"
+    ;
+
+    .content1,  .content2, .content3{
+        padding: 0.5rem;
+    }
+
+    .content1{
+        grid-area: content1;
+        min-width: 280px;
+    }
+
+    .content2{
+        grid-area: content2;
+    }
+
+    .content3{
+        grid-area: content3;
+    }
+
+    @media (max-width: 1200px){
+        grid-template-columns: 0.2fr minmax(300px, 1fr);
+        grid-template-areas: 
+        "content1 content2"
+        "content1 content3"
+    ;
+    }
+}

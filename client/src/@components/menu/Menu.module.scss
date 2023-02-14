@@ -1,0 +1,35 @@
+.container{
+
+    .btn{
+        display: flex;
+        &:focus, &:hover{
+            svg{
+                color: var(--clr-main);
+            }
+        }
+    }
+
+    .btn:focus + .menu{
+        display: block;
+    }
+    
+    .btn:focus + .btn:active{
+        display: none;
+    }
+    .menu:active{
+        display: block;
+    }
+
+    .menu{
+        margin-top: 0.4rem;
+        display: none;
+        position: absolute;
+        right: 5px;
+        border: 2px solid var(--clr-light-transparent);
+        background-color: var(--clr-background);
+        z-index: 1;
+        padding: 0.5rem;
+        border-radius: 5px;
+        width: 120px;
+    }
+}
