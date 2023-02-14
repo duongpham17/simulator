@@ -4,7 +4,7 @@ export interface Validation {
     position_size: string,
     long: string,
     short: string,
-    trailing_take_profit: string,
+    take_profit: string,
     stop_loss: string
 }
 
@@ -18,9 +18,9 @@ export const validation = (values: Validation) => {
             errors.strategy = "*";
         }
     } 
-    if(check("trailing_take_profit")){
-        if(!values.trailing_take_profit) {
-            errors.trailing_take_profit = "*";
+    if(check("take_profit")){
+        if(!values.take_profit) {
+            errors.take_profit = "*";
         }
     } 
     if(check("stop_loss")){

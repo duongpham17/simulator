@@ -4,8 +4,9 @@ export interface IStrategiesInputsSimulate {
     strategy: string,
     short: number,
     long: number,
+    trailing_take_profit: boolean,
     stop_loss: number,
-    trailing_take_profit: number,
+    take_profit: number,
     position_size: number,
     leverage: number,
     reset: number
@@ -16,6 +17,7 @@ export interface IStrategiesInputsTrades {
     position_size: number,
     reset: number,
     leverage: number,
+    live: boolean,
 };
 
 export interface IStrategies {
@@ -27,8 +29,9 @@ export interface IStrategies {
     strategy: string,
     short: number,
     long: number,
+    trailing_take_profit: boolean,
     stop_loss: number,
-    trailing_take_profit: number,
+    take_profit: number,
     api_key: string,
     secret_key: string,
     passphrase: string, 

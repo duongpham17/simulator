@@ -14,6 +14,7 @@ export interface ISimulator {
     price_snapshot: number,
     price_open_snapshot: number,
     reset: number,
+    live: boolean,
     createdAt: Date,
 };
 

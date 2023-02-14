@@ -13,6 +13,7 @@ export interface ISimulators extends Partial<Document> {
     market_id: string,
     price_open_snapshot: number,
     reset: number,
+    live: boolean,
     createdAt: Date,
 };
 
@@ -33,6 +34,9 @@ const SimulatorsSchema = new Schema<ISimulators>({
         type: Schema.Types.ObjectId,
         ref: "Orders"
     }],
+    live: {
+        type: Boolean,
+    },
     market_id: {
         type: String,
         uppercase: true,

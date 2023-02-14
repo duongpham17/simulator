@@ -2,7 +2,7 @@ import styles from './Style2.module.scss';
 import React from 'react';
 
 interface Props {
-    name: string,
+    name: string | React.ReactNode | React.ReactElement,
     value: string | React.ReactNode | React.ReactElement,
     color?: "red" | "light" | "green",
     size?: number,

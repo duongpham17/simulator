@@ -73,7 +73,7 @@ const ElementContainer = ({data}: Props) => {
             <Flex center>
                 <Text2 name="Long" value={data.strategies.long} />
                 <Text2 name="Short" value={data.strategies.short}/>
-                <Text2 name="Take profit" value={data.strategies.trailing_take_profit}/>
+                <Text2 name="Take profit" value={data.strategies.take_profit}/>
                 <Text2 name="Stop Loss" value={data.strategies.stop_loss}/>
             </Flex>
             <Line />

@@ -35,21 +35,9 @@ const trades = (id: string) => async (dispatch: Dispatch<ACTION_TRADES>) => {
     }
 };
 
-const live = (strategy: IStrategies, simulator: ISimulator | null, order: IOrders | null) => async (dispatch: Dispatch<ACTION_TRADES>) => {
+const trade = (strategy: IStrategies, simulator: ISimulator | null, order: IOrders | null) => async (dispatch: Dispatch<ACTION_TRADES>) => {
     try{
-        const res = await api.post(`/trades/live`, {strategy, simulator, order});
-        dispatch({
-            type: TYPES_TRADES.TRADES_TRADING,
-            payload: res.data.data
-        });
-    } catch (error: any) {
-        console.log(error.response)
-    }
-};
-
-const test = (strategy: IStrategies, simulator: ISimulator | null, order: IOrders | null) => async (dispatch: Dispatch<ACTION_TRADES>) => {
-    try{
-        const res = await api.post(`/trades/test`, {strategy, simulator, order});
+        const res = await api.post(`/trades/trade`, {strategy, simulator, order});
         dispatch({
             type: TYPES_TRADES.TRADES_TRADING,
             payload: res.data.data
@@ -93,8 +81,7 @@ const clear = (key:TradesObjectKeys, value: any) => async (dispatch: Dispatch<AC
 const Trades = {
     start,
     trades,
-    live,
-    test,
+    trade,
     close,
     price,
     load,

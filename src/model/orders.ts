@@ -6,18 +6,19 @@ export interface IOrder extends Partial<Document> {
     clientOid: string,
     closed: "manual" | "bot",
     side: "buy" | "sell",
-    live: boolean,
     open_price: number,
     close_price: number,
     moving_price: number,
     stop_loss: number,
-    trailing_take_profit: number,
+    trailing_take_profit: boolean,
+    take_profit: number,
     profit_loss: number,
     position_size: number,
     leverage: number,
     strategy: string,
     closed_at_date: Date,
     open_at_date: Date,
+    live: boolean,
 }
 
 const OrdersSchema = new Schema<IOrder>({
@@ -56,8 +57,11 @@ const OrdersSchema = new Schema<IOrder>({
     stop_loss: {
         type: Number
     },
+    take_profit: {
+        type: Number
+    },
     trailing_take_profit: {
-        type: Number,
+        type: Boolean
     },
     profit_loss: {
         type: Number,
@@ -69,10 +73,6 @@ const OrdersSchema = new Schema<IOrder>({
     leverage:{
         type: Number
     },
-    live: {
-        type: Boolean,
-        default: true,
-    },
     closed_at_date: {
         type: Date,
         default: Date.now()
@@ -81,6 +81,9 @@ const OrdersSchema = new Schema<IOrder>({
         type: Date,
         default: Date.now()
     },
+    live: {
+        type: Boolean,
+    }
 });
 
 export default model<IOrder>('Orders', OrdersSchema);

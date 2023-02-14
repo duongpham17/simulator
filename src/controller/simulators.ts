@@ -20,6 +20,7 @@ export const simulators = asyncBlock(async(req: InjectUserToRequest, res: Respon
         market_id: el.market_id,
         createdAt: el.createdAt,
         prices: !el.prices ? 0 : el.prices.prices.length,
+        live: el.live
     }));
 
     res.status(200).json({
@@ -102,12 +103,12 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
                 continue;
             };
 
-            const is_take_trailing_profit = open_order.side === "buy" ? (price_current > open_order.trailing_take_profit) : (open_order.trailing_take_profit > price_current);
-            if(is_take_trailing_profit) {
+            const is_take_profit = open_order.side === "buy" ? (price_current > open_order.take_profit) : (open_order.take_profit > price_current);
+            if(is_take_profit) {
                 const updated_order: IOrder = {
                     ...open_order,
                     stop_loss: open_order.side === "buy" ? open_order.stop_loss + strategy.stop_loss : open_order.stop_loss - strategy.stop_loss,
-                    trailing_take_profit:  open_order.side === "buy" ? open_order.trailing_take_profit + strategy.trailing_take_profit : open_order.trailing_take_profit - strategy.trailing_take_profit,
+                    take_profit:  open_order.side === "buy" ? open_order.take_profit + strategy.take_profit : open_order.take_profit - strategy.take_profit,
                     moving_price: price_current,
                 };
                 open_order = updated_order
@@ -128,23 +129,23 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
             if(isBuyPrice || isSellPrice) {
                 const side = isBuyPrice ? "buy" : "sell";
                 const order: IOrder = {
+                    ...strategy,
                     open: true,
                     simulator: simulator._id,
-                    clientOid: `sim-id-${Math.random().toString(36).substring(7)}`,
                     side,
+                    clientOid: `sim-id-${Math.random().toString(36).substring(7)}`,
                     moving_price: price_current,
                     open_price: price_current,
                     stop_loss: side === "sell" ? (price_current + strategy.stop_loss) : (price_current - strategy.stop_loss),
-                    trailing_take_profit: side === "sell" ? (price_current - strategy.trailing_take_profit) : (price_current + strategy.trailing_take_profit),
+                    take_profit: side === "sell" ? (price_current - strategy.take_profit) : (price_current + strategy.take_profit),
                     position_size: strategy.position_size,
                     leverage: strategy.leverage,
                     open_at_date: p.createdAt,
-                    close_price: 0,
                     closed_at_date: new Date(),
                     profit_loss: 0,
-                    strategy: strategy.strategy,
+                    close_price: 0,
                     closed: "bot",
-                    live: false,
+                    live: simulator.live,
                 };
                 open_order = order;
             };
@@ -164,7 +165,8 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
         price_snapshot: prices[0].price,
         price_open_snapshot: prices[0].price,
         createdAt: new Date(),
-        reset: strategy.reset
+        reset: strategy.reset,
+        live: simulator.live,
     };
 
     res.status(200).json({

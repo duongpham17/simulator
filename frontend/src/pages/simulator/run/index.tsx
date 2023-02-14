@@ -15,7 +15,7 @@ import List from '@components/select/List';
 import Input from '@components/inputs/Input';
 import Button from '@components/buttons/Button';
 import Loading from '@components/loading/Boxes';
-
+import Checkbox from '@components/inputs/Checkbox';
 
 import {FaHammer} from 'react-icons/fa';
 
@@ -30,8 +30,9 @@ const Run = () => {
     reset: 0,
     short: 0,
     long: 0,
+    trailing_take_profit: false,
     stop_loss: 0,
-    trailing_take_profit: 0,
+    take_profit: 0,
     leverage: 0,
     position_size: 0,
   }
@@ -46,7 +47,7 @@ const Run = () => {
         short: Number(values.short),
         long: Number(values.long),
         stop_loss: Number(values.stop_loss),
-        trailing_take_profit: Number(values.trailing_take_profit),
+        take_profit: Number(values.trailing_take_profit),
         leverage: Number(values.leverage),
         position_size: Number(values.position_size),
     }
@@ -75,44 +76,46 @@ const Run = () => {
                 
                 <Flex>
                     <Input type="number" label1="Leverage" label2={errors.leverage} error 
-                        name="leverage" value={values.leverage || ""} onChange={onChange} 
+                        name="leverage" value={values.leverage} onChange={onChange} 
                     />
                     <Input type="number" label1="Position size" label2={errors.position_size} error={errors.position_size} 
-                        name="position_size" value={values.position_size || ""} onChange={onChange} 
+                        name="position_size" value={values.position_size} onChange={onChange} 
                     />
                 </Flex>
                 
                 { find_side(values.strategy) === "both" &&
                     <Flex>
-                        <Input type="number" label1="Long at price difference" placeholder='default 0'
-                            name="long" value={values.long || ""} onChange={onChange} 
+                        <Input type="number" label1="Long difference" placeholder='default 0'
+                            name="long" value={values.long} onChange={onChange} 
                         />
-                        <Input type="number" label1="Short at price difference" placeholder='default 0'
-                            name="short" value={values.short || ""} onChange={onChange} 
+                        <Input type="number" label1="Short difference" placeholder='default 0'
+                            name="short" value={values.short} onChange={onChange} 
                         />
                     </Flex>
                 }
 
                 { find_side(values.strategy) === "buy" &&
-                    <Input type="number" label1="Long at price difference" placeholder='default 0'
-                        name="long" value={values.long || ""} onChange={onChange} 
+                    <Input type="number" label1="Long difference" placeholder='default 0'
+                        name="long" value={values.long} onChange={onChange} 
                     />
                 }
 
                 { find_side(values.strategy) === "sell" &&
-                    <Input type="number" label1="Short at price difference" placeholder='default 0'
-                        name="short" value={values.short || ""} onChange={onChange} 
+                    <Input type="number" label1="Short difference" placeholder='default 0'
+                        name="short" value={values.short} onChange={onChange} 
                     />
                 }
 
                 <Flex>
-                    <Input type="number" label1="Trailing take profit difference" label2={errors.trailing_take_profit} error 
-                        name="trailing_take_profit" value={values.trailing_take_profit || ""} onChange={onChange} 
+                    <Input type="number" label1="Take profit difference" label2={errors.trailing_take_profit} error 
+                        name="trailing_take_profit" value={values.take_profit} onChange={onChange} 
                     />
-                    <Input type="number" label1="Stop loss at price difference" label2={errors.stop_loss} error 
-                        name="stop_loss" value={values.stop_loss || ""} onChange={onChange} 
+                    <Input type="number" label1="Stop loss difference" label2={errors.stop_loss} error 
+                        name="stop_loss" value={values.stop_loss} onChange={onChange} 
                     />
                 </Flex>
+
+                <Checkbox label="Trailing take profit" margin value={values.trailing_take_profit} onClick={() => onSetValue({trailing_take_profit: !values.trailing_take_profit})}  />
              
                 <Button label1="Start simulation" label2={<FaHammer/>} color='blue' loading={loading} />
             </>

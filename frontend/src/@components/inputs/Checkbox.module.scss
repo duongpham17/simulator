@@ -1,0 +1,26 @@
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    p{
+        text-align: left;
+        font-weight: 200;
+    }
+
+    span{
+        display: block;
+        width: 20px;
+        height: 20px;
+        background-color: var(--clr-light-transparent);
+        border: 3px double var(--clr-dark-transparent);
+    }
+    .selected{
+        background-color: var(--clr-main);
+    }
+}
+
+.margin{
+    margin: 0.5rem 0;
+}

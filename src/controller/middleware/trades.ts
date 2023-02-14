@@ -9,7 +9,6 @@ interface OrderCreateTypes {
     side: "buy" | "sell", 
     price: Price[],
     clientOid: string,
-    live?: boolean,
 }
 
 interface OrderCreateReturn {
@@ -17,7 +16,7 @@ interface OrderCreateReturn {
     order: IOrder,
 }
 
-export const order_create = async ({simulator, strategy, side, price, clientOid, live=true,}: OrderCreateTypes): Promise<OrderCreateReturn> => {
+export const order_create = async ({simulator, strategy, side, price, clientOid}: OrderCreateTypes): Promise<OrderCreateReturn> => {
 
     const price_current = price[0].price;
 
@@ -28,13 +27,14 @@ export const order_create = async ({simulator, strategy, side, price, clientOid,
         moving_price: price_current,
         open_price: price_current,
         stop_loss: side === "sell" ? (price_current + strategy.stop_loss) : (price_current - strategy.stop_loss),
-        trailing_take_profit: side === "sell" ? (price_current - strategy.trailing_take_profit) : (price_current + strategy.trailing_take_profit),
+        take_profit: side === "sell" ? (price_current - strategy.take_profit) : (price_current + strategy.take_profit),
+        trailing_take_profit: strategy.trailing_take_profit,
         position_size: strategy.position_size,
+        strategy: strategy.strategy,
         leverage: strategy.leverage,
         open_at_date: new Date(),
         closed_at_date: new Date(),
-        strategy: strategy.strategy,
-        live,
+        live: simulator.live
     });
 
     const update_simulator = await Simulators.findByIdAndUpdate(simulator._id, {
@@ -92,7 +92,7 @@ export const order_update = async ({strategy, order, price_current}: OrderUpdate
 
     const update_order = await Orders.findByIdAndUpdate(order._id, {
         stop_loss: order.side === "buy" ? order.stop_loss + strategy.stop_loss : order.stop_loss - strategy.stop_loss,
-        trailing_take_profit:  order.side === "buy" ? order.trailing_take_profit + strategy.trailing_take_profit : order.trailing_take_profit - strategy.trailing_take_profit,
+        take_profit:  order.side === "buy" ? order.take_profit + strategy.take_profit : order.take_profit - strategy.take_profit,
         moving_price: price_current
     }, 
         {new: true}

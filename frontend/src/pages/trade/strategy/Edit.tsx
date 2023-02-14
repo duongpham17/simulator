@@ -9,9 +9,13 @@ import strategies_data from '@data/strategies';
 import validation from '@validations/trading';
 
 import Button from '@components/buttons/Button';
-import SameLine from '@components/inputs/SameLine';
+import Line from '@components/line/Style1';
 import Select from '@components/select/Select';
 import List from '@components/select/List';
+import Checkbox from '@components/inputs/Checkbox';
+import Flex from '@components/flex/Flex';
+import Input from '@components/inputs/Input';
+import Label from '@components/form/Label';
 
 import {MdKeyboardArrowRight} from 'react-icons/md';
 
@@ -33,20 +37,31 @@ const Edit = ({data, setIsEdit}: Props) => {
 
     return (
         <form onSubmit={onSubmit}>
+            <Line/>
+
+            <Input label1="Name" name="name" value={values.name} onChange={onChange} error={errors.name} />
+
+            <Label label1="Trading strategy" label2={errors.strategy} error />
             <Select label1="Trading strategy" items={strategies_data} selected={values.strategy}>
-            {(strategies) => 
+            {(strategies) =>  
                 strategies.map((el, i) => 
                 <List key={i} value={el.name} hover={el.description} onClick={() => onSetValue({strategy: el.name})} />  
             )}
             </Select>
 
-            <SameLine label1="Name" name="name" value={values.name} onChange={onChange} error={errors.name} />
-            
-            <SameLine label1="Long at price difference" name="long" value={values.long} onChange={onChange}/>
-            <SameLine label1="Short at price difference" name="short" value={values.short} onChange={onChange}/>
+            <Flex>
+                <Input label1="Long difference" name="long" value={values.long} onChange={onChange}/>
+                <Input label1="Short difference" name="short" value={values.short} onChange={onChange}/>
+            </Flex>
 
-            <SameLine label1="Stop loss difference" name="stop_loss" value={values.stop_loss} onChange={onChange} />
-            <SameLine label1="Trailing take profit difference" name="trailing_take_profit" value={values.trailing_take_profit} onChange={onChange}/>
+            <Flex>
+                <Input label1="Take profit difference" name="take_profit" value={values.take_profit} onChange={onChange}/>
+                <Input label1="Stop loss difference" name="stop_loss" value={values.stop_loss} onChange={onChange} />
+            </Flex>
+
+
+            <Checkbox label="Trailing take profit" margin value={values.trailing_take_profit} onClick={() => onSetValue({trailing_take_profit: !values.trailing_take_profit})}  />
+
 
             {edited && <Button label1="Update" label2={<MdKeyboardArrowRight/>} color="blue" loading={loading} />}
         </form>

@@ -5,10 +5,11 @@ export interface IStrategiesInputsSimulate {
     short: number,
     long: number,
     stop_loss: number,
-    trailing_take_profit: number,
+    trailing_take_profit: boolean,
+    take_profit: number,
     position_size: number,
     leverage: number,
-    reset: number
+    reset: number,
 };
 
 export interface IStrategies extends Document {
@@ -20,7 +21,8 @@ export interface IStrategies extends Document {
     short: number,
     long: number,
     stop_loss: number,
-    trailing_take_profit: number,
+    trailing_take_profit: boolean,
+    take_profit: number,
     api_key: string,
     secret_key: string,
     passphrase: string,
@@ -32,6 +34,7 @@ export interface IStrategiesInputs extends IStrategies {
     position_size: number,
     leverage: number,
     reset: number,
+    live: boolean,
 };
 
 const strategiesSchema = new Schema<IStrategies>({
@@ -61,6 +64,9 @@ const strategiesSchema = new Schema<IStrategies>({
         type: Number
     },
     trailing_take_profit: {
+        type: Boolean
+    },
+    take_profit: {
         type: Number
     },
     api_key: {

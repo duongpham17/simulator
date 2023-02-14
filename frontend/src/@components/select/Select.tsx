@@ -24,7 +24,7 @@ const Select = <T,>({label1, items, selected, children, style}: Props<T>) => {
         <div className={styles.container} onClick={onClick} style={style}>
 
             <button className={styles.button} onClick={onClick}>
-                <span>{label1} {selected && <small>( {selected} )</small>} </span>
+                <p>{!selected && label1} {selected && selected} </p>
                 <span className={open ? styles.open : styles.closed}><MdOutlineKeyboardArrowRight/></span>
             </button>
 

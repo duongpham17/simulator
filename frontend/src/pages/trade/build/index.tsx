@@ -14,6 +14,7 @@ import Flex from '@components/flex/Flex';
 import Select from '@components/select/Select';
 import List from '@components/select/List';
 import Input from '@components/inputs/Input';
+import Checkbox from '@components/inputs/Checkbox';
 import Search from '@components/inputs/Search';
 import Button from '@components/buttons/Button';
 import useForm from '@hooks/useForm';
@@ -31,7 +32,8 @@ const Build = () => {
     short: 0,
     long: 0,
     stop_loss: 0,
-    trailing_take_profit: 0,
+    take_profit: 0,
+    trailing_take_profit: false,
     exchange: "",
     api_key: "",
     secret_key: "",
@@ -46,7 +48,7 @@ const Build = () => {
       short: Number(values.short),
       long: Number(values.long),
       stop_loss: Number(values.stop_loss),
-      trailing_take_profit: Number(values.trailing_take_profit),
+      take_profit: Number(values.trailing_take_profit),
     }
     await dispatch(Strategies.build(data));
   };
@@ -103,29 +105,30 @@ const Build = () => {
             <>
               {find_side(values.strategy) === "both" &&
                 <Flex>
-                  <Input type="number" label1="Long at price difference" label2={errors.long} error name="long" value={values.long} onChange={onChange} />
-                  <Input type="number" label1="Short at price difference" label2={errors.short} error name="short" value={values.short} onChange={onChange} />
+                  <Input type="number" label1="Long difference" name="long" value={values.long} onChange={onChange} />
+                  <Input type="number" label1="Short difference" name="short" value={values.short} onChange={onChange} />
                 </Flex>
               }
 
               { find_side(values.strategy) === "buy" &&
-                <Input type="number" label1="Long at price difference" label2={errors.long} error name="long" value={values.long} onChange={onChange} />
+                <Input type="number" label1="Long difference" name="long" value={values.long} onChange={onChange} />
               }
 
               { find_side(values.strategy) === "sell" &&
-                <Input type="number" label1="Short at price difference" label2={errors.short} error name="short" value={values.short} onChange={onChange} />
+                <Input type="number" label1="Short difference" name="short" value={values.short} onChange={onChange} />
               }
 
               <Flex>
-                <Input type="number" label1="Trailing take profit difference" label2={errors.trailing_take_profit} error name="trailing_take_profit" value={values.trailing_take_profit} onChange={onChange} />
-                <Input type="number" label1="Stop loss at price difference" label2={errors.stop_loss} error name="stop_loss" value={values.stop_loss} onChange={onChange} />
+                <Input type="number" label1="Take profit difference"  name="take_profit" value={values.take_profit} onChange={onChange} />
+                <Input type="number" label1="Stop loss difference" name="stop_loss" value={values.stop_loss} onChange={onChange} />
               </Flex>
+
+              <Checkbox label="Trailing take profit" margin value={values.trailing_take_profit} onClick={() => onSetValue({trailing_take_profit: !values.trailing_take_profit})}  />
+
             </>
           }
 
-          {values.strategy &&
-            <Button label1="Build" label2={<FaHammer/>} color='blue' loading={loading} />
-          }
+          {values.strategy && <Button label1="Build" label2={<FaHammer/>} color='blue' loading={loading} /> }
 
         </>
       </Form>

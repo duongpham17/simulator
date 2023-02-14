@@ -15,7 +15,7 @@ const TradesGlobal = () => {
 
     if(!isTrading || !inputs || !strategy) return;
 
-    const onRun = () => dispatch(Trades.test({...strategy, ...inputs}, trading || null, orders ? orders.slice(-1)[0] : null));
+    const onRun = () => dispatch(Trades.trade({...strategy, ...inputs}, trading || null, orders ? orders.slice(-1)[0] : null));
     timeout = setTimeout(onRun, 1000);
   
     return () => clearTimeout(timeout);

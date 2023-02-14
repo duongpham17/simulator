@@ -1,6 +1,6 @@
 @mixin color($color, $border) {
     color: $color;
-    background-color: rgba(0, 0, 0, 0.328);
+    background-color: rgba(0, 0, 0, 0.779);
     border: 2px solid var(--clr-light-transparent);
     border-top: 2px solid $border;
     text-align: center;

@@ -10,6 +10,8 @@ import Input from '@components/inputs/Input';
 import Flex from '@components/flex/Flex';
 import Text from '@components/text/Style1';
 import Spinner from '@components/loading/Spinner';
+import Form from '@components/form/Form';
+import Label from '@components/form/Label';
 import useForm from '@hooks/useForm';
 import validation from '@validations/trading';
 
@@ -17,7 +19,7 @@ const Run = () => {
 
   const dispatch = useAppDispatch();
 
-  const {price_snapshot, isTrading} = useAppSelector(state => state.trades);
+  const {price_snapshot, isTrading, trading} = useAppSelector(state => state.trades);
 
   const previous = localGet("previous-trade-inputs");
 
@@ -25,10 +27,11 @@ const Run = () => {
     usdt_balance: previous.usdt_balance || 0,
     position_size: previous.position_size || 0,
     reset: previous.reset || 0,
-    leverage: previous.leverage || 1
+    leverage: previous.leverage || 1,
+    live: true,
   };
 
-  const {values, errors, onChange, onSubmit} = useForm(initialState, callback, validation);
+  const {values, errors, onChange, onSubmit, onSetValue} = useForm(initialState, callback, validation);
 
   const position_size = (): number => (values.position_size / price_snapshot) / 10 / values.leverage;
 
@@ -39,53 +42,63 @@ const Run = () => {
       usdt_balance: Math.abs(values.usdt_balance),
       position_size: Math.abs(values.position_size),
       reset: Math.abs(values.reset) || 0,
-      leverage: 0 >= values.leverage ? 1 : Math.abs(values.leverage)
+      leverage: 0 >= values.leverage ? 1 : Math.abs(values.leverage),
     }
-    dispatch(Trades.start(inputs));
+    dispatch(Trades.start({...values, ...inputs}));
     localSet("previous-trade-inputs", inputs)
   };
 
+  const onChangeEnvironment = () => {
+    if(trading) return;
+    onSetValue({live: !values.live})
+  }
+
   return (
-    <Container>
-      <form onSubmit={onSubmit}>
-        <Button label1={!isTrading ? "Start trading" : "Stop trading"} label2={isTrading ? <Spinner size={15} color="white" /> : <MdPlayArrow/>} color="blue" style={{"marginBottom": "0.5rem"}}/>
-        {!isTrading &&
-          <>
-            <Input disabled={isTrading} type="number" label1="Reset price snapshot in minutes" label2="optional" placeholder='minutes (default never reset)'
-              name="reset" value={values.reset || ""} onChange={onChange} 
-            />
+    <Form onSubmit={onSubmit} button={false}>
+        <Container>
+            <Button label1={!isTrading ? "Start trading" : "Stop trading"} label2={isTrading ? <Spinner size={15} color="white" /> : <MdPlayArrow/>} color="blue" style={{"marginBottom": "0.5rem"}}/>
 
-            <Flex>
-              <Input disabled={isTrading} type="number" label1="Usdt balance" label2={errors.usdt_balance} error 
-                name="usdt_balance" value={values.usdt_balance || ""} onChange={onChange} 
-              />
+            {!isTrading &&
+              <>
 
-              <Input disabled={isTrading} type="number" label1="Position size" label2={errors.position_size} error 
-                name="position_size" value={values.position_size || ""} onChange={onChange} 
-              />
-              <Input disabled={isTrading} type="number" label1="Leverage" label2={errors.leverage} error placeholder='(optional) default is 1' 
-                name="leverage" value={values.leverage || ""} onChange={onChange} 
-              />
-            </Flex>
+                <Label label1="Environment" label2={!trading && "Once set cannot change"}/>
+                <Button label1={values.live ? "Live" : "Test"} onClick={onChangeEnvironment} type="button" color='light' style={{"marginBottom": "0.5rem"}}/>
 
-            <Text name={"Estimated cost"} value={`£${position_size().toFixed(2)}`} />
+                <Input disabled={isTrading} type="number" label1="Reset price snapshot in minutes" label2="optional" placeholder='minutes (default never reset)'
+                  name="reset" value={values.reset || ""} onChange={onChange} 
+                />
 
-            {position_size() > values.usdt_balance ? <Text name="" value="Position size must be less than usdt balance" valueColor="red"/> : ""}
-            
-          </>
-        }
+                <Flex>
+                  <Input disabled={isTrading} type="number" label1="Usdt balance" label2={errors.usdt_balance} error 
+                    name="usdt_balance" value={values.usdt_balance || ""} onChange={onChange} 
+                  />
 
-        {isTrading &&
-          <>
-            <Text name="Usdt balance $" value={values.usdt_balance} />
-            <Text name="Reset price snapsnot" value={`${values.reset} minutes`} />
-            <Text name="Position size" value={values.position_size} />
-            <Text name="Leverage" value={`${values.leverage === 0 ? 1 : values.leverage}x`} />
-          </>
-        }
+                  <Input disabled={isTrading} type="number" label1="Position size" label2={errors.position_size} error 
+                    name="position_size" value={values.position_size || ""} onChange={onChange} 
+                  />
+                  <Input disabled={isTrading} type="number" label1="Leverage" label2={errors.leverage} error placeholder='(optional) default is 1' 
+                    name="leverage" value={values.leverage || ""} onChange={onChange} 
+                  />
+                </Flex>
 
-      </form>
-    </Container>
+                <Text name={"Estimated cost"} value={`£${position_size().toFixed(2)}`} />
+
+                {position_size() > values.usdt_balance ? <Text name="" value="Position size must be less than usdt balance" valueColor="red"/> : ""}
+                
+              </>
+            }
+
+            {isTrading &&
+              <>
+                <Text name="Environment" value={values.live ? "Live" : "Test"} />
+                <Text name="Reset price snapsnot" value={`${values.reset} minutes`} />
+                <Text name="Usdt balance" value={`$${values.usdt_balance}`} />
+                <Text name="Position size" value={values.position_size} />
+                <Text name="Leverage" value={`${values.leverage === 0 ? 1 : values.leverage}x`} />
+              </>
+            }
+        </Container>
+    </Form>
   )
 }
 

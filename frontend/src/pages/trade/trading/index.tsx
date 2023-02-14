@@ -55,15 +55,18 @@ const Running = ({orders, strategy, trading, price_latest, isTrading}: PropsRunn
 
     const profit_loss = profit_calculator(trade.side, trade.open_price, price_latest)
 
-    const trailing_take_profit_difference = calc_difference(trade.trailing_take_profit, price_latest).toFixed(5)
+    const take_profit_difference = calc_difference(trade.take_profit, price_latest).toFixed(5)
 
     const stop_loss_difference = calc_difference(trade.stop_loss, price_latest).toFixed(5)
 
     return( trade ? 
             <Container1 background='dark'>
                 <Flex>
-                    <Text3 name={`${strategy.market_id} ${date(trade.open_at_date)}`} value={""}/>
+                    <Text3 name={<span> {strategy.market_id} &#x2022; {date(trade.open_at_date)} </span>} value={""}/>
                     { isTrading && <Button label1={"Close"} color="light" style={{"padding": "0.3rem"}} onClick={() => onCloseOrder(trade)} loading={isClosing}/>}
+                </Flex>
+                <Flex>
+                    <Text3 name={<span> {strategy.strategy} &#x2022; {strategy.trailing_take_profit ? "trailing" : "take"} </span>} value={""}/>
                 </Flex>
                 <Flex padding={{top: 5, bottom: 5}}>
                     <Text2 name="Side" value={trade.side.toUpperCase()}/>
@@ -72,12 +75,12 @@ const Running = ({orders, strategy, trading, price_latest, isTrading}: PropsRunn
                 </Flex>
                 <Flex padding={{top: 5, bottom: 5}}>
                     <Text2 name="Position size" value={trade.position_size}/>
-                    <Text2 name="Trailing profit" value={trade.trailing_take_profit.toFixed(5)} color="green"/>
+                    <Text2 name="Take profit" value={trade.take_profit.toFixed(5)} color="green"/>
                     <Text2 name="Stop loss" value={trade.stop_loss.toFixed(5)} color="red"/>
                 </Flex>
                 <Flex>
                     <Text2 name="Profit/Loss" value={`${(profit_loss * trade.position_size).toFixed(2)}`} color={profit_loss >= 0 ? "green" : "red"}/>
-                    <Text2 name="Difference" value={trailing_take_profit_difference} color="green"/>
+                    <Text2 name="Difference" value={take_profit_difference} color="green"/>
                     <Text2 name="Difference" value={stop_loss_difference} color="red"/>
                 </Flex>
             </Container1>

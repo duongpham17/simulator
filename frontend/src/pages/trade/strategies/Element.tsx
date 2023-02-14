@@ -60,9 +60,12 @@ const Edit = ({strategy, query_strategy_id, setQuery}:Props) => {
                 <Text name="Short" value={strategy.short} />
 
                 <Line/>
-
+                <Text name="Take profit" value={strategy.take_profit} />
                 <Text name="Stop loss" value={strategy.stop_loss} />
-                <Text name="Trailing take profit" value={strategy.trailing_take_profit} />
+
+                <Line/>
+
+                <Text name="Trailing take profit" value={strategy.trailing_take_profit.toString()} />
 
                 {!isTrading && <Line/>}
 
