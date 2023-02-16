@@ -1,10 +1,11 @@
 .container{
     margin-bottom: 0.5rem;
     padding: 0.5rem;
-    border: 2px solid var(--clr-dark-transparent);
+    border: 1px solid var(--clr-dark-transparent);
     border-radius: 5px;
     position: relative;
     background-color: var(--clr-light-transparent);
+    width: 100%;
 }
 
 .pointer{
@@ -17,4 +18,8 @@
 
 .dark{
     background-color: var(--clr-dark-transparent);
+}
+
+.light{
+    background-color: var(--clr-light-transparent);
 }

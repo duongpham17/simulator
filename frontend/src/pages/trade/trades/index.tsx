@@ -31,7 +31,7 @@ const TradesContainer = () => {
         <>
             {trades && !isTrading &&
                 <Hidden hide={!trading ? false : true}>
-                    <Swiper data={trades} slidersPerView={3} pagination="bullets">
+                    <Swiper data={trades} slidersPerView={3} pagination="fraction">
                         {(el) => 
                             <Element key={el._id} border pointer onClick={() => onLoading(() => dispatch(Trades.load(el._id)))} selected={loading} loading={loading}>
                                 <Text3 name={date(el.createdAt)} value={""} size={14}/>
@@ -44,7 +44,7 @@ const TradesContainer = () => {
             }
 
             {trading && !isTrading &&
-                <Button label1="Reload trading data" label2={<AiFillDatabase/>} onClick={onChangeDataSet} color="light" style={{"marginBottom": "0.5rem"}} />
+                <Button label1="Reload trading data" label2={<AiFillDatabase/>} onClick={onChangeDataSet} color="dark" style={{"marginBottom": "0.5rem"}} />
             }
         </>
     )

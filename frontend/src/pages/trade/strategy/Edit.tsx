@@ -16,6 +16,7 @@ import Checkbox from '@components/inputs/Checkbox';
 import Flex from '@components/flex/Flex';
 import Input from '@components/inputs/Input';
 import Label from '@components/form/Label';
+import Form from '@components/form/Form';
 
 import {MdKeyboardArrowRight} from 'react-icons/md';
 
@@ -36,35 +37,35 @@ const Edit = ({data, setIsEdit}: Props) => {
     };
 
     return (
-        <form onSubmit={onSubmit}>
-            <Line/>
+        <Form onSubmit={onSubmit} button={false}>
+            <>
+                <Line/>
 
-            <Input label1="Name" name="name" value={values.name} onChange={onChange} error={errors.name} />
+                <Input label1="Name" name="name" value={values.name} onChange={onChange} error={errors.name} />
 
-            <Label label1="Trading strategy" label2={errors.strategy} error />
-            <Select label1="Trading strategy" items={strategies_data} selected={values.strategy}>
-            {(strategies) =>  
-                strategies.map((el, i) => 
-                <List key={i} value={el.name} hover={el.description} onClick={() => onSetValue({strategy: el.name})} />  
-            )}
-            </Select>
+                <Label label1="Trading strategy" label2={errors.strategy} error />
+                <Select label1="Trading strategy" items={strategies_data} selected={values.strategy}>
+                {(strategies) =>  
+                    strategies.map((el, i) => 
+                    <List key={i} value={el.name} hover={el.description} onClick={() => onSetValue({strategy: el.name})} />  
+                )}
+                </Select>
 
-            <Flex>
-                <Input label1="Long difference" name="long" value={values.long} onChange={onChange}/>
-                <Input label1="Short difference" name="short" value={values.short} onChange={onChange}/>
-            </Flex>
+                <Flex>
+                    <Input label1="Long difference" name="long" value={values.long} onChange={onChange}/>
+                    <Input label1="Short difference" name="short" value={values.short} onChange={onChange}/>
+                </Flex>
 
-            <Flex>
-                <Input label1="Take profit difference" name="take_profit" value={values.take_profit} onChange={onChange}/>
-                <Input label1="Stop loss difference" name="stop_loss" value={values.stop_loss} onChange={onChange} />
-            </Flex>
+                <Flex>
+                    <Input label1="Take profit difference" name="take_profit" value={values.take_profit} onChange={onChange}/>
+                    <Input label1="Stop loss difference" name="stop_loss" value={values.stop_loss} onChange={onChange} />
+                </Flex>
 
+                <Checkbox label="Trailing take profit" value={values.trailing_take_profit} onClick={() => onSetValue({trailing_take_profit: !values.trailing_take_profit})} background="light"/>
 
-            <Checkbox label="Trailing take profit" margin value={values.trailing_take_profit} onClick={() => onSetValue({trailing_take_profit: !values.trailing_take_profit})}  />
-
-
-            {edited && <Button label1="Update" label2={<MdKeyboardArrowRight/>} color="blue" loading={loading} />}
-        </form>
+                {edited && <Button label1="Update" label2={<MdKeyboardArrowRight/>} color="blue" loading={loading} />}
+            </>
+        </Form>
     )
 }
 

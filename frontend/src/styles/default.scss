@@ -49,10 +49,10 @@ input{
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: black;
+    background: var(--clr-dark-transparent);
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: rgb(139, 139, 139);
+    background: var(--clr-light)
 }

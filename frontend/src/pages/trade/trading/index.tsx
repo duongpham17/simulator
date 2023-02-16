@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
+
 import { useAppDispatch, useAppSelector } from '@redux/hooks/useRedux';
-import { IOrders } from '@redux/types/trades';
+import { IOrders } from '@redux/types/orders';
 import { ISimulator } from '@redux/types/simulators';
 import { IStrategies } from '@redux/types/strategies';
-import { date, timerGreater24 } from '@utils/functions';
-import { find_side } from '@data/strategies';
 import Trades from '@redux/actions/trades';
 
-import Container1 from '@components/container/Style1';
-import Container2 from '@components/container/Style2';
+import { date, timerGreater24 } from '@utils/functions';
+import { find_side } from '@data/strategies';
+
+import Container from '@components/container/Style1';
 import Text2 from '@components/text/Style2';
 import Text3 from '@components/text/Style3';
 import Flex from '@components/flex/Flex';
@@ -60,7 +61,7 @@ const Running = ({orders, strategy, trading, price_latest, isTrading}: PropsRunn
     const stop_loss_difference = calc_difference(trade.stop_loss, price_latest).toFixed(5)
 
     return( trade ? 
-            <Container1 background='dark'>
+            <Container background='dark'>
                 <Flex>
                     <Text3 name={<span> {strategy.market_id} &#x2022; {date(trade.open_at_date)} </span>} value={""}/>
                     { isTrading && <Button label1={"Close"} color="light" style={{"padding": "0.3rem"}} onClick={() => onCloseOrder(trade)} loading={isClosing}/>}
@@ -83,7 +84,7 @@ const Running = ({orders, strategy, trading, price_latest, isTrading}: PropsRunn
                     <Text2 name="Difference" value={take_profit_difference} color="green"/>
                     <Text2 name="Difference" value={stop_loss_difference} color="red"/>
                 </Flex>
-            </Container1>
+            </Container>
         : 
             null
     )
@@ -146,7 +147,7 @@ const Waiting = ({trading, strategy, price_latest}: PropsWaiting) => {
     const side = find_side(strategy.strategy);
 
     return(
-        <Container2>
+        <Container background='dark'>
 
             <Flex>
                 <Text2 name="$Snapshot" value={trading.price_snapshot}/>
@@ -178,7 +179,7 @@ const Waiting = ({trading, strategy, price_latest}: PropsWaiting) => {
                 </Flex>
             }
 
-        </Container2>
+        </Container>
     )
 }
 

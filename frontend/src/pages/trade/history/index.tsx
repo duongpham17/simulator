@@ -1,5 +1,5 @@
 import { IStrategies } from '@redux/types/strategies';
-import { IOrders } from '@redux/types/trades';
+import { IOrders } from '@redux/types/orders';
 import { useAppSelector } from '@redux/hooks/useRedux';
 
 import useOpen from '@hooks/useOpen';
@@ -61,7 +61,7 @@ const Orders = ({orders, strategy}: Props) => {
         <Pagination data={[...orders].reverse().filter(el => el.open !== true)}>
             {(el) => 
                 <Element key={el._id} onClick={() => onOpenItems(el._id)} selected={openItems.includes(el._id)} style={{"padding": "0.5rem"}}>
-                    <Text1 name={<span>{el.side.toUpperCase()} &#x2022; { strategy.market_id.toLowerCase()} &#x2022; {el.closed} &#x2022; {el.trailing_take_profit ? "trailing" : "take"}</span>} nameColor="default" value={el.profit_loss.toFixed(2)} valueColor={el.profit_loss >= 0 ? "green" : "red"}/>
+                    <Text1 name={<>{el.side.toUpperCase()} &#x2022; { strategy.market_id.toLowerCase()} &#x2022; {el.closed} &#x2022; {el.trailing_take_profit ? "trailing" : "take"}</>} nameColor="default" value={el.profit_loss.toFixed(2)} valueColor={el.profit_loss >= 0 ? "green" : "red"}/>
                     <Text3 color='light' name={el.strategy} value={`${date(el.closed_at_date)}`} size={14} />
                     {openItems.includes(el._id) &&
                         <>

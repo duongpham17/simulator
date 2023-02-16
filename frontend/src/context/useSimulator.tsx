@@ -1,9 +1,10 @@
 import React, {useEffect, createContext} from 'react';
 
-import useFetch from '@redux/hooks/useFetch';
-
 import Simulator from '@redux/actions/simulators';
+import useFetch from '@redux/hooks/useFetch';
 import useQuery from '@hooks/useQuery';
+
+import {localGet} from '@utils/localstorage';
 
 export interface PropsTypes {
 
@@ -19,18 +20,22 @@ export const UseSimulatorContext = ({children}: {children: React.ReactNode}) => 
 
     const {dispatch} = useFetch(Simulator.simulators());
  
-    const {getQueryValue, location} = useQuery();
+    const {getQueryValue, setQuery} = useQuery();
 
     const queryValue = getQueryValue("simulator");
 
-    useEffect(() => {
-        if(queryValue) dispatch(Simulator.simulator(queryValue));
-    }, [dispatch, location, queryValue]);
+    const localValue = JSON.parse(localGet("simulator-id"));
 
-    const value = {
-        dispatch
-    };
-  
+    useEffect(() => {
+        if(queryValue && localValue) dispatch(Simulator.simulator(queryValue || localValue));
+    }, [dispatch, queryValue, localValue]);
+
+    useEffect(() => {
+        if(!queryValue && localValue) setQuery("simulator", queryValue|| localValue);
+    }, [setQuery, queryValue, localValue]);
+
+    const value = {}
+
     return (
         <Context.Provider value={value}>
             {children}

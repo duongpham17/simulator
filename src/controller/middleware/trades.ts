@@ -21,6 +21,7 @@ export const order_create = async ({simulator, strategy, side, price, clientOid}
     const price_current = price[0].price;
 
     const order = await Orders.create({
+        user: simulator.user,
         simulator: simulator._id,
         clientOid,
         side,

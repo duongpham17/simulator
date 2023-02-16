@@ -4,13 +4,14 @@ interface Props {
     label: string,
     value: boolean | undefined | null,
     margin?: boolean,
+    background?: "light" | "dark",
     onClick: () => void,
 };
 
-const Checkbox = ({label, onClick, value, margin}:Props) => {
+const Checkbox = ({label, onClick, value, margin, background}:Props) => {
     
   return (
-    <button type="button" className={`${styles.container} ${margin ? styles.margin : ""}`} onClick={onClick}>
+    <button type="button" className={`${styles.container} ${margin ? styles.margin : ""} ${styles[background || ""]}`} onClick={onClick}>
 
         <p>{label}</p>
 

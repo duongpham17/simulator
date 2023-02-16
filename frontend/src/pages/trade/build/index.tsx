@@ -17,6 +17,7 @@ import Input from '@components/inputs/Input';
 import Checkbox from '@components/inputs/Checkbox';
 import Search from '@components/inputs/Search';
 import Button from '@components/buttons/Button';
+import Line from '@components/line/Style1';
 import useForm from '@hooks/useForm';
 
 import {FaHammer} from 'react-icons/fa';
@@ -54,10 +55,13 @@ const Build = () => {
   };
 
   return (
-    <Summary title="Build trading bot" style={{"marginBottom": "0.5rem"}} open={false} iconOpen={<FaHammer/>}>
+    <Summary title="Build trading bot" open={false} iconOpen={<FaHammer/>} background="dark">
 
       <Form onSubmit={onSubmit} button={false}>
         <>
+        
+          <Line />
+
           <Label label1="Crypto exchange" label2={errors.exchange} error />
           <Select label1="Select" items={exchanges_data} selected={values.exchange}>
             {(exchanges) => 
@@ -76,9 +80,9 @@ const Build = () => {
 
           { values.secret_key && values.api_key && values.passphrase &&
             <>
+              <Line />
 
               <Input type="text" label1="Name of script" label2={errors.name} error name="name" value={values.name} onChange={onChange} />
-
               <Search 
                 data={kucoin_futures_usdt_pairs}
                 label1="Market id" 
@@ -89,7 +93,6 @@ const Build = () => {
                 onChange={onChange}
                 onSelectValue={(value) => onSetValue({market_id: value})}
               />
-
               <Label label1="Trading strategy" label2={errors.strategy} error />
               <Select label1="Select" items={strategies_data} selected={values.strategy}>
                 {(strategies) => 
@@ -97,12 +100,12 @@ const Build = () => {
                     <List key={i} value={el.name} hover={el.description} onClick={() => onSetValue({strategy: el.name})} />  
                 )}
               </Select>
-
             </>
           }
 
           {values.strategy &&
             <>
+              <Line />
               {find_side(values.strategy) === "both" &&
                 <Flex>
                   <Input type="number" label1="Long difference" name="long" value={values.long} onChange={onChange} />
@@ -123,8 +126,7 @@ const Build = () => {
                 <Input type="number" label1="Stop loss difference" name="stop_loss" value={values.stop_loss} onChange={onChange} />
               </Flex>
 
-              <Checkbox label="Trailing take profit" margin value={values.trailing_take_profit} onClick={() => onSetValue({trailing_take_profit: !values.trailing_take_profit})}  />
-
+              <Checkbox label="Trailing take profit" margin value={values.trailing_take_profit} onClick={() => onSetValue({trailing_take_profit: !values.trailing_take_profit})} background="light" />
             </>
           }
 

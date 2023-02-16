@@ -28,10 +28,10 @@ const Style1 = <T,>({data, children, slidersPerView=5, pagination="fraction"}: P
     return (
         <div className={styles.container}>
 
-           { pages > 1 &&
+           { data.length - 2 > 0 &&
                 <div className={styles.navBtn} >
                     <button ref={navigationPrevRef}><MdOutlineKeyboardArrowLeft/></button>
-                    {pagination === "fraction" && <p>{realIndex} / {pages}</p>}
+                    {pagination === "fraction" && <small>{realIndex} / {data.length-2}</small>}
                     {pagination === "bullets" && 
                         <div className={styles.bullets}>
                             {[...new Array(pages)].map((_, index) => <button className={`${styles.bullet} ${index+1 === realIndex && styles.selected}`} key={index} />)}
@@ -41,25 +41,27 @@ const Style1 = <T,>({data, children, slidersPerView=5, pagination="fraction"}: P
                 </div>
             }
 
-            <Swiper 
-                className={styles.swiper}
-                modules={[Navigation, Pagination]} 
-                spaceBetween={5} 
-                slidesPerView={slidersPerView} 
-                onRealIndexChange={(el) => setRealIndex(el.activeIndex+1) }
-                navigation={{
-                    prevEl: navigationPrevRef.current,
-                    nextEl: navigationNextRef.current,
-                }} 
+            {!!data.length && 
+                <Swiper 
+                    className={styles.swiper}
+                    modules={[Navigation, Pagination]} 
+                    spaceBetween={5} 
+                    slidesPerView={slidersPerView} 
+                    onRealIndexChange={(el) => setRealIndex(el.activeIndex+1) }
+                    navigation={{
+                        prevEl: navigationPrevRef.current,
+                        nextEl: navigationNextRef.current,
+                    }} 
                 >
 
-                {data.map((element, index) => 
-                    <SwiperSlide key={index}>
-                        {children(element)}
-                    </SwiperSlide>
-                )}
+                    {data.map((element, index) => 
+                        <SwiperSlide key={index}>
+                            {children(element)}
+                        </SwiperSlide>
+                    )}
 
-            </Swiper>
+                </Swiper>
+            }
 
         </div>
   )

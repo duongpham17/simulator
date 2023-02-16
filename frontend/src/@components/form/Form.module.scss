@@ -9,12 +9,11 @@
 }
 @keyframes spinner {
     to{
-    transform: rotate(360deg);
+        transform: rotate(360deg);
     }
 }
 
 .container{
-    margin: 0.5rem auto;
     min-width: 200px;
     .button{
         border: 1px solid var(--clr-light-transparent);

@@ -86,7 +86,6 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
         
         if(open_order) {
             const is_stop_loss = open_order.side === "buy" ? (open_order.stop_loss > price_current) : (price_current > open_order.stop_loss);
-
             const is_last_iteration = time_current === last_price_date;
             if(is_stop_loss || is_last_iteration) {
                 const order_closed: IOrder = {
@@ -103,17 +102,37 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
                 continue;
             };
 
-            const is_take_profit = open_order.side === "buy" ? (price_current > open_order.take_profit) : (open_order.take_profit > price_current);
-            if(is_take_profit) {
-                const updated_order: IOrder = {
-                    ...open_order,
-                    stop_loss: open_order.side === "buy" ? open_order.stop_loss + strategy.stop_loss : open_order.stop_loss - strategy.stop_loss,
-                    take_profit:  open_order.side === "buy" ? open_order.take_profit + strategy.take_profit : open_order.take_profit - strategy.take_profit,
-                    moving_price: price_current,
+            if(!open_order.trailing_take_profit){
+                const is_take_profit = open_order.side === "buy" ? (price_current > open_order.take_profit) : (open_order.take_profit > price_current);
+                if(is_take_profit) {
+                    const order_closed: IOrder = {
+                        ...open_order,
+                        open: false,
+                        closed_at_date: p.createdAt,
+                        close_price: price_current,
+                        profit_loss: open_order.side === "buy" ? (price_current - open_order.open_price) * open_order.position_size : (open_order.open_price - price_current) * open_order.position_size,
+                        closed: "bot",
+                    };
+                    orders.push(order_closed);
+                    price_snapshot = price_current;
+                    open_order = undefined;
+                    continue;
                 };
-                open_order = updated_order
-                continue;
-            };
+            }
+    
+            if(open_order.trailing_take_profit){
+                const is_take_profit = open_order.side === "buy" ? (price_current > open_order.take_profit) : (open_order.take_profit > price_current);
+                if(is_take_profit) {
+                    const updated_order: IOrder = {
+                        ...open_order,
+                        stop_loss: open_order.side === "buy" ? open_order.stop_loss + strategy.stop_loss : open_order.stop_loss - strategy.stop_loss,
+                        take_profit:  open_order.side === "buy" ? open_order.take_profit + strategy.take_profit : open_order.take_profit - strategy.take_profit,
+                        moving_price: price_current,
+                    };
+                    open_order = updated_order
+                    continue;
+                };
+            }
         };
 
         const isResetTimer = !strategy.reset ? false : time_current > initial_reset_timer;
@@ -130,8 +149,9 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
                 const side = isBuyPrice ? "buy" : "sell";
                 const order: IOrder = {
                     ...strategy,
-                    open: true,
+                    user: simulator.user,
                     simulator: simulator._id,
+                    open: true,
                     side,
                     clientOid: `sim-id-${Math.random().toString(36).substring(7)}`,
                     moving_price: price_current,

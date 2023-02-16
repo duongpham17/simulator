@@ -31,7 +31,7 @@ const Simulator = () => {
 
   return ( simulator 
     ?
-      <Container>
+      <Container background='dark' style={{"marginBottom": "0.5rem"}}>
         <Flex center>
           <Text2 name="Trades" value={simulator.orders.length} />
           <Text2 name="%Win" value={win_rate()}  />

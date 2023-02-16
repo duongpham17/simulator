@@ -1,6 +1,6 @@
 .container{
     display: grid;
-    grid-template-columns: 0.2fr minmax(300px, 1fr) 1fr;
+    grid-template-columns: 0.4fr minmax(300px, 1fr) 1fr;
     gap: 0.5rem;
     overflow: hidden;
     grid-template-areas: 

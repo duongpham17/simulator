@@ -1,7 +1,8 @@
 import { api } from '@redux/api';
 import { Dispatch } from 'redux';
 import { IStrategies, IStrategiesInputsTrades } from '@redux/types/strategies';
-import { ACTION_TRADES, TYPES_TRADES, IOrders, TradesObjectKeys} from '@redux/types/trades';
+import { IOrders } from '@redux/types/orders';
+import { ACTION_TRADES, TYPES_TRADES, TradesObjectKeys} from '@redux/types/trades';
 import {ISimulator} from '@redux/types/simulators';
 
 const start = (inputs: IStrategiesInputsTrades) => async (dispatch: Dispatch<ACTION_TRADES>) => {

@@ -1,5 +1,4 @@
 .container{
-    margin-bottom: 0.5rem;
     width: 100%;
 
     .navBtn{
@@ -13,7 +12,7 @@
             align-items: center;
 
             svg{
-                font-size: 1.5rem;
+                font-size: 1rem;
             }
 
             &:hover{
@@ -37,5 +36,9 @@
         .selected{
             background-color: var(--clr-main);
         }
+    }
+
+    .swiper{
+        margin-bottom: 0.5rem;
     }
 }

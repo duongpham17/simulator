@@ -18,8 +18,8 @@ const Trade = () => {
   const {strategy} = useAppSelector(state => state.strategies)
 
   return (
-    <div className={styles.container}>
-      <UseTradeContext>
+    <UseTradeContext>
+      <div className={styles.container}>
 
         <div className={styles.content1}>
           <Build/>
@@ -28,7 +28,7 @@ const Trade = () => {
         </div>
 
         {strategy &&
-        <>
+          <>
             <div className={styles.content2}>
               <Trades />
 
@@ -49,9 +49,9 @@ const Trade = () => {
             </div>
           </>
         }
-        
-      </UseTradeContext>
-    </div>
+
+      </div>
+    </UseTradeContext>
   )
 }
 

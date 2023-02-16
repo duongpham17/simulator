@@ -17,16 +17,17 @@ const Search = ({color, label1, label2, error, borderBottom, data, value, onSele
 
     const [isSelected, setIsSelected] = useState(false);
 
-    const results: string[] = value && data.filter((el: string) => el.toLowerCase().includes(value));
+    const results: string[] = value && data.filter((el: string) => el.toLowerCase().includes(value.toLowerCase()));
 
     const onSelect = (value: string) => {
+        onSelectValue(value);
         setIsSelected(true);
-        onSelectValue(value)
     };
 
     useEffect(() => {
+        if(data.includes(value)) return;
         setIsSelected(false);
-    }, [value])
+    }, [value, data]);
     
     return (
         <div className={styles.container}>
@@ -47,14 +48,19 @@ const Search = ({color, label1, label2, error, borderBottom, data, value, onSele
             <input 
                 {...props} 
                 className={`${styles[color ? color : "plain"]} ${borderBottom ? styles.borderBottom : styles.border}` } 
-                value={value}
+                value={value.toLowerCase()}
             />
 
-            {!!results.length && !isSelected && <div className={styles.search}>
-                {results.map((el: string) => 
-                    <button className={styles.element} key={el} onClick={() => onSelect(el)}>{el}</button>    
-                )}
-            </div>}
+            {
+                !!results.length && !isSelected && <div className={styles.search}>
+                    {results.map((el: string) => 
+                        <button className={styles.element} key={el} onClick={() => onSelect(el)}>
+                            <span>{el}</span>
+                            <span>&#8592;</span>
+                        </button>    
+                    )}
+                </div>
+            }
 
         </div>
   )

@@ -3,29 +3,36 @@ import React, {useState} from 'react';
 import {MdKeyboardArrowRight} from 'react-icons/md';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement>{
-    title: string,
-    small? : string| React.ReactElement,
+    title: any,
+    small?: string| React.ReactElement | React.ReactNode,
     open?: boolean, 
     selected?: boolean,
     iconOpen?: string | React.ReactElement,
     iconClose?: string | React.ReactElement,
+    background?: "light" | "dark",
+    section?: React.ReactNode,
     children: React.ReactNode
 }
 
-const Style1 = ({title, small, iconOpen, iconClose, open=false, children, selected, ...props}: Props) => {
+const Style1 = ({title, small, iconOpen, iconClose, section, open=false, children, selected, background, ...props}: Props) => {
     const [isOpen, setisOpen] = useState(open);
 
     return (
-        <div className={`${styles.container} ${styles[selected ? "selected" : "default"]}`} {...props}>
+        <div className={`${styles.container} ${styles[selected ? "selected" : "default"]} ${styles[background || ""]}`} {...props} tabIndex={0}>
 
             <div onClick={() => setisOpen(!isOpen)} className={styles.btn}>
                 <div className={styles.flex}>
-                    <span>{title}</span>
+                    <p>{title}</p>
                     { (!iconOpen && !iconClose) && <span className={!isOpen ? styles.iconClosed : styles.iconOpen}>{<MdKeyboardArrowRight/> }</span>}
                     { (iconOpen && !iconClose) && iconOpen}
                     { (iconOpen && iconClose) && isOpen ? iconOpen : iconClose}
                 </div>
                 {small && <small>{small}</small>}
+               {section && 
+                    <div>
+                        {section}
+                    </div>
+                }
             </div>
 
             {isOpen && 

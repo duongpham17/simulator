@@ -8,11 +8,21 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
   noPadding?: boolean, 
   noBorder?: boolean,
   pointer?: boolean,
+  margin?: boolean,
 };
 
-const Container = ({children, selected, background, noPadding, noBorder, pointer,...props}: Props) => {
+const Container = ({children, margin, selected, background, noPadding, noBorder, pointer,...props}: Props) => {
   return (
-    <div className={`${styles.container} ${selected?styles.selected:""} ${pointer?styles.pointer:""} ${noPadding?styles.noPadding:""} ${noBorder?styles.noBorder:""} ${styles[background || ""]}`} {...props}>
+    <div {...props} className={`
+          ${styles.container} 
+          ${selected?styles.selected:""} 
+          ${pointer?styles.pointer:""} 
+          ${noPadding?styles.noPadding:""} 
+          ${noBorder?styles.noBorder:""} 
+          ${styles[background || ""]} 
+          ${margin ? styles.margin : ""}
+        `} 
+      >
       {children}
     </div>
   )

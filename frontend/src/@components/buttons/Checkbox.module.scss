@@ -1,0 +1,22 @@
+.button{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    &:hover{
+        opacity: 0.8;
+    }
+
+    span{
+        display: block;
+        width: 15px;
+        height: 15px;
+        background-color: var(--clr-dark-transparent);
+        border-radius: 50px;
+        border: 3px double var(--clr-dark-transparent);
+    }
+    .selected{
+        background-color: var(--clr-blue);
+    }
+}

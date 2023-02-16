@@ -1,6 +1,7 @@
 /*TYPES**************************************************************************************************************/
 import { ISimulator, ISimulatorPopulate } from './simulators';
 import { IStrategiesInputsTrades } from './strategies';
+import { IOrders } from './orders';
 
 export interface Price {
     _id: string,
@@ -13,27 +14,6 @@ export interface IPrices {
     simulator: string,
     prices: Price[],
     createdAt: Date,
-};
-
-export interface IOrders {
-    _id: string,
-    simulator: string,
-    clientOid: string,
-    open: boolean,
-    closed: "bot" | "manual",
-    side: "buy" | "sell",
-    open_price: number,
-    close_price: number,
-    moving_price: number,
-    trailing_take_profit: boolean,
-    stop_loss: number,
-    take_profit: number,
-    profit_loss: number,
-    position_size: number,
-    leverage: number,
-    strategy: string,
-    closed_at_date: Date,
-    open_at_date: Date,
 };
 
 /*STATE**************************************************************************************************************/

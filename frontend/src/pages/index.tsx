@@ -9,7 +9,8 @@ import Confirm from 'pages/confirm';
 import Account from 'pages/account';
 import Trade from 'pages/trade'
 import Unknown from 'pages/unknown';
-import simulator from 'pages/simulator';
+import Simulator from 'pages/simulator';
+import History from 'pages/history';
 
 const Pages = () => {
   return (
@@ -21,7 +22,8 @@ const Pages = () => {
 
         <Route path="/account" element={<Private component={Account}/> } />
         <Route path="/trade" element={<Private component={Trade}/> } />
-        <Route path="/simulator" element={<Private component={simulator}/> } />
+        <Route path="/simulator" element={<Private component={Simulator}/> } />
+        <Route path="/history" element={<Private component={History}/>} />
 
         <Route path="*" element={<Unknown/>} />
       </Routes>

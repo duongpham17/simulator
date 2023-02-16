@@ -6,6 +6,7 @@ import user from './user';
 import strategies from './strategies';
 import simulators from './simulators';
 import trades from './trades';
+import orders from './orders';
 
 const reducers = combineReducers({
     alert,
@@ -13,7 +14,8 @@ const reducers = combineReducers({
     user,
     strategies,
     simulators,
-    trades
+    trades,
+    orders
 });
 
 export default reducers;

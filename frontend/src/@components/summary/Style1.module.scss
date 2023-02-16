@@ -1,6 +1,6 @@
 .container{
     border-radius: 5px;
-    border: 2px solid var(--clr-light-transparent);
+    border: 1px solid var(--clr-light-transparent);
     position: relative;
     transition: 0.2s ease-in-out;
     margin-bottom: 0.5rem;
@@ -45,4 +45,12 @@
 
 .selected{
     border-color: var(--clr-main);
+}
+
+.light{
+    background-color: var(--clr-light-transparent);
+}
+
+.dark{
+    background-color: var(--clr-dark-transparent);
 }

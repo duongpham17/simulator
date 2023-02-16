@@ -1,10 +1,11 @@
+import Simulators from '@redux/actions/simulators';
+import { IStrategiesInputsSimulate } from '@redux/types/strategies';
+import { useAppDispatch, useAppSelector } from '@redux/hooks/useRedux';
+
 import strategies_data, {find_side} from '@data/strategies';
 import useForm from '@hooks/useForm';
 import validation from '@validations/simulate';
-
-import Simulators from '@redux/actions/simulators';
-import {IStrategiesInputsSimulate} from '@redux/types/strategies';
-import { useAppDispatch, useAppSelector } from '@redux/hooks/useRedux';
+import {localSet, localGet} from '@utils/localstorage';
 
 import Container from '@components/container/Style1';
 import Form from '@components/form/Form';
@@ -21,46 +22,49 @@ import {FaHammer} from 'react-icons/fa';
 
 const Run = () => {
 
-  const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
-  const {simulator} = useAppSelector(state => state.simulators)
+    const {simulator} = useAppSelector(state => state.simulators);
 
-  const initialState: IStrategiesInputsSimulate = {
-    strategy: "",
-    reset: 0,
-    short: 0,
-    long: 0,
-    trailing_take_profit: false,
-    stop_loss: 0,
-    take_profit: 0,
-    leverage: 0,
-    position_size: 0,
-  }
-  
-  const {onSubmit, values, onChange, errors, onSetValue, loading} = useForm(initialState, callback, validation);
+    const previous = localGet("previous-simulator-inputs");
 
-  async function callback(){
-    if(!simulator) return;
-    const data = {
-        ...values,
-        reset: Number(values.reset),
-        short: Number(values.short),
-        long: Number(values.long),
-        stop_loss: Number(values.stop_loss),
-        take_profit: Number(values.trailing_take_profit),
-        leverage: Number(values.leverage),
-        position_size: Number(values.position_size),
-    }
-    await dispatch(Simulators.simulate(data, simulator._id));
-  };
+    const initialState: IStrategiesInputsSimulate = {
+        strategy: previous.strategy || "",
+        reset: previous.reset || 0,
+        short: previous.short || 0,
+        long: previous.long || 0,
+        trailing_take_profit: previous.trailing_take_profit || false,
+        stop_loss: previous.stop_loss || 0,
+        take_profit: previous.take_profit || 0,
+        leverage: previous.leverage || 0,
+        position_size: previous.position_size || 0,
+    };
+    
+    const {onSubmit, values, onChange, errors, onSetValue, loading} = useForm(initialState, callback, validation);
 
+    async function callback(){
+        if(!simulator) return;
+        const inputs = {
+            ...values,
+            reset: Number(values.reset),
+            short: Number(values.short),
+            long: Number(values.long),
+            stop_loss: Number(values.stop_loss),
+            take_profit: Number(values.take_profit),
+            leverage: Number(values.leverage),
+            position_size: Number(values.position_size),
+        }
+        await dispatch(Simulators.simulate(inputs, simulator._id));
+        localSet("previous-simulator-inputs", inputs);
+    };
 
   return (
-    <Container>
+    <Container background='dark' style={{"marginBottom": "0.5rem"}}>
         {loading && <Loading/>}
 
         <Form onSubmit={onSubmit} button={false}>
             <>
+                <Button label1="Start simulation" label2={<FaHammer/>} color='blue' loading={loading} style={{"marginBottom": "0.5rem"}} />
 
                 <Input type="number" label1="Reset price snapshot" label2="optional" placeholder='minutes (default never reset)'
                     name="reset" value={values.reset || ""} onChange={onChange} 
@@ -108,16 +112,14 @@ const Run = () => {
 
                 <Flex>
                     <Input type="number" label1="Take profit difference" label2={errors.trailing_take_profit} error 
-                        name="trailing_take_profit" value={values.take_profit} onChange={onChange} 
+                        name="take_profit" value={values.take_profit} onChange={onChange} 
                     />
                     <Input type="number" label1="Stop loss difference" label2={errors.stop_loss} error 
                         name="stop_loss" value={values.stop_loss} onChange={onChange} 
                     />
                 </Flex>
 
-                <Checkbox label="Trailing take profit" margin value={values.trailing_take_profit} onClick={() => onSetValue({trailing_take_profit: !values.trailing_take_profit})}  />
-             
-                <Button label1="Start simulation" label2={<FaHammer/>} color='blue' loading={loading} />
+                <Checkbox label="Trailing take profit" margin value={values.trailing_take_profit} onClick={() => onSetValue({trailing_take_profit: !values.trailing_take_profit})} background="light" />             
             </>
         </Form>
 

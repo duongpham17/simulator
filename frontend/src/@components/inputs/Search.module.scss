@@ -1,6 +1,7 @@
 .container{
     width: 100%;
     position: relative;
+    
 
     input{
         background-color: var(--clr-light-transparent);
@@ -51,28 +52,36 @@
     }
 
     .search{
-        position: absolute;
-        background: var(--clr-background);
-        border: 2px solid var(--clr-main);
+        background: var(--clr-light-transparent);
+        border: 1px solid var(--clr-main);
         overflow: auto;
-        max-height: 70px;
+        max-height: 100px;
         width: 100%;
         z-index: 1;
-        border-radius: 5px;
+        margin-bottom: 0.5rem;
 
         &:hover{
             border-color: var(--clr-main);
         }
 
         .element{
-            display: block;
             width: 100%;
-            text-align: left;
-            padding: 0.3rem 0.5rem;
+            padding: 0.5rem;
             font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            span:nth-child(2){
+                display: none;
+            }
 
             &:hover{
                 background-color: vaR(--clr-dark-transparent);
+
+                span:nth-child(2){
+                    display: block;
+                }
             }
         }
     }

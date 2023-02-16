@@ -65,18 +65,21 @@
             @include Loading(15px, 15px, 2px, white);
         }
     }
+
+    .light, .dark{
+        border: 1px solid var(--clr-light-transparent);
+    }
     .red{
         background-color: var(--clr-red);
     }
     .black{
         background-color: black;
-        border: 1px solid var(--clr-dark-transparent) ;
     }
     .light{
         background-color: var(--clr-light-transparent);
     }
     .dark{
-        background-color: var(--clr-dark-transparent)
+        background-color: var(--clr-dark-transparent);
     }
     .blue{
         background-color: var(--clr-blue);

@@ -1,12 +1,14 @@
 .container{
     transition: ease-in-out 0.2s;
+    border: 1px solid transparent;
     &:hover{
-        background-color: var(--clr-light-transparent);
+        background-color: var(--clr-dark-transparent);
+        border-color: var(--clr-light-transparent);
     }
 }
 
 .border{
-    border-bottom: 2px dashed var(--clr-light-transparent);
+    border-bottom: 1px dashed var(--clr-light-transparent);
     padding: 0.3rem 0;
 
     &:hover{
@@ -19,7 +21,7 @@
 }
 
 .selected{
-    border-color: var(--clr-main);
+    border-color: var(--clr-light-transparent);
     border-bottom: 1px dashed var(--clr-light);
     background-color: var(--clr-dark-transparent);
 }

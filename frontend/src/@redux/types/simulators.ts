@@ -1,7 +1,8 @@
 /*TYPES**************************************************************************************************************/
 
-import {IStrategies} from './strategies';
-import {IOrders, IPrices} from './trades';
+import { IStrategies } from './strategies';
+import { IPrices } from './trades';
+import { IOrders } from './orders';
 
 export interface ISimulator {
     id?: string,

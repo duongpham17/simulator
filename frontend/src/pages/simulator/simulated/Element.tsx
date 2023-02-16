@@ -6,13 +6,13 @@ import Simulator from '@redux/actions/simulators';
 import useOpen from '@hooks/useOpen';
 import useLoading from '@hooks/useLoading';
 
-import {date} from '@utils/functions';
+import {date, firstcaps} from '@utils/functions';
 
 import Text1 from '@components/text/Style1';
 import Text2 from '@components/text/Style2';
 import Text3 from '@components/text/Style3';
 import Flex from '@components/flex/Flex';
-import Summary from '@components/summary/Style2';
+import Summary from '@components/summary/Style1';
 import Element from '@components/element/Style2';
 import Line from '@components/line/Style1';
 import Button from '@components/buttons/Button';
@@ -57,7 +57,7 @@ const ElementContainer = ({data}: Props) => {
             name: `${data.strategies.name} ${data.strategies.strategy}`,
         }
         onLoadingSave(() => dispatch(Strategies.build(d)));
-        dispatch(Alert.set("Strategy saved", "normal"));
+        dispatch(Alert.set("Strategy saved", "green"));
     }
 
     const onDelete = () => {
@@ -66,8 +66,9 @@ const ElementContainer = ({data}: Props) => {
 
     return (
         <Summary 
-        title={data.strategies.strategy.toUpperCase()} 
-        small={<Text3 name={data.market_id.toLowerCase()} value={date(data.createdAt)}/>} 
+        background='dark'
+        title={<>{firstcaps(data.strategies.strategy)} &#x2022; {data.market_id.toLowerCase()} &#x2022; {data.strategies.trailing_take_profit ? "trailing" : "take"}</>} 
+        small={<Text3 name={data.live ? "live" : "test"} value={date(data.createdAt)} color="light"/>} 
         section={
             <>
             <Flex center>
@@ -91,11 +92,10 @@ const ElementContainer = ({data}: Props) => {
         <Pagination data={[...data.orders].reverse()}>
             {(el) => 
                 <Element key={el.clientOid} pointer onClick={() => onOpenItems(el.clientOid)} selected={openItems.includes(el.clientOid)} style={{"padding": "0.5rem"}}>
-                    <Text1 name={`${el.side.toUpperCase()}`} value={el.profit_loss.toFixed(2)} valueColor={el.profit_loss >= 0 ? "green" : "red"}/>
-                    <Text3 color='light' name={date(el.closed_at_date)} value={""} size={13}/>
+                    <Text1 name={<>{el.side.toUpperCase()} &#x2022; {date(el.closed_at_date)}</>} value={el.profit_loss.toFixed(2)} valueColor={el.profit_loss >= 0 ? "green" : "red"} nameColor="default"/>
                     {openItems.includes(el.clientOid) &&
                         <>
-                            <Flex padding={{top: 4, bottom: 4}}>
+                            <Flex>
                                 <Text2 name="Position" value={el.position_size} size={14}/>
                                 <Text2 name="$Open" value={el.open_price} size={14}/>
                                 <Text2 name="$Moving" value={el.moving_price} size={14}/>
@@ -112,8 +112,8 @@ const ElementContainer = ({data}: Props) => {
         </Pagination>
 
         <Flex>
-            <Button label1="save" color="dark" onClick={onSave} loading={saveLoading} style={{"width": "100px", "padding": "0.3rem"}}/>
-            <Button label1="delete" color="dark" onClick={onDelete} style={{"width": "100px", "padding": "0.3rem"}}/>
+            <Button label1="save" color="light" onClick={onSave} loading={saveLoading} style={{"width": "100px", "padding": "0.3rem"}}/>
+            <Button label1="delete" color="light" onClick={onDelete} style={{"width": "100px", "padding": "0.3rem"}}/>
         </Flex>
 
         </Summary>

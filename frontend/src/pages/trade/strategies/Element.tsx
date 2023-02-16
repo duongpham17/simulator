@@ -11,6 +11,7 @@ import Text from '@components/text/Style1';
 import Line from '@components/line/Style1';
 
 import {MdPlayArrow, MdSettings} from 'react-icons/md';
+import { localSet } from '@utils/localstorage';
 
 interface Props {
     strategy: IStrategiesCustomInputs,
@@ -28,6 +29,7 @@ const Edit = ({strategy, query_strategy_id, setQuery}:Props) => {
         event.stopPropagation();
         if(query_strategy_id === strategy._id) return;
         setQuery("strategy", strategy._id as string);
+        localSet("strategy-id", strategy._id as string)
         if(isTrading) return;
         dispatch(Strategies.reorder(strategy));
     };
@@ -47,6 +49,7 @@ const Edit = ({strategy, query_strategy_id, setQuery}:Props) => {
             iconClose={!isTrading ? <Icon icon={<MdPlayArrow/>} onClick={onQuickRun} /> : <></> } 
             iconOpen={!isTrading || query_strategy_id !== strategy._id ? <Menu icon={<MdSettings/>}><Dropdown data={strategy}/></Menu> : ""}
             selected={query_strategy_id === strategy._id}
+            background="dark"
         >
             <>
 

@@ -1,17 +1,15 @@
 import styles from './Navbar.module.scss';
-import { Link } from 'react-router-dom';
 
 import Login from './login';
 import Theme from './theme';
+import Pages from './pages';
 
 const Navbar = () => {
   return (
     <div className={styles.container}>
 
       <div className={styles.left}>
-        <Link to="/">CST</Link>
-        <Link to="/trade">Trade</Link>
-        <Link to="/simulator">Simulator</Link>
+        <Pages />
       </div>
 
       <div className={styles.right}>

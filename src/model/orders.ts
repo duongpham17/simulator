@@ -1,6 +1,7 @@
 import {Types, Schema, model, Document} from 'mongoose';
 
 export interface IOrder extends Partial<Document> {
+    user: Types.ObjectId,
     simulator: Types.ObjectId,
     open: boolean,
     clientOid: string,
@@ -22,6 +23,10 @@ export interface IOrder extends Partial<Document> {
 }
 
 const OrdersSchema = new Schema<IOrder>({
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     simulator: {
         type: Schema.Types.ObjectId,
         ref: 'Simulators'

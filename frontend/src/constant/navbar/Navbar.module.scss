@@ -14,9 +14,12 @@
         display: flex;
         min-height: 40px;
         min-width: 40px;
+        border-bottom: 2px solid transparent;
+        transition: 0.5s ease-in-out;
 
         &:hover{
             background-color: var(--clr-dark-transparent);
+            border-bottom-color: var(--clr-main) ;
         }
     }
 
