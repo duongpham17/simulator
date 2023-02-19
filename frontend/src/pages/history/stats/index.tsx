@@ -34,7 +34,7 @@ const Stats = ({orders}: Props) => {
     })();
 
     const profit_loss = orders.reduce((acc, obj) => {
-        const calc = obj.profit_loss >= 0 ? 'profit' : "loss";
+        const calc = obj.profit_loss >= 0 ? 'profit' : 'loss';
         return {...acc, [calc]: acc[calc] + obj.profit_loss};
     }, {
         profit: 0,
@@ -44,7 +44,7 @@ const Stats = ({orders}: Props) => {
     return (
         <Container background='dark' margin>
             
-            <Text3 name={<span>Profit &#x2022; {win_rate.percentage}%</span>} value={<span>{100 - Number(win_rate.percentage)}% &#x2022; Loss</span>} />
+            <Text3 name={<span>Profit &#x2022; {win_rate.percentage}%</span>} value={<span>{(100 - Number(win_rate.percentage)).toFixed(2)}% &#x2022; Loss</span>} />
             <ProfitNLossProgress value={Number(win_rate.percentage)}/>
             <Flex>
                 <p>${profit_loss.profit.toFixed(2)}</p>

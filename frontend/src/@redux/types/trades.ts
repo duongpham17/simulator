@@ -1,5 +1,5 @@
 /*TYPES**************************************************************************************************************/
-import { ISimulator, ISimulatorPopulate } from './simulators';
+import { ISimulator } from './simulators';
 import { IStrategiesInputsTrades } from './strategies';
 import { IOrders } from './orders';
 
@@ -42,12 +42,13 @@ export enum TYPES_TRADES {
     TRADES_CLOSE = "TRADES_CLOSE",
     TRADES_LOAD = "TRADES_LOAD",
     TRADES_STATE_CLEAR = "TRADES_STATE_CLEAR",
+    TRADES_STATE_RESET = "TRADES_STATE_RESET"
 };
 
 interface Start {
     type: TYPES_TRADES.TRADES_START,
     payload: IStrategiesInputsTrades
-}
+};
 
 interface Trades {
     type: TYPES_TRADES.TRADES,
@@ -78,7 +79,11 @@ interface Price_snapshot {
 
 interface Load {
     type: TYPES_TRADES.TRADES_LOAD,
-    payload: ISimulatorPopulate
+    payload: {
+        simulator: ISimulator,
+        prices: IPrices,
+        orders: IOrders[]
+    }
 };
 
 interface Remove {
@@ -89,9 +94,14 @@ interface Remove {
 interface Clear {
     type: TYPES_TRADES.TRADES_STATE_CLEAR,
     payload: {
-        key: TradesObjectKeys,
+        key: TradesObjectKeys | "reset",
         value: any
     }
 };
 
-export type ACTION_TRADES = Start | Trades | Trade | Load | Remove | Close | Price_snapshot | Clear
+interface Reset {
+    type: TYPES_TRADES.TRADES_STATE_RESET,
+    payload: any
+};
+
+export type ACTION_TRADES = Start | Trades | Trade | Load | Remove | Close | Price_snapshot | Clear | Reset

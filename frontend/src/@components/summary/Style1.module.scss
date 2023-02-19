@@ -6,7 +6,7 @@
     margin-bottom: 0.5rem;
 
     &:hover{
-        border-color: var(--clr-main);
+        border-color: var(--clr-dark-transparent);
     }
 
     .btn{
@@ -45,6 +45,9 @@
 
 .selected{
     border-color: var(--clr-main);
+    &:hover{
+        border-color: var(--clr-main);
+    }
 }
 
 .light{

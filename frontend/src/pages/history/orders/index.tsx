@@ -4,7 +4,7 @@ import { Context } from 'context/useOrders';
 
 import useOpen from '@hooks/useOpen';
 
-import {date} from '@utils/functions';
+import {date, firstcaps} from '@utils/functions';
 
 import Pagination from '@components/pagination/Style1';
 import Element from '@components/element/Style2';
@@ -27,11 +27,11 @@ const Test = ({orders}: Props) => {
     const {openItems, onOpenItems} = useOpen();
 
     return (
-        <Pagination data={[...orders].reverse().filter(el => el.open !== true)} show={20} >
+        <Pagination data={[...orders].reverse().filter(el => el.open !== true)} show={20} top>
             {(el) => 
                 <Element key={el._id} onClick={() => onOpenItems(el._id)} selected={openItems.includes(el._id)} style={{"padding": "0.5rem"}}>
-                    <Text1 name={<>{el.side.toUpperCase()} &#x2022; {el.closed} &#x2022; {el.trailing_take_profit ? "trailing" : "take"}</>} nameColor="default" value={el.profit_loss.toFixed(2)} valueColor={el.profit_loss >= 0 ? "green" : "red"}/>
-                    <Text3 color='light' name={el.strategy} value={`${date(el.closed_at_date)}`} size={14} />
+                    <Text1 name={<>{firstcaps(el.side)} &#x2022; {el.market_id.toLowerCase()} </>} nameColor="default" value={el.profit_loss.toFixed(2)} valueColor={el.profit_loss >= 0 ? "green" : "red"}/>
+                    <Text3 color='light' name={<span>{el.strategy} &#x2022; {el.closed} &#x2022; {el.trailing_take_profit ? "trailing" : "take"}</span>} value={`${date(el.closed_at_date)}`} size={14} />
                     {openItems.includes(el._id) &&
                         <>
                             <Flex padding={{top: 4, bottom: 4}}>

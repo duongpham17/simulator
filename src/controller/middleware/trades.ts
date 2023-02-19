@@ -23,6 +23,7 @@ export const order_create = async ({simulator, strategy, side, price, clientOid}
     const order = await Orders.create({
         user: simulator.user,
         simulator: simulator._id,
+        market_id: strategy.market_id,
         clientOid,
         side,
         moving_price: price_current,
@@ -38,12 +39,7 @@ export const order_create = async ({simulator, strategy, side, price, clientOid}
         live: simulator.live
     });
 
-    const update_simulator = await Simulators.findByIdAndUpdate(simulator._id, {
-        price_snapshot: price_current,
-        "$push": { orders: order._id }
-    }, 
-        {new: true}
-    );
+    const update_simulator = await Simulators.findByIdAndUpdate(simulator._id, { price_snapshot: price_current}, {new: true});
 
     return {
         simulator: update_simulator || simulator,

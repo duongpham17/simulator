@@ -16,7 +16,7 @@ const Confirmation = () => {
 
     if(params.token) dispatch(authentication.confirm_with_email(params.token));
 
-    return () =>  { dispatch(authentication.clear_error) };
+    return () =>  { dispatch(authentication.state_clear("errors", "")) };
 
   }, [params.token, dispatch]);
 

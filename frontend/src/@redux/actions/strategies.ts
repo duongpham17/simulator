@@ -11,7 +11,7 @@ const get = () => async (dispatch: Dispatch<ACTION_STRATEGIES>) => {
         });
     } catch(err: any){
         dispatch({
-            type: TYPES_STRATEGIES.RESPONSE_ERROR,
+            type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_ERROR,
             payload: {
                 get: err.response.data.message
             }
@@ -28,7 +28,7 @@ const select = (id: string) => async (dispatch: Dispatch<ACTION_STRATEGIES>) => 
         });
     } catch(err: any){
         dispatch({
-            type: TYPES_STRATEGIES.RESPONSE_ERROR,
+            type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_ERROR,
             payload: {
                 select: "Please refresh"
             }
@@ -45,9 +45,28 @@ const build = (data: Partial<IStrategies>) => async (dispatch: Dispatch<ACTION_S
         });
     } catch(err: any){
         dispatch({
-            type: TYPES_STRATEGIES.RESPONSE_ERROR,
+            type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_ERROR,
             payload: {
                 build: err.response.data.message
+            }
+        })
+    }
+};
+
+const checkapi = ({api_key, secret_key, passphrase}: {api_key: string, secret_key: string, passphrase: string}) => async (dispatch: Dispatch<ACTION_STRATEGIES>) => {
+    try{
+        const res = await api.post(`/strategies/check`, {api_key, secret_key, passphrase});
+        dispatch({
+            type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_STATUS,
+            payload: {
+                check_api: res.data.data
+            }
+        });
+    } catch(err: any){
+        dispatch({
+            type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_STATUS,
+            payload: {
+                check_api: false
             }
         })
     }
@@ -62,7 +81,7 @@ const update = (data: Partial<IStrategies>) => async (dispatch: Dispatch<ACTION_
         });
     } catch(err: any){
         dispatch({
-            type: TYPES_STRATEGIES.RESPONSE_ERROR,
+            type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_ERROR,
             payload: {
                 update: err.response.data.message
             }
@@ -79,7 +98,7 @@ const duplicate = (data: IStrategies) => async (dispatch: Dispatch<ACTION_STRATE
         });
     } catch(err: any){
         dispatch({
-            type: TYPES_STRATEGIES.RESPONSE_ERROR,
+            type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_ERROR,
             payload: {
                 duplicate: err.response.data.message
             }
@@ -96,7 +115,7 @@ const remove = (id: string) => async (dispatch: Dispatch<ACTION_STRATEGIES>) => 
         });
     } catch(err: any){
         dispatch({
-            type: TYPES_STRATEGIES.RESPONSE_ERROR,
+            type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_ERROR,
             payload: {
                 remove: err.response.data.message
             }
@@ -111,7 +130,7 @@ const reorder = (payload: IStrategies) => async (dispatch: Dispatch<ACTION_STRAT
     });
 };
 
-const clear = (key:StrategiesObjectKeys, value: any) => async (dispatch: Dispatch<ACTION_STRATEGIES>) => {
+const state_clear = (key:StrategiesObjectKeys, value: any) => async (dispatch: Dispatch<ACTION_STRATEGIES>) => {
     dispatch({
         type: TYPES_STRATEGIES.STRATEGIES_STATE_CLEAR,
         payload: { key, value }
@@ -121,12 +140,13 @@ const clear = (key:StrategiesObjectKeys, value: any) => async (dispatch: Dispatc
 const Strategies = {
     get,
     build,
+    checkapi,
     remove,
     duplicate,
     update,
     select,
     reorder,
-    clear
+    state_clear
 };
 
 export default Strategies

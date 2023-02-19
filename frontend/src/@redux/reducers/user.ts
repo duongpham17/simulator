@@ -15,21 +15,26 @@ export const user = (state = initialState, action: ACTION_USER) => {
                 ...state,
                 user: payload
             }  
-        case TYPES_USER.RESPONSE_STATUS:
+        case TYPES_USER.USER_RESPONSE_STATUS:
             return{
                 ...state,
                 status: payload
             };
-        case TYPES_USER.RESPONSE_ERROR:
+        case TYPES_USER.USER_RESPONSE_ERROR:
             return{
                 ...state,
                 errors: payload
             }
-        case TYPES_USER.RESPONSE_CLEAR:
+        case TYPES_USER.USER_RESPONSE_CLEAR:
             return{
                 ...state,
                 status: {},
                 errors: {}
+            }
+        case TYPES_USER.USER_STATE_CLEAR:
+            return{
+                ...state,
+                [payload.key]: payload.value
             }
 
         default: 

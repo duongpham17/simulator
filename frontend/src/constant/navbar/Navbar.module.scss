@@ -7,30 +7,9 @@
     border-bottom: 1px solid var(--clr-light-transparent);
     z-index: 1;
 
-    a, button{
-        padding: 0.5rem;
-        align-items: center;
-        justify-content: center;
-        display: flex;
-        min-height: 40px;
-        min-width: 40px;
-        border-bottom: 2px solid transparent;
-        transition: 0.5s ease-in-out;
-
-        &:hover{
-            background-color: var(--clr-dark-transparent);
-            border-bottom-color: var(--clr-main) ;
-        }
-    }
-
-    svg{
-        font-size: 1.4rem;
-    }
-
     .right, .left{
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
-
 }

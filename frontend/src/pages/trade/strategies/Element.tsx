@@ -2,6 +2,7 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '@redux/hooks/useRedux';
 import { IStrategiesCustomInputs } from '@redux/types/strategies';
 import Strategies from '@redux/actions/strategies';
+import Trades from '@redux/actions/trades';
 
 import Button from '@components/buttons/Button';
 import Icon from '@components/buttons/Icon';
@@ -10,7 +11,7 @@ import Menu from '@components/menu/Menu';
 import Text from '@components/text/Style1';
 import Line from '@components/line/Style1';
 
-import {MdPlayArrow, MdSettings} from 'react-icons/md';
+import { MdPlayArrow, MdSettings, MdOutlineKeyboardArrowRight, MdArrowRightAlt } from 'react-icons/md';
 import { localSet } from '@utils/localstorage';
 
 interface Props {
@@ -28,6 +29,7 @@ const Edit = ({strategy, query_strategy_id, setQuery}:Props) => {
     const onQuickRun = (event: React.SyntheticEvent) => {
         event.stopPropagation();
         if(query_strategy_id === strategy._id) return;
+        dispatch(Trades.reset());
         setQuery("strategy", strategy._id as string);
         localSet("strategy-id", strategy._id as string)
         if(isTrading) return;
@@ -46,8 +48,8 @@ const Edit = ({strategy, query_strategy_id, setQuery}:Props) => {
 
     return (
         <Summary title={strategy.new ? `new | ${strategy.name}` : strategy.name} 
-            iconClose={!isTrading ? <Icon icon={<MdPlayArrow/>} onClick={onQuickRun} /> : <></> } 
-            iconOpen={!isTrading || query_strategy_id !== strategy._id ? <Menu icon={<MdSettings/>}><Dropdown data={strategy}/></Menu> : ""}
+            iconClose={!isTrading ? <Icon icon={<MdPlayArrow/>} onClick={onQuickRun} /> : query_strategy_id === strategy._id ? <MdArrowRightAlt/> : <></> } 
+            iconOpen={!isTrading || query_strategy_id !== strategy._id ? <Menu icon={<MdSettings/>}><Dropdown data={strategy}/></Menu> : <MdOutlineKeyboardArrowRight/>}
             selected={query_strategy_id === strategy._id}
             background="dark"
         >

@@ -2,13 +2,11 @@ import {Types, Schema, model, PopulatedDoc, Document} from 'mongoose';
 import {IPrices} from './prices';
 import {IStrategies} from './strategies';
 import {IUsers} from './users';
-import {IOrder} from './orders';
 
 export interface ISimulators extends Partial<Document> {
     user: PopulatedDoc<Types.ObjectId & IUsers>,
     strategies: PopulatedDoc<Types.ObjectId & IStrategies>,
     prices: PopulatedDoc<Types.ObjectId & IPrices>,
-    orders: PopulatedDoc<Types.ObjectId[] & IOrder>,
     price_snapshot: number,
     market_id: string,
     price_open_snapshot: number,
@@ -30,10 +28,6 @@ const SimulatorsSchema = new Schema<ISimulators>({
         type: Schema.Types.ObjectId,
         ref: 'Prices'
     },
-    orders:[{
-        type: Schema.Types.ObjectId,
-        ref: "Orders"
-    }],
     live: {
         type: Boolean,
     },

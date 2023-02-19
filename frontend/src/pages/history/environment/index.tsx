@@ -16,7 +16,7 @@ const Environment = () => {
     };
 
     return (
-        <Button label1={"Environment"} label2={environment === "live" ? "Test" : "Live"} onClick={onClick} color="light" />
+        <Button label1={"Environment"} label2={environment === "live" ? "Test" : "Live"} onClick={onClick} color="light" margin/>
     )
 }
 

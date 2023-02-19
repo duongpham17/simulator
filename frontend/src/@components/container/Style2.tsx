@@ -5,12 +5,13 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode,
   selected?: boolean,
   background?: "light" | "dark",
+  border?: "light" | "dark",
   pointer?: boolean,
 };
 
-const Container = ({children, background, pointer,...props}: Props) => {
+const Container = ({children, background, border, pointer,...props}: Props) => {
   return (
-    <div className={`${styles.container} ${styles[background || ""]}`} {...props}>
+    <div className={`${styles.container} ${styles[`background-${background}`]} ${styles[`border-${border}`]}`} {...props}>
       {children}
     </div>
   )

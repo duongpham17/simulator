@@ -72,12 +72,20 @@ const load = (id: string) => async (dispatch: Dispatch<ACTION_TRADES>) => {
     }
 };
 
+const reset = () => async (dispatch: Dispatch<ACTION_TRADES>) => {
+    dispatch({
+        type: TYPES_TRADES.TRADES_STATE_RESET,
+        payload: null
+    });
+}
+
 const clear = (key:TradesObjectKeys, value: any) => async (dispatch: Dispatch<ACTION_TRADES>) => {
     dispatch({
         type: TYPES_TRADES.TRADES_STATE_CLEAR,
         payload: { key, value }
     });
 };
+
 
 const Trades = {
     start,
@@ -87,6 +95,7 @@ const Trades = {
     price,
     load,
     clear,
+    reset
 };
 
 export default Trades;

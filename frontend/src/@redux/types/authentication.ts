@@ -11,13 +11,17 @@ export interface INITIALSTATE_AUTHENTICATION {
     errors: ResponseType,
 };
 
+export type AuthenticationObjectKeys = keyof INITIALSTATE_AUTHENTICATION
+
 /*ACTION**************************************************************************************************************/
 
 export enum TYPES_AUTHENTICATION {
-    AUTHENTICATION_LOAD_USER = "AUTHENTICATION_LOAD_USER",
-    RESPONSE_ERROR = "RESPONSE_ERROR",
-    RESPONSE_STATUS = "RESPONSE_STATUS",
-    RESPONSE_CLEAR = "RESPONSE_CLEAR",
+    AUTHENTICATION_LOAD_USER        = "AUTHENTICATION_LOAD_USER",
+    
+    AUTHENTICATION_RESPONSE_ERROR   = "AUTHENTICATION_RESPONSE_ERROR",
+    AUTHENTICATION_RESPONSE_STATUS  = "AUTHENTICATION_RESPONSE_STATUS",
+    AUTHENTICATION_RESPONSE_CLEAR   = "AUTHENTICATION_RESPONSE_CLEAR",
+    AUTHENTICATION_STATE_CLEAR      = "AUTHENTICATION_STATE_CLEAR",
 };
 
 interface LoadUser {
@@ -26,18 +30,26 @@ interface LoadUser {
 };
 
 interface Response_Status {
-    type: TYPES_AUTHENTICATION.RESPONSE_STATUS,
+    type: TYPES_AUTHENTICATION.AUTHENTICATION_RESPONSE_STATUS,
     payload: ResponseType
 };
 
 interface Response_Error {
-    type: TYPES_AUTHENTICATION.RESPONSE_ERROR,
+    type: TYPES_AUTHENTICATION.AUTHENTICATION_RESPONSE_ERROR,
     payload: ResponseType
 };
 
 interface Response_Clear {
-    type: TYPES_AUTHENTICATION.RESPONSE_CLEAR
+    type: TYPES_AUTHENTICATION.AUTHENTICATION_RESPONSE_CLEAR
     payload?: string
 };
 
-export type ACTION_AUTHENTICATION = LoadUser | Response_Status | Response_Clear | Response_Error
+interface State_Clear {
+    type: TYPES_AUTHENTICATION.AUTHENTICATION_STATE_CLEAR,
+    payload: {
+        key: AuthenticationObjectKeys,
+        value: any
+    }
+};
+
+export type ACTION_AUTHENTICATION = LoadUser | Response_Status | Response_Clear | Response_Error | State_Clear

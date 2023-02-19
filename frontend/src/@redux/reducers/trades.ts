@@ -55,19 +55,19 @@ export const trades = (state = initialState, action: ACTION_TRADES) => {
         case TYPES_TRADES.TRADES_LOAD:
             return{
                 ...state,
-                prices: payload.prices.prices,
+                trading: payload.simulator,
                 orders: payload.orders,
-                trading: {
-                    ...payload,
-                    prices: payload.prices._id,
-                    strategies: payload.strategies._id,
-                    orders: payload.orders.map(el => el._id),
-                }
+                prices: payload.prices.prices
             };
+
         case TYPES_TRADES.TRADES_STATE_CLEAR:
             return{
                 ...state,
                 [payload.key]: payload.value
+            }
+        case TYPES_TRADES.TRADES_STATE_RESET:
+            return{
+                ...initialState,
             }
         default: 
             return state;

@@ -1,6 +1,6 @@
 import { api } from '@redux/api';
 import { Dispatch } from 'redux';
-import { ACTION_USER, TYPES_USER, IUser } from '@redux/types/user';
+import { ACTION_USER, TYPES_USER, IUser, UserObjectKeys } from '@redux/types/user';
 
 const update = (data: IUser) => async (dispatch: Dispatch<ACTION_USER>) => {
     try{
@@ -14,8 +14,16 @@ const update = (data: IUser) => async (dispatch: Dispatch<ACTION_USER>) => {
     }
 };
 
+const state_clear = (key:UserObjectKeys, value: any) => async (dispatch: Dispatch<ACTION_USER>) => {
+    dispatch({
+        type: TYPES_USER.USER_STATE_CLEAR,
+        payload: { key, value }
+    });
+};
+
 const User = {
-    update
+    update,
+    state_clear
 };
 
 export default User;

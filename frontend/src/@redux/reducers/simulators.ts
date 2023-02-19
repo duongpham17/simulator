@@ -18,25 +18,24 @@ export const simulators = (state = initialState, action: ACTION_SIMULATORS) => {
         case TYPES_SIMULATORS.SIMULATORS_SIMULATOR:
             return{
                 ...state,
-                simulator: payload,
+                simulator: { ...payload.simulator, orders: payload.orders }
             };
         case TYPES_SIMULATORS.SIMULATORS_SIMULATOR_REMOVE:
             return{
                 ...state,
                 simulators: state.simulators ? state.simulators.filter(el => el._id !== payload) : []
             };
-        case TYPES_SIMULATORS.SIMULATORS_SIMULATE:
+        case TYPES_SIMULATORS.SIMULATORS_SIMULATED:
             return{
                 ...state,
                 simulated: state.simulated ? [payload, ...state.simulated] : [payload],
             };
-        case TYPES_SIMULATORS.SIMULATORS_SIMULATE_REMOVE:
-            return{
-                ...state,
-                simulated: state.simulated ? state.simulated.filter(el => el.createdAt.toLocaleString() !== payload) : []
-            };
-
-        case TYPES_SIMULATORS.SIMULATORS_CLEAR:
+        // case TYPES_SIMULATORS.SIMULATORS_SIMULATE_REMOVE:
+        //     return{
+        //         ...state,
+        //         simulated: state.simulated ? state.simulated.filter(el => el.createdAt.toLocaleString() !== payload) : []
+        //     };
+        case TYPES_SIMULATORS.SIMULATORS_STATE_CLEAR:
             return{
                 ...state,
                 [payload.key]: payload.value

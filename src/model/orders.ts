@@ -3,6 +3,7 @@ import {Types, Schema, model, Document} from 'mongoose';
 export interface IOrder extends Partial<Document> {
     user: Types.ObjectId,
     simulator: Types.ObjectId,
+    market_id: string,
     open: boolean,
     clientOid: string,
     closed: "manual" | "bot",
@@ -30,6 +31,10 @@ const OrdersSchema = new Schema<IOrder>({
     simulator: {
         type: Schema.Types.ObjectId,
         ref: 'Simulators'
+    },
+    market_id: {
+        type: String,
+        uppercase: true,
     },
     closed: {
         type: String,

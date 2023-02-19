@@ -43,7 +43,7 @@ const simulate = (strategy: Partial<IStrategiesCustomInputs>, simulatorId: strin
     try{
         const res = await api.post(`/simulators/simulate`, {strategy, simulatorId});
         dispatch({
-            type: TYPES_SIMULATORS.SIMULATORS_SIMULATE,
+            type: TYPES_SIMULATORS.SIMULATORS_SIMULATED,
             payload: res.data.data
         });
     } catch (error: any) {
@@ -64,7 +64,7 @@ const simulate_remove = (id: string) => async (dispatch: Dispatch<ACTION_SIMULAT
 
 const clear = (key: SimulatorObjectKeys, value: any) => async (dispatch: Dispatch<ACTION_SIMULATORS>) => {
     dispatch({
-        type: TYPES_SIMULATORS.SIMULATORS_CLEAR,
+        type: TYPES_SIMULATORS.SIMULATORS_STATE_CLEAR,
         payload: {key, value}
     });
 };

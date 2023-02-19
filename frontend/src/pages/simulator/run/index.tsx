@@ -59,12 +59,12 @@ const Run = () => {
     };
 
   return (
-    <Container background='dark' style={{"marginBottom": "0.5rem"}}>
+    <Container background='dark' margin>
         {loading && <Loading/>}
 
         <Form onSubmit={onSubmit} button={false}>
             <>
-                <Button label1="Start simulation" label2={<FaHammer/>} color='blue' loading={loading} style={{"marginBottom": "0.5rem"}} />
+                <Button label1="Start simulation" label2={<FaHammer/>} color='blue' loading={loading} margin/>
 
                 <Input type="number" label1="Reset price snapshot" label2="optional" placeholder='minutes (default never reset)'
                     name="reset" value={values.reset || ""} onChange={onChange} 

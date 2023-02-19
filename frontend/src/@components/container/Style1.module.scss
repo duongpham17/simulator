@@ -20,7 +20,7 @@
 }
 
 .margin{
-    margin: 0.5rem 0;
+    margin-bottom: 0.5rem;
 }
 
 .noBorder{
@@ -41,4 +41,8 @@
 
 .selected{
     border-color: var(--clr-main);
+
+    &:hover{
+        border-color: var(--clr-main);
+    }
 }

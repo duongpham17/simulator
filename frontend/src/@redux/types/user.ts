@@ -19,13 +19,17 @@ export interface INITIALSTATE_USER {
     errors: ResponseType,
 };
 
+export type UserObjectKeys = keyof INITIALSTATE_USER
+
 /*ACTION**************************************************************************************************************/
 
 export enum TYPES_USER {
     USER = "USER",
-    RESPONSE_STATUS = "RESPONSE_STATUS",
-    RESPONSE_ERROR = "RESPONSE_ERROR",
-    RESPONSE_CLEAR = "RESPONSE_CLEAR"
+
+    USER_RESPONSE_STATUS = "RESPONSE_STATUS",
+    USER_RESPONSE_ERROR  = "RESPONSE_ERROR",
+    USER_RESPONSE_CLEAR  = "RESPONSE_CLEAR",
+    USER_STATE_CLEAR     = "USER_STATE_CLEAR",
 };
 
 interface User {
@@ -33,19 +37,27 @@ interface User {
     payload: IUser
 };
 
-interface Status {
-    type: TYPES_USER.RESPONSE_STATUS,
+interface Response_Status {
+    type: TYPES_USER.USER_RESPONSE_STATUS,
     payload: ResponseType
 };
 
-interface Errors {
-    type: TYPES_USER.RESPONSE_ERROR,
+interface Response_Error {
+    type: TYPES_USER.USER_RESPONSE_ERROR,
     payload: ResponseType
 };
 
-interface Clear {
-    type: TYPES_USER.RESPONSE_CLEAR
+interface Response_Clear {
+    type: TYPES_USER.USER_RESPONSE_CLEAR
     payload?: string
 };
 
-export type ACTION_USER = User | Errors | Status | Clear
+interface State_Clear {
+    type: TYPES_USER.USER_STATE_CLEAR,
+    payload: {
+        key: UserObjectKeys,
+        value: any
+    }
+};
+
+export type ACTION_USER = User | Response_Error | Response_Status | Response_Clear | State_Clear

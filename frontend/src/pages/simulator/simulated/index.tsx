@@ -12,7 +12,7 @@ const Simulated = () => {
 
     return ( simulated ? 
         <>
-            {simulated.filter((el) =>  el._id === simulatorID).map((el, index) => 
+            {simulated.filter((el) =>  el.simulator._id === simulatorID).map((el, index) => 
                 <Element data={el} key={index} />
             )}
         </>

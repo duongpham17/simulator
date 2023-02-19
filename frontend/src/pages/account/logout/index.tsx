@@ -8,7 +8,7 @@ const Logout = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <Button label1="Logout" label2={<MdLogout/>} onClick={() => dispatch(authentication.logout)} color="red"/>
+    <Button label1="Logout" label2={<MdLogout/>} onClick={() => dispatch(authentication.logout)} color="light"/>
   )
 
 };

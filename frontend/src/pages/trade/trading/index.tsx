@@ -61,7 +61,7 @@ const Running = ({orders, strategy, trading, price_latest, isTrading}: PropsRunn
     const stop_loss_difference = calc_difference(trade.stop_loss, price_latest).toFixed(5)
 
     return( trade ? 
-            <Container background='dark'>
+            <Container background='dark' margin>
                 <Flex>
                     <Text3 name={<span> {strategy.market_id} &#x2022; {date(trade.open_at_date)} </span>} value={""}/>
                     { isTrading && <Button label1={"Close"} color="light" style={{"padding": "0.3rem"}} onClick={() => onCloseOrder(trade)} loading={isClosing}/>}

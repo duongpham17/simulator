@@ -43,7 +43,7 @@ export interface IStrategiesCustomInputs extends IStrategies {
 }
 
 export interface Response {
-    [key: string]: string
+    [key: string]: any
 };
 
 /*STATE**************************************************************************************************************/
@@ -69,9 +69,9 @@ export enum TYPES_STRATEGIES {
     STRATEGIES_REORDER     = "STRATEGIES_REORDER",
 
     STRATEGIES_STATE_CLEAR = "STRATEGIES_STATE_CLEAR",
-    RESPONSE_STATUS        = "RESPONSE_STATUS",
-    RESPONSE_ERROR         = "RESPONSE_ERROR",
-    RESPONSE_CLEAR         = "RESPONSE_CLEAR",
+    STRATEGIES_RESPONSE_STATUS = "STRATEGIES_RESPONSE_STATUS",
+    STRATEGIES_RESPONSE_ERROR  = "STRATEGIES_RESPONSE_ERROR",
+    STRATEGIES_RESPONSE_CLEAR  = "STRATEGIES_RESPONSE_CLEAR",
 };
 
 interface Strategies {
@@ -107,24 +107,24 @@ interface Strategy {
 interface Reorder {
     type: TYPES_STRATEGIES.STRATEGIES_REORDER,
     payload: IStrategies
-}
+};
 
 interface Response_Status {
-    type: TYPES_STRATEGIES.RESPONSE_STATUS,
+    type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_STATUS,
     payload: Response
 };
 
 interface Response_Error {
-    type: TYPES_STRATEGIES.RESPONSE_ERROR,
+    type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_ERROR,
     payload: Response
 };
 
 interface Response_Clear {
-    type: TYPES_STRATEGIES.RESPONSE_CLEAR
+    type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_CLEAR
     payload?: string
 };
 
-interface Clear {
+interface State_Clear {
     type: TYPES_STRATEGIES.STRATEGIES_STATE_CLEAR,
     payload: {
         key: StrategiesObjectKeys,
@@ -134,4 +134,4 @@ interface Clear {
 
 export type ACTION_STRATEGIES = 
     Strategies | Build | Remove | Duplicate | Update | Strategy | Reorder |
-    Response_Status | Response_Clear | Response_Error | Clear
+    Response_Status | Response_Clear | Response_Error | State_Clear

@@ -1,7 +1,7 @@
 import styles from './Alert.module.scss';
 import { useAppSelector } from '@redux/hooks/useRedux';
 
-const Alert = () => {
+const AlertContainer = () => {
 
     const {alert} = useAppSelector(state => state.alert);
 
@@ -16,4 +16,4 @@ const Alert = () => {
     )
 }
 
-export default Alert;
+export default AlertContainer

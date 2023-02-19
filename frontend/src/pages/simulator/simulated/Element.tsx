@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@redux/hooks/useRedux';
-import { ISimulatorPopulate } from '@redux/types/simulators';
+import { ISimulatorSimulated } from '@redux/types/simulators';
 import Alert from '@redux/actions/alert';
 import Strategies from '@redux/actions/strategies';
 import Simulator from '@redux/actions/simulators';
@@ -19,10 +19,12 @@ import Button from '@components/buttons/Button';
 import Pagination from '@components/pagination/Style1';
 
 interface Props {
-    data: ISimulatorPopulate
+    data: ISimulatorSimulated
 }
 
 const ElementContainer = ({data}: Props) => {
+
+    const {strategy, orders, simulator} = data;
 
     const dispatch = useAppDispatch();
 
@@ -30,7 +32,7 @@ const ElementContainer = ({data}: Props) => {
 
     const {loading: saveLoading, onLoading: onLoadingSave} = useLoading();
 
-    const profit_loss = data.orders.reduce((acc, obj) => {
+    const profit_loss = orders.reduce((acc, obj) => {
         const calc = obj.profit_loss >= 0 ? 'profit' : "loss";
         return {...acc, [calc]: acc[calc] + obj.profit_loss};
     }, {
@@ -39,57 +41,58 @@ const ElementContainer = ({data}: Props) => {
     });
 
     const win_rate = () => {
-        const d = data.orders.reduce((acc, obj) => {
+        const d = orders.reduce((acc, obj) => {
             const calc = obj.profit_loss >= 0 ? "win" : "lose";
             return {...acc, [calc]: acc[calc] + 1};
         }, {
             win: 0,
             lose: 0
         });
-        const win_percentage = ((d.win / data.orders.length) * 100).toFixed(2);
+        const win_percentage = ((d.win / orders.length) * 100).toFixed(2);
         return win_percentage;
     };
 
     const onSave = async () => {
         const d = {
-            ...data.strategies,
+            ...strategy,
             _id: undefined,
-            name: `${data.strategies.name} ${data.strategies.strategy}`,
+            name: `new | ${strategy.name} ${strategy.strategy}`,
         }
         onLoadingSave(() => dispatch(Strategies.build(d)));
         dispatch(Alert.set("Strategy saved", "green"));
     }
 
     const onDelete = () => {
-        dispatch(Simulator.simulate_remove(data.createdAt.toLocaleString()))
+        dispatch(Simulator.simulate_remove(simulator.createdAt.toLocaleString()))
     }
 
     return (
         <Summary 
-        background='dark'
-        title={<>{firstcaps(data.strategies.strategy)} &#x2022; {data.market_id.toLowerCase()} &#x2022; {data.strategies.trailing_take_profit ? "trailing" : "take"}</>} 
-        small={<Text3 name={data.live ? "live" : "test"} value={date(data.createdAt)} color="light"/>} 
-        section={
-            <>
-            <Flex center>
-                <Text2 name="Long" value={data.strategies.long} />
-                <Text2 name="Short" value={data.strategies.short}/>
-                <Text2 name="Take profit" value={data.strategies.take_profit}/>
-                <Text2 name="Stop Loss" value={data.strategies.stop_loss}/>
-            </Flex>
-            <Line />
-            <Flex center>
-                <Text2 name="Trades" value={data.orders.length} />
-                <Text2 name="% Win" value={win_rate()}/>
-                <Text2 name="Profit" value={profit_loss.profit.toFixed(2)} color="green"/>
-                <Text2 name="Loss" value={profit_loss.loss.toFixed(2)} color="red"/>
-            </Flex>
-            </>
-        }> 
+            background='dark'
+            title={<>{firstcaps(strategy.strategy)} &#x2022; {simulator.market_id.toLowerCase()} &#x2022; {strategy.trailing_take_profit ? "trailing" : "take"}</>} 
+            small={<Text3 name={simulator.live ? "live" : "test"} value={date(simulator.createdAt)} color="light"/>} 
+            section={
+                <>
+                    <Flex center>
+                        <Text2 name="Long" value={strategy.long} />
+                        <Text2 name="Short" value={strategy.short}/>
+                        <Text2 name="Take profit" value={strategy.take_profit}/>
+                        <Text2 name="Stop Loss" value={strategy.stop_loss}/>
+                    </Flex>
+                    <Line />
+                    <Flex center>
+                        <Text2 name="Trades" value={orders.length} />
+                        <Text2 name="% Win" value={win_rate()}/>
+                        <Text2 name="Profit" value={profit_loss.profit.toFixed(2)} color="green"/>
+                        <Text2 name="Loss" value={profit_loss.loss.toFixed(2)} color="red"/>
+                    </Flex>
+                </>
+            }
+        > 
 
         <Line />
         
-        <Pagination data={[...data.orders].reverse()}>
+        <Pagination data={[...orders].reverse()}>
             {(el) => 
                 <Element key={el.clientOid} pointer onClick={() => onOpenItems(el.clientOid)} selected={openItems.includes(el.clientOid)} style={{"padding": "0.5rem"}}>
                     <Text1 name={<>{el.side.toUpperCase()} &#x2022; {date(el.closed_at_date)}</>} value={el.profit_loss.toFixed(2)} valueColor={el.profit_loss >= 0 ? "green" : "red"} nameColor="default"/>

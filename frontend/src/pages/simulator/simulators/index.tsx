@@ -46,7 +46,7 @@ const Simulators = ( ) => {
   return ( simulators ?
     <>
       {simulators.map(el =>
-        <Container key={el._id} selected={query === el._id} onClick={onQuickRun(el._id)} pointer background="dark" style={{"marginBottom": "0.5rem"}}>
+        <Container key={el._id} selected={query === el._id} onClick={onQuickRun(el._id)} pointer background="dark" margin>
           <Text3 name={`${el.market_id} ${el.prices}`} value={loading ? <Spinner size={15}/> : <Dropdown open={openItems.includes(el._id)} onClick={() => onOpenItems(el._id)} />} />
           <Text3 name={date(el.createdAt)} value={el.live ? "Live" : "Test"} color='light' size={12}/>
           {openItems.includes(el._id) && 

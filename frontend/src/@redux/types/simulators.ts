@@ -1,15 +1,13 @@
 /*TYPES**************************************************************************************************************/
 
-import { IStrategies } from './strategies';
-import { IPrices } from './trades';
 import { IOrders } from './orders';
+import { IStrategies } from './strategies';
 
 export interface ISimulator {
     id?: string,
     _id: string,
     user: string,
     strategies: string,
-    orders: string[],
     prices: string,
     market_id: string,
     price_snapshot: number,
@@ -19,22 +17,22 @@ export interface ISimulator {
     createdAt: Date,
 };
 
-export interface ISimulatorPopulate extends Omit<ISimulator, "strategies"|"prices"|"orders">{
-    strategies: IStrategies,
-    prices: IPrices,
-    orders: IOrders[],
+export interface ISimulatorOrders extends ISimulator{
+    orders: IOrders[]
 };
 
-export interface ISimulatorPopulateOrders extends Omit<ISimulator, "orders">{
-    orders: IOrders[],
-};
+export interface ISimulatorSimulated {
+    simulator: ISimulator,
+    strategy: IStrategies,
+    orders: IOrders[]
+}
 
 /*STATE**************************************************************************************************************/
 
 export interface INITIALSTATE_SIMULATOR {
     simulators: ISimulator[] | null,
-    simulator: ISimulatorPopulateOrders | null,
-    simulated: ISimulatorPopulate[]| null,
+    simulator: ISimulatorOrders | null,
+    simulated: ISimulatorSimulated[]| null,
 };
 
 export type SimulatorObjectKeys = keyof INITIALSTATE_SIMULATOR
@@ -45,9 +43,9 @@ export enum TYPES_SIMULATORS {
     SIMULATORS = "SIMULATORS",
     SIMULATORS_SIMULATOR = "SIMULATORS_SIMULATOR",
     SIMULATORS_SIMULATOR_REMOVE = "SIMULATORS_SIMULATOR_REMOVE",
-    SIMULATORS_SIMULATE = "SIMULATORS_SIMULATE",
+    SIMULATORS_SIMULATED = "SIMULATORS_SIMULATED",
     SIMULATORS_SIMULATE_REMOVE = "SIMULATORS_SIMULATE_REMOVE",
-    SIMULATORS_CLEAR = "SIMULATORS_CLEAR"
+    SIMULATORS_STATE_CLEAR = "SIMULATORS_STATE_CLEAR"
 };
 
 interface Simulators {
@@ -57,7 +55,10 @@ interface Simulators {
 
 interface Simulator {
     type: TYPES_SIMULATORS.SIMULATORS_SIMULATOR,
-    payload: ISimulatorPopulateOrders
+    payload: {
+        simulator: ISimulator,
+        orders: IOrders[]
+    }
 };
 
 interface Simulator_remove {
@@ -65,9 +66,9 @@ interface Simulator_remove {
     payload: string
 }
 
-interface Simulate {
-    type: TYPES_SIMULATORS.SIMULATORS_SIMULATE,
-    payload: ISimulatorPopulate
+interface Simulated {
+    type: TYPES_SIMULATORS.SIMULATORS_SIMULATED,
+    payload: ISimulatorSimulated
 };
 
 interface Simulate_Remove {
@@ -76,11 +77,11 @@ interface Simulate_Remove {
 }
 
 interface Clear {
-    type: TYPES_SIMULATORS.SIMULATORS_CLEAR,
+    type: TYPES_SIMULATORS.SIMULATORS_STATE_CLEAR,
     payload: {
         key: SimulatorObjectKeys,
         value: any
     }
 };
 
-export type ACTION_SIMULATORS = Simulators | Simulator | Simulator_remove | Simulate | Simulate_Remove | Clear
+export type ACTION_SIMULATORS = Simulators | Simulator | Simulator_remove | Simulated | Simulate_Remove | Clear

@@ -2,6 +2,7 @@
 
 export interface IOrders {
     _id: string,
+    market_id: string,
     simulator: string,
     clientOid: string,
     open: boolean,

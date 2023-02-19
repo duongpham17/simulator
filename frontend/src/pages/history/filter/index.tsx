@@ -4,14 +4,9 @@ import { Context } from 'context/useOrders';
 
 import Container from '@components/container/Style1';
 import Checkbox from '@components/buttons/Checkbox';
-import Flex from '@components/flex/Flex';
-
-const Index = () => {
-    const {orders, setOrders, initialOrders} = useContext(Context);
-    return ( 
-        orders && initialOrders && <Filter orders={orders} setOrders={setOrders} initialOrders={initialOrders} /> 
-    )
-};
+import Grid from '@components/grid/Style2';
+import Overflow from '@components/overflow/Overflow';
+import { firstcaps } from '@utils/functions';
 
 interface Props {
     initialOrders: IOrders[],
@@ -22,17 +17,23 @@ interface Props {
 const Filter = ({setOrders, orders, initialOrders}: Props) => {
 
     const [query, setQuery] = useState({
+        market_id: "",
         filter: "",
         sort: "",
     });
+    const check = (q: "filter" | "sort" | "market_id", selected: string) => query[q] === selected;
+
+    const sort_values = ["highest", "lowest", "newest", "oldest"];
+    const filter_values = ["profit", "loss", "sell", "buy"];
+    const market_ids_values = [...new Set(initialOrders.map(el => el.market_id))].sort();
 
     const sort = (s: string, data: IOrders[]):IOrders[] => {
-        if(s === "highest profit") data = data.sort((a, b) => Number(a.profit_loss) - Number(b.profit_loss));
-        if(s === "lowest profit")  data = data.sort((a, b) => Number(b.profit_loss) -  Number(a.profit_loss));
+        if(s === "highest") data = data.sort((a, b) => Number(a.profit_loss) - Number(b.profit_loss));
+        if(s === "lowest")  data = data.sort((a, b) => Number(b.profit_loss) -  Number(a.profit_loss));
         if(s === "newest")         data = data.sort((a, b) => Date.parse(a.closed_at_date as any) - Date.parse(b.closed_at_date as any));
         if(s === "oldest")         data = data.sort((a, b) => Date.parse(b.closed_at_date as any) - Date.parse(a.closed_at_date as any));
         return data;
-    }
+    };
 
     const filter = (q: string, data: IOrders[]): IOrders[] => {
         if(q === "loss")    data = data.filter(el => 0 > el.profit_loss);
@@ -40,52 +41,61 @@ const Filter = ({setOrders, orders, initialOrders}: Props) => {
         if(q === "sell")    data = data.filter(el => el.side === "sell");
         if(q === "buy")     data = data.filter(el => el.side === "buy");
         return data;
-    }
+    };
 
     const onFilter = (q: string) => {
-        const off = query.filter === q;
+        const query_marketIds = market_ids_values.includes(q) ? q === query.market_id ? "" : q : query.market_id;
 
-        let data = [...initialOrders];
+        const query_filter = filter_values.includes(q) ? q === query.filter ? "" : q : query.filter;
 
-        if(off) data = sort(query.sort, data);
+        let data = query_marketIds ? initialOrders.filter(el => el.market_id === query_marketIds) : [...initialOrders];
 
-        if(!off){
-            data = filter(q, data);
-            data = sort(query.sort, data);
-        }
+        data = filter(query_filter, data);
 
-        setQuery(state => ({...state, filter: state.filter ? "" : q}));
+        data = sort(query.sort, data);
+
+        setQuery(state => ({...state, filter: query_filter, market_id: query_marketIds}));
+
         setOrders(data);
     };
 
     const onSort = (q: string) => {
-        const off = query.sort === q;
-        if(off) return;
-        let data = [...orders];
-        data = sort(q, data);
-        setOrders(data);
+        const isSelected = query.sort === q;
+        if(isSelected) return;
+        setOrders(sort(q, [...orders]));
         setQuery(state => ({...state, sort: q}));
-
     };
 
-    const check = (q: "filter" | "sort", selected: string) => query[q] === selected;
-
     return (
-        <Flex style={{"marginBottom": "0.5rem"}}>
+        <Grid columns='1fr 1fr 1fr' margin="0.5rem 0">
+
             <Container background="dark">
-                <Checkbox name="Profit" selected={check("filter", "profit")} onClick={() => onFilter("profit")} /> 
-                <Checkbox name="Loss"   selected={check("filter", "loss")} onClick={() => onFilter("loss")} /> 
-                <Checkbox name="Sell"   selected={check("filter", "sell")} onClick={() => onFilter("sell")} /> 
-                <Checkbox name="Buy"    selected={check("filter", "buy")} onClick={() => onFilter("buy")} /> 
+                <Overflow maxHeight={75} hideScrollBar>
+                    {market_ids_values.map((el) => 
+                        <Checkbox key={el} name={el.toLowerCase()} selected={check("market_id", el)} onClick={() => onFilter(el)} /> 
+                    )}
+                </Overflow>
             </Container>
+
             <Container background="dark">
-                <Checkbox name="Highest profit" selected={check("sort", "highest profit")}  onClick={() => onSort("highest profit")} /> 
-                <Checkbox name="Lowest profit"  selected={check("sort", "lowest profit")}  onClick={() => onSort("lowest profit")} /> 
-                <Checkbox name="Newest"         selected={check("sort", "newest")}  onClick={() => onSort("newest")} /> 
-                <Checkbox name="Oldest"         selected={check("sort", "oldest")}  onClick={() => onSort("oldest")} /> 
+                {filter_values.map((el) => 
+                    <Checkbox key={el} name={firstcaps(el)} selected={check("filter", el)} onClick={() => onFilter(el)} /> 
+                )}
             </Container>
-        </Flex>
+
+            <Container background="dark">
+                {sort_values.map((el) => 
+                    <Checkbox key={el} name={firstcaps(el)} selected={check("sort", el)} onClick={() => onSort(el)} /> 
+                )}
+            </Container>
+
+        </Grid>
     )
 }
+
+const Index = () => {
+    const {orders, setOrders, initialOrders} = useContext(Context);
+    return ( orders && initialOrders && <Filter orders={orders} setOrders={setOrders} initialOrders={initialOrders} /> )
+};
 
 export default Index

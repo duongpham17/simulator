@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
-
-import { asyncBlock, appError } from '../@utils/helper';
+import { kucoin } from '../@api/kucoin';
 import { InjectUserToRequest } from '../@types/models';
+import { asyncBlock, appError } from '../@utils/helper';
 import { encrypt } from '../@utils/encryption';
 
 import Strategies from '../model/strategies';
@@ -29,6 +29,27 @@ export const strategy = asyncBlock(async(req: InjectUserToRequest, res: Response
         status: "success",
         data: s
     });
+
+});
+
+export const checkapi = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
+
+    const { api_key, secret_key, passphrase } = req.body;
+
+    const live = kucoin({
+        symbol: "adausdtm",
+        api_key: encrypt(api_key),
+        secret_key: encrypt(secret_key), 
+        passphrase: encrypt(passphrase)
+    });
+
+    const account = await live.getAccountOverview();
+
+    res.status(200).json({
+        status: "success",
+        data: account ? true : false
+    });
+
 
 });
 

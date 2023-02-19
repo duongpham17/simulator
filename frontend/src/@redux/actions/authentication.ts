@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { ACTION_AUTHENTICATION, TYPES_AUTHENTICATION } from '@redux/types/authentication';
+import { ACTION_AUTHENTICATION, AuthenticationObjectKeys, TYPES_AUTHENTICATION } from '@redux/types/authentication';
 import { ACTION_USER, TYPES_USER } from '@redux/types/user';
 import { api } from '@redux/api';
 import { redirect } from '@utils/functions';
@@ -31,14 +31,14 @@ const login = (email: string) => async (dispatch: Dispatch<ACTION_AUTHENTICATION
     try{
         const res = await api.post(`/authentication/email`, {email});
         dispatch({
-            type: TYPES_AUTHENTICATION.RESPONSE_STATUS,
+            type: TYPES_AUTHENTICATION.AUTHENTICATION_RESPONSE_STATUS,
             payload: {
                 login: res.data.status
             }
         });
     } catch(error:any){
         dispatch({
-            type: TYPES_AUTHENTICATION.RESPONSE_ERROR,
+            type: TYPES_AUTHENTICATION.AUTHENTICATION_RESPONSE_ERROR,
             payload: {
                 login: error.response.data.message
             }
@@ -53,7 +53,7 @@ const confirm_with_email = (token: string) => async (dispatch: Dispatch<ACTION_A
         redirect();
     } catch(error:any){
         dispatch({
-            type: TYPES_AUTHENTICATION.RESPONSE_ERROR,
+            type: TYPES_AUTHENTICATION.AUTHENTICATION_RESPONSE_ERROR,
             payload: {
                 confirm: error.response.data.message
             }
@@ -68,7 +68,7 @@ const confirm_with_code = (email: string, code: string) => async (dispatch: Disp
         redirect();
     } catch(error:any){
         dispatch({
-            type: TYPES_AUTHENTICATION.RESPONSE_ERROR,
+            type: TYPES_AUTHENTICATION.AUTHENTICATION_RESPONSE_ERROR,
             payload: {
                 code:  error.response.data.message
             }
@@ -76,12 +76,13 @@ const confirm_with_code = (email: string, code: string) => async (dispatch: Disp
     }
 };
 
-const clear_error = () => async (dispatch: Dispatch<ACTION_AUTHENTICATION>) => {
+const state_clear = (key:AuthenticationObjectKeys, value: any) => async (dispatch: Dispatch<ACTION_AUTHENTICATION>) => {
     dispatch({
-        type: TYPES_AUTHENTICATION.RESPONSE_CLEAR,
-        payload: "",
-    })
+        type: TYPES_AUTHENTICATION.AUTHENTICATION_STATE_CLEAR,
+        payload: { key, value }
+    });
 };
+
 
 const Authentication = {
     load_user,
@@ -89,7 +90,7 @@ const Authentication = {
     logout,
     confirm_with_code,
     confirm_with_email,
-    clear_error,
+    state_clear
 };
 
 export default Authentication

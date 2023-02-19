@@ -7,13 +7,14 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     selected?: boolean,
     loading?: boolean,
     color?: "red" | "dark" | "light" | "black" | "blue" | "border",
+    margin?: boolean,
 };
 
-const Button = ({label1, label2, loading, color, selected, ...props}: Props) => {
+const Button = ({label1, label2, loading, color, selected, margin, ...props}: Props) => {
     return (
         <div className={styles.container}>
 
-            <button {...props} disabled={loading} className={`${styles[color ? color : "default"]} ${selected && styles.selected}`}>
+            <button type="button" disabled={loading} className={`${styles[color ? color : "default"]} ${selected && styles.selected} ${margin && styles.margin}`} {...props}>
 
                 { label1 && !label2 && 
                     <div className={styles.single}>  

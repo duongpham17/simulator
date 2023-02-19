@@ -47,17 +47,17 @@ export const trading = (state = initialState, action: ACTION_STRATEGIES) => {
                 ...state,
                 strategies: !state.strategies ? [payload] : [payload, ...state.strategies.filter(el => el._id !== payload._id)]
             }
-        case TYPES_STRATEGIES.RESPONSE_STATUS:
+        case TYPES_STRATEGIES.STRATEGIES_RESPONSE_STATUS:
             return{
                 ...state,
                 status: payload
             };
-        case TYPES_STRATEGIES.RESPONSE_ERROR:
+        case TYPES_STRATEGIES.STRATEGIES_RESPONSE_ERROR:
             return{
                 ...state,
                 errors: payload
             };
-        case TYPES_STRATEGIES.RESPONSE_CLEAR:
+        case TYPES_STRATEGIES.STRATEGIES_RESPONSE_CLEAR:
             return{
                 ...state,
                 status: {},

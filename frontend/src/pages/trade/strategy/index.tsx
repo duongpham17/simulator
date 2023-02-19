@@ -19,7 +19,7 @@ const Strategy = () => {
   const [ isEdit, setIsEdit ] = useState(false);
 
   return ( (!isTrading && strategy) ?
-    <Container selected={isEdit} background='dark'>
+    <Container selected={isEdit} background='dark' margin>
 
       <Header label1={<>{strategy.name} &#x2022; {strategy.market_id.toLowerCase()}</>} label2={isEdit ? <MdClose/> : <MdModeEditOutline/>} onClick={() => setIsEdit(!isEdit)}/>
 

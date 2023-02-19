@@ -31,13 +31,20 @@ export const simulators = asyncBlock(async(req: InjectUserToRequest, res: Respon
 
 export const simulator = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
     
-    const data = await Simulators.findById(req.params.id).populate("orders")
+    const simulator = await Simulators.findById(req.params.id)
     
-    if(!data) return new appError("Could not get data", 400);
+    if(!simulator) return new appError("Could not get data", 400);
+
+    const orders = await Orders.find({simulator: simulator._id});
+
+    if(!orders) return new appError("Could not get data", 400);
     
     res.status(200).json({
         status: "success",
-        data
+        data: {
+            simulator,
+            orders
+        }
     });
 
 });
@@ -151,6 +158,7 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
                     ...strategy,
                     user: simulator.user,
                     simulator: simulator._id,
+                    market_id: simulator.market_id,
                     open: true,
                     side,
                     clientOid: `sim-id-${Math.random().toString(36).substring(7)}`,
@@ -174,14 +182,10 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
     
     const simulator_data: ISimulators = {
         _id: simulator._id,
-        strategies: {
-            ...simulator.strategies._doc,
-            ...strategy
-        },
+        strategies: simulator.strategies._id,
         user: simulator.user,
         market_id: simulator.market_id,
         prices: simulator.prices._id,
-        orders,
         price_snapshot: prices[0].price,
         price_open_snapshot: prices[0].price,
         createdAt: new Date(),
@@ -191,7 +195,11 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
 
     res.status(200).json({
         status: "success",
-        data: simulator_data
+        data: {
+            simulator: simulator_data,
+            strategy: {...simulator.strategies._doc, ...strategy},
+            orders
+        }
     });
 
 });

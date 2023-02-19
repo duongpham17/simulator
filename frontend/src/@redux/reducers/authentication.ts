@@ -15,15 +15,26 @@ export const authentication = (state = initialState, action: ACTION_AUTHENTICATI
                 ...state,
                 isLoggedIn: payload
             }
-        case TYPES_AUTHENTICATION.RESPONSE_STATUS:
+        case TYPES_AUTHENTICATION.AUTHENTICATION_RESPONSE_STATUS:
             return{
                 ...state,
                 status: payload
             }
-        case TYPES_AUTHENTICATION.RESPONSE_ERROR:
+        case TYPES_AUTHENTICATION.AUTHENTICATION_RESPONSE_ERROR:
             return{
                 ...state,
                 errors: payload,
+            }
+        case TYPES_AUTHENTICATION.AUTHENTICATION_RESPONSE_CLEAR:
+            return{
+                ...state,
+                status: {},
+                errors: {}
+            }
+        case TYPES_AUTHENTICATION.AUTHENTICATION_STATE_CLEAR:
+            return{
+                ...state,
+                [payload.key]: payload.value
             }
 
         default: 

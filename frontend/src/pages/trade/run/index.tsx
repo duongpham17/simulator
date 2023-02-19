@@ -1,4 +1,4 @@
-import {useAppDispatch, useAppSelector} from '@redux/hooks/useRedux';
+import { useAppDispatch, useAppSelector } from '@redux/hooks/useRedux';
 import { localGet, localSet } from '@utils/localstorage';
 import Trades from '@redux/actions/trades';
 
@@ -56,18 +56,18 @@ const Run = () => {
 
   useEffect(() => {
     if(trading) setValues(state => ({...state, live: trading.live}));
-  }, [trading, setValues])
+  }, [trading, setValues]);
 
   return (
-    <Form onSubmit={onSubmit} button={false}>
+    <Form onSubmit={onSubmit} button={false} marginBottom="0.5rem"> 
       <Container background='dark'>
         
-          <Button label1={!isTrading ? "Start trading" : "Stop trading"} label2={isTrading ? <Spinner size={15} color="white" /> : <MdPlayArrow/>} color="blue" style={{"marginBottom": "0.5rem"}}/>
+          <Button type="submit" label1={!isTrading ? "Start trading" : "Stop trading"} label2={isTrading ? <Spinner size={15} color="white" /> : <MdPlayArrow/>} color="blue" margin/>
 
           {!isTrading &&
             <>
               <Label label1="Environment" label2={!trading && "Once set cannot change"}/>
-              <Button label1={values.live ? "Live" : "Test"} onClick={onChangeEnvironment} type="button" color='light' style={{"marginBottom": "0.5rem"}}/>
+              <Button label1={values.live ? "Live" : "Test"} onClick={onChangeEnvironment} type="button" color='light' margin/>
 
               <Input disabled={isTrading} type="number" label1="Reset price snapshot in minutes" label2="optional" placeholder='minutes (default never reset)'
                 name="reset" value={values.reset || ""} onChange={onChange} 

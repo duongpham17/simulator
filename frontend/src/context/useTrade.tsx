@@ -46,6 +46,7 @@ export const UseTradeContext = ({children}: {children: React.ReactNode}) => {
 
     useEffect(() => {
         dispatch(Strategies.get());
+        dispatch(Strategies.state_clear("status", {}));
     }, [dispatch]);
 
     const value = {
