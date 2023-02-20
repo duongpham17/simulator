@@ -1,1 +1,1 @@
-# Crypto trading simulator
+# Crypto trading simulator!
