@@ -7,6 +7,8 @@ export interface ISimulators extends Partial<Document> {
     user: PopulatedDoc<Types.ObjectId & IUsers>,
     strategies: PopulatedDoc<Types.ObjectId & IStrategies>,
     prices: PopulatedDoc<Types.ObjectId & IPrices>,
+    prices_count: number,
+    used: boolean,
     price_snapshot: number,
     market_id: string,
     price_open_snapshot: number,
@@ -24,9 +26,16 @@ const SimulatorsSchema = new Schema<ISimulators>({
         type: Schema.Types.ObjectId,
         ref: 'Strategies'
     },
+    prices_count: {
+        type: Number,
+        default: 0
+    },
     prices: {
         type: Schema.Types.ObjectId,
         ref: 'Prices'
+    },
+    used: {
+        type: Boolean
     },
     live: {
         type: Boolean,

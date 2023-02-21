@@ -7,38 +7,45 @@ import Simulators from './simulators';
 import Simulator from './simulator';
 import Run from './run';
 import Simulated from './simulated';
+import Loading from '@components/loading/Fish';
+
+import useFetching from '@hooks/useFetching';
 import useQuery from '@hooks/useQuery';
 
 const Trade = () => {
 
   const {simulators} = useAppSelector(state => state.simulators);
 
-  const {getQueryValue} = useQuery()
+  const {fetching} = useFetching({ seconds: 10, dependency: simulators});
 
-  const simulatorId = getQueryValue("simulator")
+  const {getQueryValue} = useQuery();
+
+  const simulatorId = getQueryValue("simulator");
 
   return ( 
-    <UseSimulatorContext>
-      { simulators && simulators.length ?
+      <UseSimulatorContext>
+        {fetching ? <Loading /> :
+          <>
+            { simulators && simulators.length ?
+              <div className={styles.container}>
+                  <div className={styles.control}>
+                    <Simulators simulators={simulators}/>
+                  </div>
 
-        <div className={styles.container}>
-            <div className={styles.control}>
-              <Simulators/>
-            </div>
-
-          {simulatorId &&
-            <div className={styles.trades}>
-              <Simulator />
-              <Run />
-              <Simulated />
-            </div>
-          }
-            
-        </div>
-      :
-        <Empty/>
-      }
-    </UseSimulatorContext>
+                {simulatorId &&
+                  <div className={styles.trades}>
+                    <Simulator />
+                    <Run />
+                    <Simulated />
+                  </div>
+                }
+              </div>
+            :
+              <Empty/>
+            }
+          </>
+        }
+      </UseSimulatorContext>
   )
 }
 

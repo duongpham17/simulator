@@ -29,7 +29,7 @@ const Orders = ({orders}: Props) => {
 
     return (
         <>  
-            <Button label1={!openItems.length ? <MdKeyboardArrowDown/> : <MdKeyboardArrowUp/>} onClick={onOpenAll} style={{padding: "0.2rem"}} />
+            {!!orders.length && <Button label1={!openItems.length ? <MdKeyboardArrowDown/> : <MdKeyboardArrowUp/>} onClick={onOpenAll} style={{padding: "0.2rem"}} />}
 
             <Pagination data={[...orders].reverse().filter(el => el.open !== true)}>
                 {(el) => 

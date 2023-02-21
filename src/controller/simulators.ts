@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express';
 import { asyncBlock, appError } from '../@utils/helper';
 import { InjectUserToRequest } from '../@types/models';
 
-import Prices, {Price} from '../model/prices';
+import Prices, {Price, IPrices} from '../model/prices';
 import Simulators, {ISimulators} from '../model/simulators';
 import Orders, {IOrder} from '../model/orders';
 import {IStrategiesInputsSimulate} from '../model/strategies';
@@ -11,27 +11,31 @@ import {order_strategy} from './middleware/trades';
 
 export const simulators = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
 
-    const data = await Simulators.find({user: req.user._id}).populate("prices").sort({createdAt: -1})
+    const sims = await Simulators.find({user: req.user._id}).sort({createdAt: -1});
 
-    if(!data) return new appError("Could not get data", 400);
+    if(!sims) return new appError("Could not get data", 400);
 
-    const shorten_data = data.map(el => ({
-        _id: el._id, 
-        market_id: el.market_id,
-        createdAt: el.createdAt,
-        prices: !el.prices ? 0 : el.prices.prices.length,
-        live: el.live
-    }));
+    for(let i in sims){
+        const s = sims[i];
+        if(s.used === false) continue;
+        try{
+            const prices = await Prices.findById(s.prices) as IPrices;
+            const updated_simulator = await Simulators.findByIdAndUpdate(s._id, { prices_count: prices.prices.length, used: false}, {new: true});
+            if(updated_simulator) sims[i] = updated_simulator;
+        } catch(_){
+            console.log(_)
+        }
+    };
 
     res.status(200).json({
         status: "success",
-        data: shorten_data
+        data: sims
     })
 });
 
 export const simulator = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
     
-    const simulator = await Simulators.findById(req.params.id)
+    const simulator = await Simulators.findByIdAndUpdate(req.params.id);
     
     if(!simulator) return new appError("Could not get data", 400);
 
@@ -188,9 +192,11 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
         prices: simulator.prices._id,
         price_snapshot: prices[0].price,
         price_open_snapshot: prices[0].price,
-        createdAt: new Date(),
         reset: strategy.reset,
         live: simulator.live,
+        prices_count: prices.length,
+        used: false,
+        createdAt: new Date(),
     };
 
     res.status(200).json({

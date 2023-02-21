@@ -35,8 +35,7 @@ const TradesContainer = () => {
                         {(el) => 
                             <Element key={el._id} border pointer onClick={() => onLoading(() => dispatch(Trades.load(el._id)))} selected={loading} loading={loading}>
                                 <Text3 name={date(el.createdAt)} value={""} size={14}/>
-                                <Text1 name="Prices" value={el.prices as any} size={14}/>
-                                {/* <Text1 name="Orders" value={el.orders as any} size={14}/> */}
+                                <Text1 name="data" value={el.prices_count} size={14}/>
                             </Element>
                         }
                     </Swiper>

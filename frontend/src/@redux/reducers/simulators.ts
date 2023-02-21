@@ -30,11 +30,11 @@ export const simulators = (state = initialState, action: ACTION_SIMULATORS) => {
                 ...state,
                 simulated: state.simulated ? [payload, ...state.simulated] : [payload],
             };
-        // case TYPES_SIMULATORS.SIMULATORS_SIMULATE_REMOVE:
-        //     return{
-        //         ...state,
-        //         simulated: state.simulated ? state.simulated.filter(el => el.createdAt.toLocaleString() !== payload) : []
-        //     };
+        case TYPES_SIMULATORS.SIMULATORS_SIMULATE_REMOVE:
+            return{
+                ...state,
+                simulated: state.simulated ? state.simulated.filter(el => el.simulator.createdAt.toLocaleString() !== payload) : []
+            };
         case TYPES_SIMULATORS.SIMULATORS_STATE_CLEAR:
             return{
                 ...state,

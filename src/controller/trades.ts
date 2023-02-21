@@ -3,7 +3,7 @@ import { kucoin } from '../@api/kucoin';
 import { asyncBlock, appError } from '../@utils/helper';
 import { InjectUserToRequest } from '../@types/models';
 
-import Prices, {Price} from '../model/prices';
+import Prices, {Price, IPrices} from '../model/prices';
 import Simulators, {ISimulators} from '../model/simulators';
 import Orders, {IOrder} from '../model/orders';
 import {IStrategiesInputs} from '../model/strategies';
@@ -26,37 +26,42 @@ export const price = asyncBlock(async(req: InjectUserToRequest, res: Response, n
 
 export const trades = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
     
-    const data = await Simulators.find({strategies: req.params.id}).populate("prices").sort({createdAt: -1});
+    const sims = await Simulators.find({strategies: req.params.id}).sort({createdAt: -1});
     
-    if(!data) return new appError("Could not get data", 400);
+    if(!sims) return new appError("Could not find any trade data", 400);
 
-    const shorten_data = data.map(el => ({
-        _id: el._id, 
-        market_id: el.market_id,
-        createdAt: el.createdAt,
-        prices: !el.prices ? 0 : el.prices.prices.length,
-    }));
-    
+    for(let i in sims){
+        const s = sims[i];
+        if(s.used === false) continue;
+        try{
+            const prices = await Prices.findById(s.prices) as IPrices;
+            const updated_simulator = await Simulators.findByIdAndUpdate(s._id, { prices_count: prices.prices.length, used: false}, {new: true});
+            if(updated_simulator) sims[i] = updated_simulator;
+        } catch(_){
+            console.log(_)
+        }
+    };
+
     res.status(200).json({
         status: "success",
-        data: shorten_data
+        data: sims
     });
 
 });
 
 export const load = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
     
-    const simulator = await Simulators.findById(req.params.id);
+    const simulator = await Simulators.findByIdAndUpdate(req.params.id, {used: true}, {new: true});
     
-    if(!simulator) return new appError("Could not get data", 400);
+    if(!simulator) return new appError("Could not find simulator data", 400);
 
     const orders = await Orders.find({simulator: simulator._id});
 
-    if(!orders) return new appError("Could not get data", 400);
+    if(!orders) return new appError("Could not find order data", 400);
 
-    const prices = await Prices.find({simulator: simulator._id});
+    const prices = await Prices.findById(simulator.prices);
 
-    if(!prices) return new appError("Could not get data", 400);
+    if(!prices) return new appError("Could not find price data", 400);
     
     res.status(200).json({
         status: "success",
