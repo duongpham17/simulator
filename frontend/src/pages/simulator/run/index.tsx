@@ -29,15 +29,15 @@ const Run = () => {
     const previous = localGet("previous-simulator-inputs");
 
     const initialState: IStrategiesInputsSimulate = {
-        strategy: previous.strategy || "",
-        reset: previous.reset || 0,
-        short: previous.short || 0,
-        long: previous.long || 0,
-        trailing_take_profit: previous.trailing_take_profit || false,
-        stop_loss: previous.stop_loss || 0,
-        take_profit: previous.take_profit || 0,
-        leverage: previous.leverage || 0,
-        position_size: previous.position_size || 0,
+        strategy: previous?.strategy || "",
+        reset: previous?.reset || 0,
+        short: previous?.short || 0,
+        long: previous?.long || 0,
+        trailing_take_profit: previous?.trailing_take_profit || false,
+        stop_loss: previous?.stop_loss || 0,
+        take_profit: previous?.take_profit || 0,
+        leverage: previous?.leverage || 0,
+        position_size: previous?.position_size || 0,
     };
     
     const {onSubmit, values, onChange, errors, onSetValue, loading} = useForm(initialState, callback, validation);

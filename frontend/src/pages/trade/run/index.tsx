@@ -25,10 +25,10 @@ const Run = () => {
   const previous = localGet("previous-trade-inputs");
 
   const initialState = {
-    usdt_balance: previous.usdt_balance || 0,
-    position_size: previous.position_size || 0,
-    reset: previous.reset || 0,
-    leverage: previous.leverage || 1,
+    usdt_balance: previous?.usdt_balance || 0,
+    position_size: previous?.position_size || 0,
+    reset: previous?.reset || 0,
+    leverage: previous?.leverage || 1,
     live: trading ? trading.live : true,
   };
 
@@ -62,7 +62,7 @@ const Run = () => {
     <Form onSubmit={onSubmit} button={false} marginBottom="0.5rem"> 
       <Container background='dark'>
         
-          <Button type="submit" label1={!isTrading ? "Start trading" : "Stop trading"} label2={!isTrading ? <Loading /> : <MdPlayArrow/>} color="blue" margin/>
+          <Button type="submit" label1={!isTrading ? "Start trading" : "Stop trading"} label2={isTrading ? <Loading /> : <MdPlayArrow/>} color="blue" margin/>
 
           {!isTrading &&
             <>
