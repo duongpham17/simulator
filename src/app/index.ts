@@ -1,4 +1,5 @@
 import express from 'express';
+import server from './server';
 import database from './database';
 import parser from './parser';
 import port from './port';
@@ -16,6 +17,8 @@ export default (): void => {
     routes(app);
 
     database();
+
+    server(app, express);
 
     port(app);
     

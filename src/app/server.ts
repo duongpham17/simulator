@@ -1,7 +1,7 @@
 import {Express} from 'express';
 import path from 'path';
 
-const heroku = (app: Express, express: any) => {
+const server = (app: Express, express: any) => {
     const production = process.env.NODE_ENV === "production";
 
     if(production){
@@ -15,4 +15,4 @@ const heroku = (app: Express, express: any) => {
     
 }
 
-export default heroku;
+export default server;
