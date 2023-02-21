@@ -1,0 +1,29 @@
+.container{
+    button{
+        border-bottom: 1px solid transparent;
+        padding: 0.5rem;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+
+        &:hover{
+            border-color: var(--clr-main);
+        }
+    }
+    button:hover small{
+        display: block;
+    }
+    small{
+        display: none;
+        font-weight: 200;
+        color: var(--clr-text);
+        text-align: right;
+        width: 60%;
+    }
+    img{
+        width: 18px;
+        height: 18px;
+    }
+}

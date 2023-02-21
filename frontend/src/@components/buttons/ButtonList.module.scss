@@ -1,0 +1,45 @@
+.container{
+    width: 100%;
+
+    button{
+        border-bottom: 2px solid var(--clr-light);
+        padding: 0.5rem 0;
+        width: 100%;
+        transition: 0.2s ease-in-out;
+
+        &:hover{
+            border-color: var(--clr-main);
+        }
+
+        .single{
+            text-align: center;
+        }
+
+        .double{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+
+            svg, span{
+                font-size: 1rem;
+                display: flex;
+                align-items: center;
+            }
+        }
+
+    }
+
+    .dark{
+        border-color: var(--clr-dark-transparent);
+    }
+    .light{
+        border-color: var(--clr-light-transparent)
+    }
+    .red{
+        border-color: var(--clr-red);
+    }
+    .bright{
+        border-color: var(--clr-bright);
+    }
+}

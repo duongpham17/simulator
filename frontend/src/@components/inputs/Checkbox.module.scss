@@ -1,0 +1,47 @@
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+    transition: 0.2s ease-in-out;
+
+    p{
+        text-align: left;
+        font-weight: 200;
+    }
+
+    span{
+        display: block;
+        width: 20px;
+        height: 20px;
+        background-color: var(--clr-light-transparent);
+        border: 3px double var(--clr-light-transparent);
+        border-radius: 50px;
+    }
+    .selected{
+        background-color: var(--clr-main);
+    }
+}
+
+.margin{
+    margin-bottom: 0.5rem;
+}
+
+.dark, .light{
+    padding: 0.5rem;
+    border: 1px solid var(--clr-light-transparent);
+
+    &:hover{
+        border-color: var(--clr-main);
+    }
+}
+
+.dark{
+    background-color: var(--clr-dark-transparent);
+}
+
+.light{
+    background-color: var(--clr-light-transparent);
+}

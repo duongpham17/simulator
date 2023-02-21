@@ -1,0 +1,22 @@
+.container{
+    width: 100%;
+    span:first-child{
+        text-align: left;
+        color: var(--clr-text-light);
+    }
+    span:last-child{
+        text-align: right;
+    }
+}
+
+.red{
+    span{
+        color: var(--clr-red);
+    }
+}
+
+.green{
+    span{
+        color: var(--clr-green);
+    }
+}

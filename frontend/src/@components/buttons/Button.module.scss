@@ -1,0 +1,94 @@
+/* Loading */ 
+@mixin Loading($width, $height, $border, $color) {
+    width: $width;
+    height: $height;
+    border-radius: 50%;
+    border: $border solid $color;
+    border-top-color: transparent;
+    animation: spinner 0.5s linear infinite;
+}
+@keyframes spinner {
+    to{
+        transform: rotate(360deg);
+    }
+}
+
+.container{
+    
+    button{
+        border: 1px solid transparent;
+        padding: 0.5rem;
+        width: 100%;
+        transition: 0.2s ease-in-out;
+        border-radius: 5px;
+
+        &:hover{
+            opacity: 0.8;
+        }
+        
+        .single{
+            text-align: center;
+        }
+
+        .double{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;    
+            
+            svg, span{
+                display: flex;
+            }
+        }
+
+        .loading1{
+            @include Loading(15px, 15px, 2px, var(--clr-main));
+            margin: auto;
+        }
+
+        .loading2{
+            @include Loading(15px, 15px, 2px, var(--clr-main));
+        }
+
+    }
+
+    .red, .black, .blue{
+        border: 1px solid var(--clr-light-transparent);
+        p, svg, span{
+            color: white;
+        };
+        .loading1{
+            @include Loading(15px, 15px, 2px, white);
+            margin: auto;
+        }
+        .loading2{
+            @include Loading(15px, 15px, 2px, white);
+        }
+    }
+
+    .light, .dark{
+        border: 1px solid var(--clr-light-transparent);
+    }
+    .red{
+        background-color: var(--clr-red);
+    }
+    .black{
+        background-color: black;
+    }
+    .light{
+        background-color: var(--clr-light-transparent);
+    }
+    .dark{
+        background-color: var(--clr-dark-transparent);
+    }
+    .blue{
+        background-color: var(--clr-blue);
+    }
+    .selected{
+        border-color: var(--clr-main);
+    }
+
+    .margin{
+        margin-bottom: 0.5rem;
+    }
+}

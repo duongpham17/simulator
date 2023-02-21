@@ -1,0 +1,47 @@
+.container{
+    transition: ease-in-out 0.2s;
+    border-radius: 5px;
+    background-color: var(--clr-dark-transparent);
+}
+
+.border{
+    border: 1px solid var(--clr-light-transparent);
+    padding: 0.5rem;
+
+    &:hover{
+        border-color: var(--clr-dark-transparent);
+    }
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.selected{
+    border-color: var(--clr-main);
+}
+
+.loading{
+    &:before{
+        content: "";
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        position: absolute;
+        border-radius: 5px;
+        opacity: 0.8;
+        z-index: 1;
+        background: linear-gradient(110deg, var(--clr-light-transparent) 8%, var(--clr-dark-transparent) 20%, var(--clr-light-transparent) 33%);
+        border-radius: 5px;
+        background-size: 200% 100%;
+        animation: 1.2s shine linear infinite;
+    }
+}
+
+@keyframes shine {
+    to {
+      background-position-x: -200%;
+    }
+  }

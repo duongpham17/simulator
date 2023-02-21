@@ -1,0 +1,44 @@
+.container{
+    width: 100%;
+
+    .navBtn{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.1rem;
+
+        button{
+            display: flex;
+            align-items: center;
+
+            svg{
+                font-size: 1rem;
+            }
+
+            &:hover{
+                background-color: var(--clr-light-transparent);
+                border-radius: 50px;
+            }
+        }
+    }
+
+    .bullets{
+        display: flex;
+        align-items: center;
+
+        .bullet{
+            background-color: var(--clr-dark-transparent);
+            width: 7px;
+            height: 7px;
+            margin: 0 0.1rem;
+            border-radius: 5px;
+        }
+        .selected{
+            background-color: var(--clr-main);
+        }
+    }
+
+    .swiper{
+        margin-bottom: 0.5rem;
+    }
+}
