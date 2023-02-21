@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@redux/hooks/useRedux';
 import authentication from '@redux/actions/authentication';
+import Loading from '@components/loading/Fish';
 
 const Confirmation = () => {
 
@@ -23,15 +24,14 @@ const Confirmation = () => {
   return (
     <div className={styles.container}>
       {
-        errors.confirm
+        !errors.confirm
         ? 
           <div>
             <Link to="/login">{errors.confirm}</Link>
           </div>
         : 
           <div>
-            <p>Checking</p>
-            <div className='loading-30 center' />
+            <Loading />
           </div>
       }
 

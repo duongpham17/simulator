@@ -1,14 +1,18 @@
 import styles from './Spinner.module.scss';
 
 interface Props {
-  size: 10 | 15 | 20 | 30 | 40 | 50 | 60,
-  color?: "white",
+  size?: number,
+  thickness?: number,
+  color?: string,
   center?: boolean 
 }
 
-const Spinner = ({size, color, center=false}:Props) => {
+const Spinner = ({color="", center=false, size=20, thickness=2}:Props) => {
   return (
-    <span className={`${styles[`loading${size || 20}`]} ${center ? styles.center : "default"} ${styles[color ? color : ""]}`} />
+    <span 
+      style={{width: `${size}px`, height: `${size}px`, border: `${thickness}px solid`, borderColor: color || "", borderTopColor: "transparent"}}      
+      className={`${styles.loading} ${center ? styles.center : "default"}`}  
+    />  
   )
 }
 
