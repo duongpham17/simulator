@@ -12,6 +12,7 @@
             width: 40px;
             border-radius: 5px;
             border: 2px solid var(--clr-dark-transparent); 
+            background-color: var(--clr-dark-transparent);
 
             &:hover{
                 border-color: var(--clr-light);

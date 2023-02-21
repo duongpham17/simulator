@@ -1,0 +1,93 @@
+.loader {
+    height: 2px;
+    width: 2px;
+    margin-right: 0.5rem;
+    color: var(--clr-main);
+    box-shadow: -6px -6px 0 4px,
+                -6px -6px 0 4px,
+                -6px -6px 0 4px,
+                -6px -6px 0 4px;
+    animation: loader-38 6s infinite;
+  }
+
+  @keyframes loader-38 {
+    0% {
+      box-shadow: -6px -6px 0 4px,
+                  -6px -6px 0 4px,
+                  -6px -6px 0 4px,
+                  -6px -6px 0 4px;
+    }
+    8.33% {
+      box-shadow: -6px -6px 0 4px,
+                  6px -6px 0 4px,
+                  6px -6px 0 4px,
+                  6px -6px 0 4px;
+    }
+    16.66% {
+      box-shadow: -6px -6px 0 4px,
+                  6px -6px 0 4px,
+                  6px 6px 0 4px,
+                  6px 6px 0 4px;
+    }
+    24.99% {
+      box-shadow: -6px -6px 0 4px,
+                  6px -6px 0 4px,
+                  6px 6px 0 4px,
+                  -6px 6px 0 4px;
+    }
+    33.32% {
+      box-shadow: -6px -6px 0 4px,
+                  6px -6px 0 4px,
+                  6px 6px 0 4px,
+                  -6px -6px 0 4px;
+    }
+    41.65% {
+      box-shadow: 6px -6px 0 4px,
+                  6px -6px 0 4px,
+                  6px 6px 0 4px,
+                  6px -6px 0 4px;
+    }
+    49.98% {
+      box-shadow: 6px 6px 0 4px,
+                6px 6px 0 4px,
+                6px 6px 0 4px,
+                6px 6px 0 4px;
+    }
+    58.31% {
+      box-shadow: -6px 6px 0 4px,
+                  -6px 6px 0 4px,
+                  6px 6px 0 4px,
+                  -6px 6px 0 4px;
+    }
+    66.64% {
+      box-shadow: -6px -6px 0 4px,
+                  -6px -6px 0 4px,
+                  6px 6px 0 4px,
+                  -6px 6px 0 4px;
+    }
+    74.97% {
+      box-shadow: -6px -6px 0 4px,
+                  6px -6px 0 4px,
+                  6px 6px 0 4px,
+                  -6px 6px 0 4px;
+    }
+    83.3% {
+      box-shadow: -6px -6px 0 4px,
+                  6px 6px 0 4px,
+                  6px 6px 0 4px,
+                  -6px 6px 0 4px;
+    }
+    91.63% {
+      box-shadow: -6px -6px 0 4px,
+                  -6px 6px 0 4px,
+                  -6px 6px 0 4px,
+                  -6px 6px 0 4px;
+    }
+    100% {
+      box-shadow: -6px -6px 0 4px,
+                  -6px -6px 0 4px,
+                  -6px -6px 0 4px,
+                  -6px -6px 0 4px;
+    }
+  }
+

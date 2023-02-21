@@ -9,7 +9,7 @@ import Button from '@components/buttons/Button';
 import Input from '@components/inputs/Input';
 import Flex from '@components/flex/Flex';
 import Text from '@components/text/Style1';
-import Spinner from '@components/loading/Spinner';
+import Loading from '@components/loading/Flyingdots';
 import Form from '@components/form/Form';
 import Label from '@components/form/Label';
 import useForm from '@hooks/useForm';
@@ -62,7 +62,7 @@ const Run = () => {
     <Form onSubmit={onSubmit} button={false} marginBottom="0.5rem"> 
       <Container background='dark'>
         
-          <Button type="submit" label1={!isTrading ? "Start trading" : "Stop trading"} label2={isTrading ? <Spinner size={15} color="white" /> : <MdPlayArrow/>} color="blue" margin/>
+          <Button type="submit" label1={!isTrading ? "Start trading" : "Stop trading"} label2={!isTrading ? <Loading /> : <MdPlayArrow/>} color="blue" margin/>
 
           {!isTrading &&
             <>

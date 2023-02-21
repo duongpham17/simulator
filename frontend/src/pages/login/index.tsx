@@ -45,7 +45,7 @@ const Login = () => {
                     </>
                 </Form>
                 :
-                <Form onSubmit={onSubmit} loading={loading} width={350} buttonClr={values.code ? "blue" : "none"}>
+                <Form onSubmit={onSubmit} loading={loading} width={350} buttonClr={values.email ? "blue" : "none"}>
                     <>
                         <Input label1="Email address" label2={errors.email} error placeholder="..." name="email" value={values.email} onChange={onChange} />
                         {authState.errors && <small>{authState.errors.login}</small>}

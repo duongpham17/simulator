@@ -14,7 +14,7 @@ interface Props extends React.HTMLProps<HTMLFormElement> {
 
 const Form = ({onSubmit, children, loading, edited = true, button=true, width, buttonClr, marginBottom, ...props}: Props) => {
   return (
-    <form {...props} className={styles.container} onSubmit={onSubmit} style={{"width": `${width}px`, "marginBottom": marginBottom || ""}} >
+    <form className={styles.container} onSubmit={onSubmit} style={{"width": `${width}px`, "marginBottom": marginBottom || ""}}  {...props} >
 
       {children}
 
