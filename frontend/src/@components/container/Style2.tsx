@@ -4,7 +4,7 @@ import React from 'react'
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode,
   selected?: boolean,
-  background?: "light" | "dark",
+  background?: "light" | "dark" | "blue",
   border?: "light" | "dark",
   pointer?: boolean,
 };

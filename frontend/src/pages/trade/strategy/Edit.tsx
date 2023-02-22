@@ -5,7 +5,7 @@ import { useAppDispatch } from '@redux/hooks/useRedux';
 import { IStrategies } from '@redux/types/strategies';
 import useForm from '@hooks/useForm';
 
-import strategies_data from '@data/strategies';
+import strategies_data, { find_side } from '@data/strategies';
 import validation from '@validations/trading';
 
 import Button from '@components/buttons/Button';
@@ -46,14 +46,28 @@ const Edit = ({data, setIsEdit}: Props) => {
             <Select label1="Trading strategy" items={strategies_data} selected={values.strategy}>
             {(strategies) =>  
                 strategies.map((el, i) => 
-                <List key={i} value={el.name} hover={el.description} onClick={() => onSetValue({strategy: el.name})} />  
+                <List key={i} value={el.name} hover={el.description} selected={el.name === values.strategy} onClick={() => onSetValue({strategy: el.name})} />  
             )}
             </Select>
 
-            <Flex>
-                <Input label1="Long difference" name="long" value={values.long} onChange={onChange}/>
-                <Input label1="Short difference" name="short" value={values.short} onChange={onChange}/>
-            </Flex>
+            {find_side(values.strategy) === "both" && 
+                <Flex>
+                    <Input label1="Long difference" name="long" value={values.long} onChange={onChange}/>
+                    <Input label1="Short difference" name="short" value={values.short} onChange={onChange}/>
+                </Flex>
+            }
+
+            {find_side(values.strategy) === "sell" && 
+                <Flex>
+                    <Input label1="Short difference" name="short" value={values.short} onChange={onChange}/>
+                </Flex>
+            }
+
+            {find_side(values.strategy) === "buy" && 
+                <Flex>
+                    <Input label1="Long difference" name="long" value={values.long} onChange={onChange}/>
+                </Flex>
+            }
 
             <Flex>
                 <Input label1="Take profit difference" name="take_profit" value={values.take_profit} onChange={onChange}/>

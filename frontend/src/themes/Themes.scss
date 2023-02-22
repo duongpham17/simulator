@@ -14,25 +14,36 @@ div, section, main, table, form, header, nav, footer{
     --clr-main: #3199ef;
     --clr-text: #555555;
     --clr-text-light: #717272df;
-    --clr-bright: rgb(49, 153, 239);
+    
     --clr-light: rgba(160, 160, 160, 0.773);
     --clr-light-transparent: rgba(226, 226, 226, 0.447);
+
+    --clr-dark: black;
     --clr-dark-transparent: rgba(238, 238, 238, 0.419);
+
+    --clr-blue: rgb(36, 139, 243);
+    --clr-blue-transparent: rgba(36, 139, 243, 0.779);
+
     --clr-red: rgb(252, 88, 88);
     --clr-green: rgb(90, 209, 90);
-    --clr-blue: rgb(36, 139, 243);
 }
 
 .theme-night{
     --clr-background: black;
-    --clr-main: rgb(19, 71, 168);
+    --clr-main: rgb(16, 73, 180);
+
     --clr-text: white;
     --clr-text-light: #bcbcbc;
-    --clr-bright: rgb(36, 169, 158);
+
     --clr-light: rgba(216, 216, 216, 0.773);
     --clr-light-transparent: rgba(46, 46, 46, 0.602);
+
+    --clr-dark: black;
     --clr-dark-transparent: rgba(35, 35, 35, 0.409);
+
+    --clr-blue: rgb(14, 124, 235);
+    --clr-blue-transparent: rgba(144, 164, 251, 0.169);
+
     --clr-red: rgb(252, 88, 88);
     --clr-green: rgb(92, 232, 92);
-    --clr-blue: rgb(36, 139, 243) ;
 }

@@ -29,6 +29,20 @@
         grid-template-areas: 
         "content1 content2"
         "content1 content3"
-    ;
+        ;
+    }
+
+    @media (max-width: 700px){
+        grid-template-columns: 0.2fr minmax(300px, 1fr);
+        grid-template-areas: 
+        "content1 content1"
+        "content2 content2"
+        "content3 content3"
+        ;
+
+        .content1{
+            max-height: 600px;
+            overflow-y: auto;
+        }
     }
 }

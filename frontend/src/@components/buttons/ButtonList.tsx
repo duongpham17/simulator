@@ -4,7 +4,7 @@ import React from 'react';
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     label1: string | React.ReactNode;
     label2?: string | React.ReactNode;
-    color?: "dark" | "bright" | "red" | "light",
+    color?: "dark" | "red" | "light",
 };
 
 const ButtonList = ({label1, label2, color, ...props}: Props) => {

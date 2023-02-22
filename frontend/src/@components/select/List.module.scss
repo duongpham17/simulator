@@ -16,7 +16,6 @@
         display: block;
     }
     small{
-        display: none;
         font-weight: 200;
         color: var(--clr-text);
         text-align: right;
@@ -25,5 +24,8 @@
     img{
         width: 18px;
         height: 18px;
+    }
+    .selected{
+        background-color: var(--clr-light-transparent);
     }
 }

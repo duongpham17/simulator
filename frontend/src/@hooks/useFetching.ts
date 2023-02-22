@@ -13,12 +13,12 @@ const useFetching = ({dependency, seconds = 10}: Props) => {
 
     useEffect(() => {
         if(!fetching) return;
-        if(looped >= seconds) return setFetching(false);
+        if(looped >= (seconds * 2)) return setFetching(false);
 
         let interval = setInterval(() => {
             if(dependency) setFetching(false);
             setLooped(looped => looped + 1);
-        }, 1000)
+        }, 500)
 
         return () => clearInterval(interval);
 

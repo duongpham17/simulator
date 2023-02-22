@@ -6,7 +6,7 @@ import Simulator from '@redux/actions/simulators';
 import useOpen from '@hooks/useOpen';
 import useLoading from '@hooks/useLoading';
 
-import {date, firstcaps} from '@utils/functions';
+import { date } from '@utils/functions';
 
 import Text1 from '@components/text/Style1';
 import Text2 from '@components/text/Style2';
@@ -69,8 +69,8 @@ const ElementContainer = ({data}: Props) => {
     return (
         <Summary 
             background='dark'
-            title={<>{firstcaps(strategy.strategy)} &#x2022; {simulator.market_id.toLowerCase()} &#x2022; {strategy.trailing_take_profit ? "trailing" : "take"}</>} 
-            small={<Text3 name={simulator.live ? "live" : "test"} value={date(simulator.createdAt)} color="light"/>} 
+            title={<>{strategy.strategy} &#x2022; {simulator.live ? "live" : "test"} &#x2022; {strategy.trailing_take_profit ? "trailing" : "take"}</>} 
+            small={<Text3 name={simulator.market_id.toLowerCase()} value={date(simulator.createdAt)} color="light"/>} 
             section={
                 <>
                     <Flex center>

@@ -11,7 +11,7 @@ import Menu from '@components/menu/Menu';
 import Text from '@components/text/Style1';
 import Line from '@components/line/Style1';
 
-import { MdPlayArrow, MdSettings, MdOutlineKeyboardArrowRight, MdArrowRightAlt } from 'react-icons/md';
+import { MdPlayArrow, MdSettings, MdOutlineKeyboardArrowRight } from 'react-icons/md';
 import { localSet } from '@utils/localstorage';
 
 interface Props {
@@ -48,7 +48,7 @@ const Edit = ({strategy, query_strategy_id, setQuery}:Props) => {
 
     return (
         <Summary title={strategy.new ? `new | ${strategy.name}` : strategy.name} 
-            iconClose={!isTrading ? <Icon icon={<MdPlayArrow/>} onClick={onQuickRun} /> : query_strategy_id === strategy._id ? <MdArrowRightAlt/> : <></> } 
+            iconClose={!isTrading ? <Icon icon={<MdPlayArrow/>} onClick={onQuickRun} /> : query_strategy_id === strategy._id ? <MdOutlineKeyboardArrowRight/> : <></> } 
             iconOpen={!isTrading || query_strategy_id !== strategy._id ? <Menu icon={<MdSettings/>}><Dropdown data={strategy}/></Menu> : <MdOutlineKeyboardArrowRight/>}
             selected={query_strategy_id === strategy._id}
             background="dark"
