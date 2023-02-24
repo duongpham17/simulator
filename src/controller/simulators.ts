@@ -30,6 +30,26 @@ export const simulators = asyncBlock(async(req: InjectUserToRequest, res: Respon
     })
 });
 
+export const resync = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
+
+    const simulator = await Simulators.findById(req.params.id);
+
+    if(!simulator) return new appError("Could not get simulator data", 400);
+
+    const prices_count = await Prices.countDocuments({simulator: simulator._id});
+
+    if(!prices_count) return new appError("Could not get prices data", 400);
+
+    simulator.prices_count = prices_count;
+
+    await simulator.save();
+
+    res.status(200).json({
+        status: "success",
+        data: simulator
+    })
+});
+
 export const simulator = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
     
     const simulator = await Simulators.findByIdAndUpdate(req.params.id);

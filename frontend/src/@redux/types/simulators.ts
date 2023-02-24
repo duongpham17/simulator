@@ -45,6 +45,7 @@ export enum TYPES_SIMULATORS {
     SIMULATORS_SIMULATOR = "SIMULATORS_SIMULATOR",
     SIMULATORS_SIMULATOR_REMOVE = "SIMULATORS_SIMULATOR_REMOVE",
     SIMULATORS_SIMULATED = "SIMULATORS_SIMULATED",
+    SIMULATORS_RESYNC = "SIMULATORS_RESYNC",
     SIMULATORS_SIMULATE_REMOVE = "SIMULATORS_SIMULATE_REMOVE",
     SIMULATORS_STATE_CLEAR = "SIMULATORS_STATE_CLEAR"
 };
@@ -61,6 +62,11 @@ interface Simulator {
         orders: IOrders[]
     }
 };
+
+interface Resync {
+    type: TYPES_SIMULATORS.SIMULATORS_RESYNC,
+    payload: ISimulator
+}
 
 interface Simulator_remove {
     type: TYPES_SIMULATORS.SIMULATORS_SIMULATOR_REMOVE,
@@ -85,4 +91,4 @@ interface Clear {
     }
 };
 
-export type ACTION_SIMULATORS = Simulators | Simulator | Simulator_remove | Simulated | Simulate_Remove | Clear
+export type ACTION_SIMULATORS = Simulators | Simulator | Simulator_remove | Simulated | Simulate_Remove | Resync | Clear

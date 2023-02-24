@@ -27,6 +27,18 @@ const simulator = (id: string) => async (dispatch: Dispatch<ACTION_SIMULATORS>) 
     }
 };
 
+const resync = (id: string) => async (dispatch: Dispatch<ACTION_SIMULATORS>) => {
+    try{
+        const res = await api.get(`/simulators/resync/${id}`);
+        dispatch({
+            type: TYPES_SIMULATORS.SIMULATORS_RESYNC,
+            payload: res.data.data
+        });
+    } catch(err: any){
+        console.log(err.response)
+    }
+};
+
 const simulator_remove = (id: string) => async (dispatch: Dispatch<ACTION_SIMULATORS>) => {
     try{
         await api.delete(`/simulators/${id}`);
@@ -75,6 +87,7 @@ const Simulator = {
     simulator_remove,
     simulate,
     simulate_remove,
+    resync,
     clear,
 };
 

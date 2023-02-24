@@ -47,6 +47,10 @@ const Simulators = ({simulators}:Props) => {
     localStorage.removeItem("simulator-id");
   };
 
+  const onResync = (id: string) => {
+    onLoading(() => dispatch(Simulator.resync(id)));
+  }
+
   const onDropMenu = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => {
     e.stopPropagation()
     onOpenItems(id)
@@ -59,7 +63,10 @@ const Simulators = ({simulators}:Props) => {
           <Text3 name={`${el.market_id} ${el.prices_count}`} value={loading ? <Spinner size={15}/> : <Dropdown open={openItems.includes(el._id)} onClick={(e) => onDropMenu(e, el._id)}/>} />
           <Text3 name={date(el.createdAt)} value={el.live ? "Live" : "Test"} color='light' size={12}/>
           {openItems.includes(el._id) && 
-            <Button label1="Delete data set" color="red" style={{padding: "0.3rem"}} onClick={() => onDelete(el._id)}/>
+          <>
+            <Button label1="resync" color="dark" style={{padding: "0.3rem"}} onClick={() => onResync(el._id)} margin/>
+            <Button label1="delete" color="red" style={{padding: "0.3rem"}} onClick={() => onDelete(el._id)}/>
+          </>
           }
         </Container>
       )}
