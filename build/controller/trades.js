@@ -98,11 +98,8 @@ exports.close = (0, helper_1.asyncBlock)(async (req, res, next) => {
         }
     });
 });
-///
-/// !remember to remove prices that are the same.
-///
 exports.trade = (0, helper_1.asyncBlock)(async (req, res, next) => {
-    const [strategy, order, simulator] = [req.body.strategy, req.body.order, req.body.simulator];
+    const [strategy, order, simulator, price_previous] = [req.body.strategy, req.body.order, req.body.simulator, req.body.price_previous];
     const kucoin_live = (0, kucoin_1.kucoin)({
         symbol: strategy.market_id.toUpperCase(),
         api_key: strategy.api_key,
@@ -135,7 +132,8 @@ exports.trade = (0, helper_1.asyncBlock)(async (req, res, next) => {
         });
     }
     ;
-    await prices_1.default.create({ ...price, simulator: simulator._id });
+    if (price_previous !== price.price)
+        await prices_1.default.create({ ...price, simulator: simulator._id });
     const isOrderOpen = !order ? false : order.open;
     // start trading
     if (isOrderOpen === true) {

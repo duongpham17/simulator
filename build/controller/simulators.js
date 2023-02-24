@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.simulate = exports.remove = exports.simulator = exports.simulators = void 0;
+exports.simulate = exports.remove = exports.simulator = exports.resync = exports.simulators = void 0;
 const helper_1 = require("../@utils/helper");
 const trades_1 = __importDefault(require("../model/trades"));
 const prices_1 = __importDefault(require("../model/prices"));
@@ -27,6 +27,20 @@ exports.simulators = (0, helper_1.asyncBlock)(async (req, res, next) => {
     res.status(200).json({
         status: "success",
         data: sims
+    });
+});
+exports.resync = (0, helper_1.asyncBlock)(async (req, res, next) => {
+    const simulator = await simulators_1.default.findById(req.params.id);
+    if (!simulator)
+        return new helper_1.appError("Could not get simulator data", 400);
+    const prices_count = await prices_1.default.countDocuments({ simulator: simulator._id });
+    if (!prices_count)
+        return new helper_1.appError("Could not get prices data", 400);
+    simulator.prices_count = prices_count;
+    await simulator.save();
+    res.status(200).json({
+        status: "success",
+        data: simulator
     });
 });
 exports.simulator = (0, helper_1.asyncBlock)(async (req, res, next) => {

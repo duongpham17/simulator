@@ -12,4 +12,5 @@ router.get('/', simulators_1.simulators);
 router.get('/:id', simulators_1.simulator);
 router.post('/simulate', simulators_1.simulate);
 router.delete('/:id', simulators_1.remove);
+router.get('/resync/:id', simulators_1.resync);
 exports.default = router;
