@@ -6,7 +6,8 @@ const initialState: INITIALSTATE_TRADES = {
     trades: null,
     trading: null,
     prices: null,
-    orders: null,
+    orders_closed: null,
+    orders_open: null,
     price_latest: 0,
     price_snapshot: 0,
 };
@@ -32,34 +33,43 @@ export const trades = (state = initialState, action: ACTION_TRADES) => {
                 price_snapshot: payload
             };
         case TYPES_TRADES.TRADES_TRADING:
-            let orders = state.orders;
-            if(payload.order && orders) {
-                const index = orders.findIndex(el => el._id === payload.order._id);
-                if(index === -1) orders = [...orders, payload.order];
-                if(index !== -1) orders[index] = payload.order;
-            }
-            if(payload.order && !orders) orders = [payload.order];
+            let closed = state.orders_closed;
+            let opened = state.orders_open;
+
+            if(payload.order) {
+                if(payload.order.open === true) {
+                    opened = [...state.orders_open || [], payload.order]
+                    closed = state.orders_closed;
+                }
+                if(payload.order.open === false) {
+                    closed = [...state.orders_closed || [], payload.order]
+                    opened = state.orders_open ? state.orders_open.filter(el => el._id !== payload.order._id) : []
+                }
+            };
+    
             return{
                 ...state,
                 trading: payload.simulator,
-                prices: state.prices ? [...state.prices.slice(-1800), ...payload.price] : [...payload.price.slice(-1800)],
-                price_latest: payload.price[0].price,
-                orders: orders
+                prices: state.prices ? [...state.prices.slice(-2000), payload.price] : [payload.price],
+                price_latest: payload.price.price,
+                orders_closed: closed,
+                orders_open: opened,
+            };
+        case TYPES_TRADES.TRADES_LOAD:
+            return{
+                ...state,
+                trading: payload.simulator,
+                prices: payload.prices,
+                orders_open: payload.trades,
+                orders_closed: payload.orders,
             };
         case TYPES_TRADES.TRADES_CLOSE:
             return{
                 ...state,
                 trading: payload.simulator,
-                orders: state.orders ? state.orders.map(el => el._id === payload.order._id ? payload.order : el ) : state.orders
+                orders_open: state.orders_open ? state.orders_open.filter(el => el._id !== payload.order._id) : state.orders_open,
+                orders_closed: state.orders_closed ? [payload.order, ...state.orders_closed] : state.orders_closed
             }
-        case TYPES_TRADES.TRADES_LOAD:
-            return{
-                ...state,
-                trading: payload.simulator,
-                orders: payload.orders,
-                prices: payload.prices.prices
-            };
-
         case TYPES_TRADES.TRADES_STATE_CLEAR:
             return{
                 ...state,

@@ -5,10 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.simulate = exports.remove = exports.simulator = exports.simulators = void 0;
 const helper_1 = require("../@utils/helper");
+const trades_1 = __importDefault(require("../model/trades"));
 const prices_1 = __importDefault(require("../model/prices"));
 const simulators_1 = __importDefault(require("../model/simulators"));
 const orders_1 = __importDefault(require("../model/orders"));
-const trades_1 = require("./middleware/trades");
+const trades_2 = require("./middleware/trades");
 exports.simulators = (0, helper_1.asyncBlock)(async (req, res, next) => {
     const sims = await simulators_1.default.find({ user: req.user._id }).sort({ createdAt: -1 });
     if (!sims)
@@ -17,15 +18,10 @@ exports.simulators = (0, helper_1.asyncBlock)(async (req, res, next) => {
         const s = sims[i];
         if (s.used === false)
             continue;
-        try {
-            const prices = await prices_1.default.findById(s.prices);
-            const updated_simulator = await simulators_1.default.findByIdAndUpdate(s._id, { prices_count: prices.prices.length, used: false }, { new: true });
-            if (updated_simulator)
-                sims[i] = updated_simulator;
-        }
-        catch (_) {
-            console.log(_);
-        }
+        const prices_count = await prices_1.default.countDocuments({ simulator: s._id });
+        const updated_simulator = await simulators_1.default.findByIdAndUpdate(s._id, { prices_count, used: false }, { new: true });
+        if (updated_simulator)
+            sims[i] = updated_simulator;
     }
     ;
     res.status(200).json({
@@ -52,19 +48,21 @@ exports.remove = (0, helper_1.asyncBlock)(async (req, res, next) => {
     const simulator = await simulators_1.default.findByIdAndDelete(req.params.id);
     if (!simulator)
         return new helper_1.appError("Could not delete data", 400);
-    await prices_1.default.findByIdAndDelete(simulator.prices);
+    await prices_1.default.deleteMany({ simulator: simulator._id });
     await orders_1.default.deleteMany({ simulator: simulator._id });
+    await trades_1.default.deleteMany({ simulator: simulator._id });
     res.status(200).json({
         status: "success",
     });
 });
 exports.simulate = (0, helper_1.asyncBlock)(async (req, res, next) => {
-    const strategy = req.body.strategy;
-    const simulatorId = req.body.simulatorId;
-    const simulator = await simulators_1.default.findById(simulatorId).populate("prices").populate("strategies");
+    const [strategy, simulatorId] = [req.body.strategy, req.body.simulatorId];
+    const simulator = await simulators_1.default.findById(simulatorId).populate("strategies");
     if (!simulator)
         return new helper_1.appError("Could not get simulate data", 400);
-    const prices = simulator.prices.prices;
+    const prices = await prices_1.default.find({ simulator: simulator._id });
+    if (!prices)
+        return new helper_1.appError("Could not get simulate data", 400);
     const last_price_date = Date.parse(prices.slice(-1)[0].createdAt.toISOString());
     const orders = [];
     let initial_reset_timer = Date.parse(prices[0].createdAt.toISOString()) + (strategy.reset * 60000);
@@ -91,7 +89,7 @@ exports.simulate = (0, helper_1.asyncBlock)(async (req, res, next) => {
                 continue;
             }
             ;
-            if (!open_order.trailing_take_profit) {
+            if (!open_order.strategy.trailing_take_profit) {
                 const is_take_profit = open_order.side === "buy" ? (price_current > open_order.take_profit) : (open_order.take_profit > price_current);
                 if (is_take_profit) {
                     const order_closed = {
@@ -109,7 +107,7 @@ exports.simulate = (0, helper_1.asyncBlock)(async (req, res, next) => {
                 }
                 ;
             }
-            if (open_order.trailing_take_profit) {
+            if (open_order.strategy.trailing_take_profit) {
                 const is_take_profit = open_order.side === "buy" ? (price_current > open_order.take_profit) : (open_order.take_profit > price_current);
                 if (is_take_profit) {
                     const updated_order = {
@@ -133,11 +131,10 @@ exports.simulate = (0, helper_1.asyncBlock)(async (req, res, next) => {
         }
         ;
         if (isOpen === false) {
-            const { isBuyPrice, isSellPrice } = (0, trades_1.order_strategy)({ strategy, price_snapshot, price_current });
+            const { isBuyPrice, isSellPrice } = (0, trades_2.strategyTrade)({ strategy, price_snapshot, price_current });
             if (isBuyPrice || isSellPrice) {
                 const side = isBuyPrice ? "buy" : "sell";
                 const order = {
-                    ...strategy,
                     user: simulator.user,
                     simulator: simulator._id,
                     market_id: simulator.market_id,
@@ -156,6 +153,7 @@ exports.simulate = (0, helper_1.asyncBlock)(async (req, res, next) => {
                     close_price: 0,
                     closed: "bot",
                     live: simulator.live,
+                    strategy: { ...strategy }
                 };
                 open_order = order;
             }
@@ -169,7 +167,6 @@ exports.simulate = (0, helper_1.asyncBlock)(async (req, res, next) => {
         strategies: simulator.strategies._id,
         user: simulator.user,
         market_id: simulator.market_id,
-        prices: simulator.prices._id,
         price_snapshot: prices[0].price,
         price_open_snapshot: prices[0].price,
         reset: strategy.reset,

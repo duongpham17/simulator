@@ -8,7 +8,6 @@ export interface ISimulator {
     _id: string,
     user: string,
     strategies: string,
-    prices: string,
     prices_count: number,
     market_id: string,
     price_snapshot: number,

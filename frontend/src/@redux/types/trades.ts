@@ -3,16 +3,10 @@ import { ISimulator } from './simulators';
 import { IStrategiesInputsTrades } from './strategies';
 import { IOrders } from './orders';
 
-export interface Price {
-    _id: string,
-    price: number,
-    createdAt: Date,
-};
-
 export interface IPrices {
     _id: string,
     simulator: string,
-    prices: Price[],
+    price: number,
     createdAt: Date,
 };
 
@@ -23,8 +17,9 @@ export interface INITIALSTATE_TRADES{
     inputs: IStrategiesInputsTrades | null,
     trades: ISimulator[] | null,
     trading: ISimulator | null,
-    orders: IOrders[] | null,
-    prices: Price[] | null,
+    orders_open: IOrders[] | null,
+    orders_closed: IOrders[] | null,
+    prices: IPrices[] | null,
     price_snapshot: number,
     price_latest: number,
 };
@@ -60,7 +55,7 @@ interface Trade {
     payload: {
         simulator: ISimulator,
         order: IOrders,
-        price: Price[]
+        price: IPrices
     }
 };
 
@@ -81,7 +76,8 @@ interface Load {
     type: TYPES_TRADES.TRADES_LOAD,
     payload: {
         simulator: ISimulator,
-        prices: IPrices,
+        prices: IPrices[],
+        trades: IOrders[],
         orders: IOrders[]
     }
 };

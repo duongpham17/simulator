@@ -24,7 +24,8 @@ const TradesContainer = () => {
     const onChangeDataSet = () => {
         dispatch(Trades.clear("trading", null));
         dispatch(Trades.clear("prices", null));
-        dispatch(Trades.clear("orders", null));
+        dispatch(Trades.clear("orders_closed", null));
+        dispatch(Trades.clear("orders_open", null));
     };
 
     return ( 
@@ -43,7 +44,7 @@ const TradesContainer = () => {
             }
 
             {trading && !isTrading &&
-                <Button label1="Reload trading data" label2={<AiFillDatabase/>} onClick={onChangeDataSet} color="dark" margin/>
+                <Button label1="Clear trading data" label2={<AiFillDatabase/>} onClick={onChangeDataSet} color="dark" margin/>
             }
         </>
     )

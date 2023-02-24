@@ -3,12 +3,13 @@ import { kucoin } from '../@api/kucoin';
 import { asyncBlock, appError } from '../@utils/helper';
 import { InjectUserToRequest } from '../@types/models';
 
-import Prices, {Price, IPrices} from '../model/prices';
+import Trades from '../model/trades';
+import Prices from '../model/prices';
 import Simulators, {ISimulators} from '../model/simulators';
 import Orders, {IOrder} from '../model/orders';
 import {IStrategiesInputs} from '../model/strategies';
 
-import {order_close, order_create, order_update, order_strategy} from './middleware/trades';
+import {closeTrade, createTrade, updateTrade, strategyTrade} from './middleware/trades';
 
 export const price = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
 
@@ -26,20 +27,16 @@ export const price = asyncBlock(async(req: InjectUserToRequest, res: Response, n
 
 export const trades = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
     
-    const sims = await Simulators.find({strategies: req.params.id}).sort({createdAt: -1});
+    const sims = await Simulators.find({strategies: req.params.id}).sort({createdAt: -1}).select(["prices_count", "createdAt", "used"]);
     
     if(!sims) return new appError("Could not find any trade data", 400);
 
     for(let i in sims){
         const s = sims[i];
         if(s.used === false) continue;
-        try{
-            const prices = await Prices.findById(s.prices) as IPrices;
-            const updated_simulator = await Simulators.findByIdAndUpdate(s._id, { prices_count: prices.prices.length, used: false}, {new: true});
-            if(updated_simulator) sims[i] = updated_simulator;
-        } catch(_){
-            console.log(_)
-        }
+        const prices_count = await Prices.countDocuments({simulator: s._id});
+        const updated_simulator = await Simulators.findByIdAndUpdate(s._id, {prices_count, used: false}, {new: true});
+        if(updated_simulator) sims[i] = updated_simulator;
     };
 
     res.status(200).json({
@@ -59,20 +56,38 @@ export const load = asyncBlock(async(req: InjectUserToRequest, res: Response, ne
 
     if(!orders) return new appError("Could not find order data", 400);
 
-    const prices = await Prices.findById(simulator.prices);
+    const prices = await Prices.find({simulator: simulator._id}).sort({createdAt: 1}).limit(2000)
 
     if(!prices) return new appError("Could not find price data", 400);
+
+    const trades = await Trades.find({simulator: simulator._id});
+
+    if(!trades) return new appError("Could not find trades data", 400);  
     
     res.status(200).json({
         status: "success",
         data: {
             simulator,
+            prices,
             orders,
-            prices
+            trades
         }
     });
 
 });
+
+export const open = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
+
+    const trades = await Trades.find({user: req.user._id});
+
+    if(!trades) return new appError("Could not find open trade data", 400);
+
+    res.status(200).json({
+        status: "success",
+        data: trades
+    })
+});
+
 
 export const close = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
 
@@ -89,71 +104,71 @@ export const close = asyncBlock(async(req: InjectUserToRequest, res: Response, n
 
     const price_current = await live.getPrice() as number;
 
-    const prices = [{
+    const price = { 
         price: price_current,
-        createdAt: new Date()
-    }];
+        createdAt: new Date() 
+    };
 
     if(simulator.live) await live.closePosition(order.clientOid);
 
-    const data = await order_close({order, price_current, simulator, closed: "manual"});
-
-    await Prices.findByIdAndUpdate(simulator.prices, { "$push": { prices: { "$each": prices }}}, {new: true});
+    const data = await closeTrade({order, price_current, simulator, closed: "manual"});
 
     res.status(200).json({
         status: "success",
         data: {
             simulator: data.simulator,
             order: data.order,
-            price: Prices
+            price: price
         }
     });
 });
 
+
+///
+/// !remember to remove prices that are the same.
+///
+
 export const trade = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
 
-    const [strategy, simulator, order]:[IStrategiesInputs, ISimulators, IOrder] = [req.body.strategy, req.body.simulator, req.body.order];
+    const [strategy, order, simulator]:[IStrategiesInputs, IOrder, ISimulators] = [req.body.strategy, req.body.order, req.body.simulator];
     
-    const live = kucoin({
+    const kucoin_live = kucoin({
         symbol: strategy.market_id.toUpperCase(), 
         api_key: strategy.api_key, 
         secret_key: strategy.secret_key, 
         passphrase: strategy.passphrase
     });
 
-    strategy.api_key, strategy.secret_key, strategy.passphrase
+    const price_current = await kucoin_live.getPrice() as number;
 
-    const price_current = await live.getPrice() as number;
-
-    const price: Price[] = [{ price: price_current,createdAt: new Date() }];
-
-    const price_snapshot = simulator === null ? -1 : simulator.price_snapshot;
+    const price = { 
+        price: price_current,
+        createdAt: new Date() 
+    };
 
     //setup simulator document
-    if(price_snapshot === -1){
-        const p = await Prices.create({price});
-        const create_simulator = await Simulators.create({
+    if(!simulator){
+        const sims = await Simulators.create({
             user: req.user._id, 
             strategies: strategy._id,
-            prices: p._id,
             market_id: strategy.market_id,
             price_snapshot: price_current,
             price_open_snapshot: price_current,
             reset: 0,
             live: strategy.live,
         });
-        await Prices.findByIdAndUpdate(p._id, {simulator: create_simulator._id}, {new: true});
+
         return res.status(200).json({
             status: "success",
             data: {
-                simulator: create_simulator,
+                simulator: sims,
                 order: null,
                 price,
             }
         })
-    }
-    
-    await Prices.findByIdAndUpdate(simulator.prices, { "$push": { prices: { "$each": price }}}, {new: true});
+    };
+
+    await Prices.create({...price, simulator: simulator._id});
 
     const isOrderOpen = !order ? false : order.open;
 
@@ -161,8 +176,8 @@ export const trade = asyncBlock(async(req: InjectUserToRequest, res: Response, n
     if(isOrderOpen === true) {
         const is_stop_loss = order.side === "buy" ? (order.stop_loss > price_current) : (price_current > order.stop_loss);
         if(is_stop_loss) {
-            if(simulator.live) await live.closePosition(order.clientOid);
-            const data = await order_close({order, simulator, price_current});
+            if(simulator.live) await kucoin_live.closePosition(order.clientOid);
+            const data = await closeTrade({order, simulator, price_current});
             return res.status(200).json({ 
                 status: "success", 
                 data: {
@@ -173,11 +188,11 @@ export const trade = asyncBlock(async(req: InjectUserToRequest, res: Response, n
             });
         };
 
-        if(!order.trailing_take_profit){
+        if(!order.strategy.trailing_take_profit){
             const is_take_profit = order.side === "buy" ? (price_current > order.take_profit) : (order.take_profit > price_current);
             if(is_take_profit) {
-                if(simulator.live) await live.closePosition(order.clientOid);
-                const data = await order_close({order, simulator, price_current});
+                if(simulator.live) await kucoin_live.closePosition(order.clientOid);
+                const data = await closeTrade({order, simulator, price_current});
                 return res.status(200).json({ 
                     status: "success", 
                     data: {
@@ -189,10 +204,10 @@ export const trade = asyncBlock(async(req: InjectUserToRequest, res: Response, n
             }
         }
 
-        if(order.trailing_take_profit){
+        if(order.strategy.trailing_take_profit){
             const is_take_profit = order.side === "buy" ? (price_current > order.take_profit) : (order.take_profit > price_current);
             if(is_take_profit) {
-                const updated_order = await order_update({strategy, order, price_current});
+                const updated_order = await updateTrade({strategy, order, price_current});
                 return res.status(200).json({ 
                     status: "success", 
                     data: {
@@ -243,13 +258,17 @@ export const trade = asyncBlock(async(req: InjectUserToRequest, res: Response, n
     };
 
     if(isOrderOpen === false){
-        const {isBuyPrice, isSellPrice} = order_strategy({strategy, price_snapshot, price_current})
+        const {isBuyPrice, isSellPrice} = strategyTrade({
+            strategy, 
+            price_current, 
+            price_snapshot: simulator.price_snapshot
+        })
         if(isBuyPrice || isSellPrice) {
             const side = isBuyPrice ? "buy" : "sell";
             let clientOid = "01010101-"+(Math.random() * 100000000000).toString()+"-01010101";
             
             if(simulator.live){
-                clientOid = await live.placePosition({
+                clientOid = await kucoin_live.placePosition({
                     side,
                     usdtBalance: strategy.usdt_balance,
                     price: price_current,
@@ -258,11 +277,11 @@ export const trade = asyncBlock(async(req: InjectUserToRequest, res: Response, n
                 }) as string;
             }
 
-            const data = await order_create({
+            const data = await createTrade({
                 clientOid,
                 simulator, 
                 strategy, 
-                price, 
+                price_current, 
                 side, 
             });
                 

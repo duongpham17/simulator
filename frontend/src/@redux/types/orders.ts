@@ -11,16 +11,23 @@ export interface IOrders {
     open_price: number,
     close_price: number,
     moving_price: number,
-    trailing_take_profit: boolean,
     stop_loss: number,
     take_profit: number,
     profit_loss: number,
     position_size: number,
     leverage: number,
-    strategy: string,
     live: boolean,
     closed_at_date: Date,
     open_at_date: Date,
+    strategy: {
+        strategy: string,
+        short: number,
+        long: number,
+        stop_loss: number,
+        trailing_take_profit: boolean,
+        take_profit: number,
+        reset: number
+    },
 };
 
 /*STATE**************************************************************************************************************/

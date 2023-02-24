@@ -31,7 +31,15 @@ const Strategy = ({values, onChange, onSetValue}: BuildProps) => {
             <Input type="number" label1="Stop loss difference" name="stop_loss" value={values.stop_loss} onChange={onChange} />
         </Flex>
 
+        <Line />
+
+        <Flex>
+            <Input type="number" label1="Reset price snapshot" name="reset" value={values.reset} onChange={onChange} />
+        </Flex>
+
         <Checkbox label="Trailing take profit" margin value={values.trailing_take_profit} onClick={() => onSetValue({trailing_take_profit: !values.trailing_take_profit})} background="light" />
+
+        <Line />
     </>
   )
 }

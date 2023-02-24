@@ -5,14 +5,14 @@ import Stats from './Stats';
 
 const History = () => {
 
-    const {orders} = useAppSelector(state => state.trades);
+    const {orders_closed} = useAppSelector(state => state.trades);
     
-    return (  orders
+    return (  orders_closed
         ?  
             <>              
-                <Stats orders={orders} />
+                <Stats orders={orders_closed} />
 
-                <Orders orders={orders} />
+                <Orders orders={orders_closed} />
             </>      
         : 
             null

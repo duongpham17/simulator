@@ -2,12 +2,13 @@ import { NextFunction, Response } from 'express';
 import { asyncBlock, appError } from '../@utils/helper';
 import { InjectUserToRequest } from '../@types/models';
 
-import Prices, {Price, IPrices} from '../model/prices';
+import Trades from '../model/trades';
+import Prices from '../model/prices';
 import Simulators, {ISimulators} from '../model/simulators';
 import Orders, {IOrder} from '../model/orders';
 import {IStrategiesInputsSimulate} from '../model/strategies';
 
-import {order_strategy} from './middleware/trades';
+import {strategyTrade} from './middleware/trades';
 
 export const simulators = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
 
@@ -18,13 +19,9 @@ export const simulators = asyncBlock(async(req: InjectUserToRequest, res: Respon
     for(let i in sims){
         const s = sims[i];
         if(s.used === false) continue;
-        try{
-            const prices = await Prices.findById(s.prices) as IPrices;
-            const updated_simulator = await Simulators.findByIdAndUpdate(s._id, { prices_count: prices.prices.length, used: false}, {new: true});
-            if(updated_simulator) sims[i] = updated_simulator;
-        } catch(_){
-            console.log(_)
-        }
+        const prices_count = await Prices.countDocuments({simulator: s._id})
+        const updated_simulator = await Simulators.findByIdAndUpdate(s._id, {prices_count, used: false}, {new: true});
+        if(updated_simulator) sims[i] = updated_simulator;
     };
 
     res.status(200).json({
@@ -59,9 +56,11 @@ export const remove = asyncBlock(async(req: InjectUserToRequest, res: Response, 
 
     if(!simulator) return new appError("Could not delete data", 400);
 
-    await Prices.findByIdAndDelete(simulator.prices);
+    await Prices.deleteMany({simulator: simulator._id});
 
     await Orders.deleteMany({simulator: simulator._id});
+
+    await Trades.deleteMany({simulator: simulator._id});
 
     res.status(200).json({
         status: "success",
@@ -70,14 +69,15 @@ export const remove = asyncBlock(async(req: InjectUserToRequest, res: Response, 
 
 export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
 
-    const strategy: IStrategiesInputsSimulate = req.body.strategy;
-    const simulatorId = req.body.simulatorId;
+    const [strategy, simulatorId]: [IStrategiesInputsSimulate, string] = [req.body.strategy, req.body.simulatorId];
 
-    const simulator = await Simulators.findById(simulatorId).populate("prices").populate("strategies");
+    const simulator = await Simulators.findById(simulatorId).populate("strategies");
 
     if(!simulator) return new appError("Could not get simulate data", 400);
 
-    const prices: Price[] = simulator.prices.prices;
+    const prices = await Prices.find({simulator: simulator._id});
+
+    if(!prices) return new appError("Could not get simulate data", 400);
 
     const last_price_date = Date.parse(prices.slice(-1)[0].createdAt.toISOString());
 
@@ -113,7 +113,7 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
                 continue;
             };
 
-            if(!open_order.trailing_take_profit){
+            if(!open_order.strategy.trailing_take_profit){
                 const is_take_profit = open_order.side === "buy" ? (price_current > open_order.take_profit) : (open_order.take_profit > price_current);
                 if(is_take_profit) {
                     const order_closed: IOrder = {
@@ -131,7 +131,7 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
                 };
             }
     
-            if(open_order.trailing_take_profit){
+            if(open_order.strategy.trailing_take_profit){
                 const is_take_profit = open_order.side === "buy" ? (price_current > open_order.take_profit) : (open_order.take_profit > price_current);
                 if(is_take_profit) {
                     const updated_order: IOrder = {
@@ -155,11 +155,10 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
         };
 
         if(isOpen === false){
-            const {isBuyPrice, isSellPrice} = order_strategy({strategy, price_snapshot, price_current});
+            const {isBuyPrice, isSellPrice} = strategyTrade({strategy, price_snapshot, price_current});
             if(isBuyPrice || isSellPrice) {
                 const side = isBuyPrice ? "buy" : "sell";
                 const order: IOrder = {
-                    ...strategy,
                     user: simulator.user,
                     simulator: simulator._id,
                     market_id: simulator.market_id,
@@ -178,6 +177,7 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
                     close_price: 0,
                     closed: "bot",
                     live: simulator.live,
+                    strategy:{ ...strategy}
                 };
                 open_order = order;
             };
@@ -189,7 +189,6 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
         strategies: simulator.strategies._id,
         user: simulator.user,
         market_id: simulator.market_id,
-        prices: simulator.prices._id,
         price_snapshot: prices[0].price,
         price_open_snapshot: prices[0].price,
         reset: strategy.reset,

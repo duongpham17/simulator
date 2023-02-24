@@ -26,6 +26,8 @@ export interface IStrategies extends Document {
     api_key: string,
     secret_key: string,
     passphrase: string,
+    favourite: boolean,
+    reset: number,
     createdAt: Date,
 };
 
@@ -69,6 +71,9 @@ const strategiesSchema = new Schema<IStrategies>({
     take_profit: {
         type: Number
     },
+    reset:{
+        type: Number,
+    },
     api_key: {
         type: String
     },
@@ -77,6 +82,10 @@ const strategiesSchema = new Schema<IStrategies>({
     },
     passphrase:{
         type: String
+    },
+    favourite: {
+        type: Boolean,
+        default: false
     },
     createdAt: {
         type: Date,

@@ -36,6 +36,9 @@ const strategiesSchema = new mongoose_1.Schema({
     take_profit: {
         type: Number
     },
+    reset: {
+        type: Number,
+    },
     api_key: {
         type: String
     },
@@ -44,6 +47,10 @@ const strategiesSchema = new mongoose_1.Schema({
     },
     passphrase: {
         type: String
+    },
+    favourite: {
+        type: Boolean,
+        default: false
     },
     createdAt: {
         type: Date,

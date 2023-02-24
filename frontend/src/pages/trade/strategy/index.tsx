@@ -36,7 +36,8 @@ const Strategy = () => {
           <Text name="Stop loss" value={strategy.stop_loss} />
           <Text name="Take profit" value={strategy.take_profit} />
           <Line/>
-          <Text name="Trailing take profit" value={strategy.trailing_take_profit.toString()} />
+          <Text name="Reset price snapshot" value={strategy.reset > 0 ? `${strategy.reset} minute` : "off"} />
+          <Text name="Trailing take profit" value={strategy.trailing_take_profit ? "on" : "off"} />
         </>
       }   
       { isEdit && <Edit data={strategy} setIsEdit={setIsEdit} />}

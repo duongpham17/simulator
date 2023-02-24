@@ -15,7 +15,6 @@ export interface IStrategiesInputsSimulate {
 export interface IStrategiesInputsTrades {
     usdt_balance: number,
     position_size: number,
-    reset: number,
     leverage: number,
     live: boolean,
 };
@@ -35,6 +34,8 @@ export interface IStrategies {
     api_key: string,
     secret_key: string,
     passphrase: string, 
+    reset: number,
+    favourite: boolean,
     createdAt: Date,
 };
 
@@ -66,7 +67,6 @@ export enum TYPES_STRATEGIES {
     STRATEGIES_DUPLICATE   = "STRATEGIES_DUPLICATE",
     STRATEGIES_UPDATE      = "STRATEGIES_UPDATE",
     STRATEGIES_STRATEGY    = "STRATEGIES_STRATEGY",
-    STRATEGIES_REORDER     = "STRATEGIES_REORDER",
 
     STRATEGIES_STATE_CLEAR = "STRATEGIES_STATE_CLEAR",
     STRATEGIES_RESPONSE_STATUS = "STRATEGIES_RESPONSE_STATUS",
@@ -104,11 +104,6 @@ interface Strategy {
     payload: IStrategies
 };
 
-interface Reorder {
-    type: TYPES_STRATEGIES.STRATEGIES_REORDER,
-    payload: IStrategies
-};
-
 interface Response_Status {
     type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_STATUS,
     payload: Response
@@ -133,5 +128,5 @@ interface State_Clear {
 }
 
 export type ACTION_STRATEGIES = 
-    Strategies | Build | Remove | Duplicate | Update | Strategy | Reorder |
+    Strategies | Build | Remove | Duplicate | Update | Strategy |
     Response_Status | Response_Clear | Response_Error | State_Clear

@@ -123,13 +123,6 @@ const remove = (id: string) => async (dispatch: Dispatch<ACTION_STRATEGIES>) => 
     }
 };
 
-const reorder = (payload: IStrategies) => async (dispatch: Dispatch<ACTION_STRATEGIES>) => {
-    dispatch({
-        type: TYPES_STRATEGIES.STRATEGIES_REORDER,
-        payload: payload
-    });
-};
-
 const state_clear = (key:StrategiesObjectKeys, value: any) => async (dispatch: Dispatch<ACTION_STRATEGIES>) => {
     dispatch({
         type: TYPES_STRATEGIES.STRATEGIES_STATE_CLEAR,
@@ -145,7 +138,6 @@ const Strategies = {
     duplicate,
     update,
     select,
-    reorder,
     state_clear
 };
 

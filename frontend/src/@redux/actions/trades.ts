@@ -56,7 +56,7 @@ const close = (strategies:IStrategies, simulator: ISimulator, order: IOrders) =>
             payload:res.data.data
         })
     } catch (error: any) {
-        console.log("Please reload")
+        console.log(error.response.data)
     }
 };
 

@@ -16,7 +16,7 @@ const OrdersSchema = new mongoose_1.Schema({
     },
     closed: {
         type: String,
-        enum: ["maunal", "bot"]
+        enum: ["manual", "bot"]
     },
     open: {
         type: Boolean,
@@ -26,7 +26,13 @@ const OrdersSchema = new mongoose_1.Schema({
         type: String
     },
     strategy: {
-        type: String,
+        strategy: String,
+        short: Number,
+        long: Number,
+        stop_loss: Number,
+        trailing_take_profit: Boolean,
+        take_profit: Number,
+        reset: Number,
     },
     side: {
         type: String,
@@ -47,9 +53,6 @@ const OrdersSchema = new mongoose_1.Schema({
     },
     take_profit: {
         type: Number
-    },
-    trailing_take_profit: {
-        type: Boolean
     },
     profit_loss: {
         type: Number,

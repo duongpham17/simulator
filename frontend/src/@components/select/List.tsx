@@ -14,7 +14,7 @@ const List = ({value, hover, icon, selected, ...props}: Props) => {
             <button {...props} className={selected ? styles.selected : ""}>
                 <span>{value}</span>
                 {hover && <small>{hover}</small>}
-                {icon && <img src={icon} alt="exchange"/>}
+                {icon && <img src={icon} alt="listitems"/>}
             </button>
         </div>
     )

@@ -66,15 +66,11 @@ const Run = () => {
             <>
                 <Button type="submit" label1="Start simulation" label2={<FaHammer/>} color='blue' loading={loading} margin/>
 
-                <Input type="number" label1="Reset price snapshot" label2="optional" placeholder='minutes (default never reset)'
-                    name="reset" value={values.reset || ""} onChange={onChange} 
-                />
-
                 <Label label1="Trading strategy" label2={errors.strategy} error />
                 <Select label1="Select" items={strategies_data} selected={values.strategy}>
                 {(strategies) => 
                     strategies.map((el, i) => 
-                    <List key={i} value={el.name} hover={el.description} onClick={() => onSetValue({strategy: el.name})} />  
+                    <List key={i} value={el.name} hover={el.description} selected={values.strategy === el.name} onClick={() => onSetValue({strategy: el.name})} />  
                 )}
                 </Select>
                 
@@ -118,6 +114,10 @@ const Run = () => {
                         name="stop_loss" value={values.stop_loss} onChange={onChange} 
                     />
                 </Flex>
+
+                <Input type="number" label1="Reset price snapshot" label2="optional" placeholder='minutes (default never reset)'
+                    name="reset" value={values.reset || ""} onChange={onChange} 
+                />
 
                 <Checkbox label="Trailing take profit" margin value={values.trailing_take_profit} onClick={() => onSetValue({trailing_take_profit: !values.trailing_take_profit})} background="light" />             
             </>

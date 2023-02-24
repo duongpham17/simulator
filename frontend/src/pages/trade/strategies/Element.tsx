@@ -5,7 +5,7 @@ import Strategies from '@redux/actions/strategies';
 import Trades from '@redux/actions/trades';
 
 import Button from '@components/buttons/Button';
-import Icon from '@components/buttons/Icon';
+import Favourite from '@components/buttons/Favourite';
 import Summary from '@components/summary/Style1';
 import Menu from '@components/menu/Menu';
 import Text from '@components/text/Style1';
@@ -26,15 +26,17 @@ const Edit = ({strategy, query_strategy_id, setQuery}:Props) => {
 
     const dispatch = useAppDispatch();
 
-    const onQuickRun = (event: React.SyntheticEvent) => {
-        event.stopPropagation();
+    const onQuickRun = () => {
         if(query_strategy_id === strategy._id) return;
         dispatch(Trades.reset());
         setQuery("strategy", strategy._id as string);
         localSet("strategy-id", strategy._id as string)
-        if(isTrading) return;
-        dispatch(Strategies.reorder(strategy));
     };
+
+    const onFavourite = (event: React.SyntheticEvent) => {
+        event.stopPropagation();
+        dispatch(Strategies.update({...strategy, favourite: !strategy.favourite}))
+    }
 
     const Dropdown = ({data}:{data: IStrategiesCustomInputs}) => {
         const style = {padding: "0.2rem", margin: "0.2rem 0"};
@@ -48,7 +50,7 @@ const Edit = ({strategy, query_strategy_id, setQuery}:Props) => {
 
     return (
         <Summary title={strategy.new ? `new | ${strategy.name}` : strategy.name} 
-            iconClose={!isTrading ? <Icon icon={<MdPlayArrow/>} onClick={onQuickRun} /> : query_strategy_id === strategy._id ? <MdOutlineKeyboardArrowRight/> : <></> } 
+            iconClose={!isTrading ? <Favourite selected={strategy.favourite} onClick={onFavourite}/> : query_strategy_id === strategy._id ? <MdOutlineKeyboardArrowRight/> : <Favourite selected={strategy.favourite} onClick={onFavourite}/> } 
             iconOpen={!isTrading || query_strategy_id !== strategy._id ? <Menu icon={<MdSettings/>}><Dropdown data={strategy}/></Menu> : <MdOutlineKeyboardArrowRight/>}
             selected={query_strategy_id === strategy._id}
             background="dark"
@@ -70,7 +72,8 @@ const Edit = ({strategy, query_strategy_id, setQuery}:Props) => {
 
                 <Line/>
 
-                <Text name="Trailing take profit" value={strategy.trailing_take_profit.toString()} />
+                <Text name="Reset" value={strategy.reset >= 0 ? `${strategy.reset} minute` : "off"} />
+                <Text name="Trailing take profit" value={strategy.trailing_take_profit ? "on" : "off"} />
 
                 {!isTrading && <Line/>}
 

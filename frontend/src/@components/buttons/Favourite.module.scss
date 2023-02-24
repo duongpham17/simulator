@@ -1,0 +1,11 @@
+.selected{
+    color: var(--clr-yellow);
+
+    &:hover{
+        opacity: 0.7;
+    }
+}
+
+.star{
+    color: var(--clr-light);
+}

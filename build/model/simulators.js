@@ -15,10 +15,6 @@ const SimulatorsSchema = new mongoose_1.Schema({
         type: Number,
         default: 0
     },
-    prices: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Prices'
-    },
     used: {
         type: Boolean
     },

@@ -74,6 +74,10 @@ const Edit = ({data, setIsEdit}: Props) => {
                 <Input label1="Stop loss difference" name="stop_loss" value={values.stop_loss} onChange={onChange} />
             </Flex>
 
+            <Flex>
+                <Input label1="Reset price snapshot" placeholder='minute' name="reset" value={values.reset} onChange={onChange} />
+            </Flex>
+
             <Checkbox label="Trailing take profit" value={values.trailing_take_profit} onClick={() => onSetValue({trailing_take_profit: !values.trailing_take_profit})} background="light"/>
 
             {edited && <Button type="submit" label1="Update" label2={<MdKeyboardArrowRight/>} color="blue" loading={loading} />}

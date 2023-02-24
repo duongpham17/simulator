@@ -12,15 +12,22 @@ export interface IOrder extends Partial<Document> {
     close_price: number,
     moving_price: number,
     stop_loss: number,
-    trailing_take_profit: boolean,
     take_profit: number,
     profit_loss: number,
     position_size: number,
     leverage: number,
-    strategy: string,
     closed_at_date: Date,
     open_at_date: Date,
     live: boolean,
+    strategy: {
+        strategy: string,
+        short: number,
+        long: number,
+        stop_loss: number,
+        trailing_take_profit: boolean,
+        take_profit: number,
+        reset: number
+    },
 }
 
 const OrdersSchema = new Schema<IOrder>({
@@ -38,7 +45,7 @@ const OrdersSchema = new Schema<IOrder>({
     },
     closed: {
         type: String,
-        enum: ["maunal", "bot"]
+        enum: ["manual", "bot"]
     },
     open: {
         type: Boolean,
@@ -48,7 +55,13 @@ const OrdersSchema = new Schema<IOrder>({
         type: String
     },
     strategy: {
-        type: String,
+        strategy: String,
+        short: Number,
+        long: Number,
+        stop_loss: Number,
+        trailing_take_profit: Boolean,
+        take_profit: Number,
+        reset: Number,
     },
     side: {
         type: String,
@@ -69,9 +82,6 @@ const OrdersSchema = new Schema<IOrder>({
     },
     take_profit: {
         type: Number
-    },
-    trailing_take_profit: {
-        type: Boolean
     },
     profit_loss: {
         type: Number,

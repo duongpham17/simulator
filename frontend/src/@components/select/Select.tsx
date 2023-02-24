@@ -3,14 +3,13 @@ import React, {useState} from 'react';
 import {MdOutlineKeyboardArrowRight} from 'react-icons/md';
 
 interface Props<T>{
-    label1: string;
-    selected: string | number | null | undefined,
+    label1: any;
+    selected: any,
     items: T[];
-    style?: {[key:string]: string},
     children: (items: T[]) => React.ReactNode,
 };
 
-const Select = <T,>({label1, items, selected, children, style}: Props<T>) => {
+const Select = <T,>({label1, items, selected, children}: Props<T>) => {
 
     const [open, setOpen] = useState(false);
 
@@ -21,7 +20,7 @@ const Select = <T,>({label1, items, selected, children, style}: Props<T>) => {
     }
 
     return (
-        <div className={styles.container} onClick={onClick} style={style}>
+        <div className={styles.container} onClick={onClick}>
 
             <button className={styles.button} onClick={onClick}>
                 <p>{!selected && label1} {selected && selected} </p>

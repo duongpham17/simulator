@@ -35,6 +35,7 @@ const Build = ({onOpen}: Props) => {
     stop_loss: 0,
     take_profit: 0,
     trailing_take_profit: false,
+    reset: 0,
     exchange: "",
     api_key: "",
     secret_key: "",
@@ -80,7 +81,7 @@ const Build = ({onOpen}: Props) => {
 
         { values.strategy && <Strategy {...context} /> }
 
-        { values.strategy && <Button label1="Build" label2={<FaHammer/>} color='blue' loading={loading} /> }
+        { values.strategy && <Button type="submit" label1="Build" label2={<FaHammer/>} color='blue' loading={loading} /> }
           
       </Form>
 

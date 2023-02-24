@@ -25,7 +25,7 @@ export const trading = (state = initialState, action: ACTION_STRATEGIES) => {
             return{
                 ...state,
                 strategies: !state.strategies ? [payload] : state.strategies.map(el => el._id === payload._id ? payload : el),
-                strategy: payload
+                strategy: state.strategy ? payload._id === state.strategy._id ? payload : state.strategy : payload
             };
         case TYPES_STRATEGIES.STRATEGIES_DUPLICATE:
             return{
@@ -41,11 +41,6 @@ export const trading = (state = initialState, action: ACTION_STRATEGIES) => {
             return{
                 ...state,
                 strategies: state.strategies?.filter(el => el._id !== payload) || []
-            }
-        case TYPES_STRATEGIES.STRATEGIES_REORDER:
-            return{
-                ...state,
-                strategies: !state.strategies ? [payload] : [payload, ...state.strategies.filter(el => el._id !== payload._id)]
             }
         case TYPES_STRATEGIES.STRATEGIES_RESPONSE_STATUS:
             return{

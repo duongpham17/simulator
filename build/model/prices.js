@@ -2,18 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 ;
-;
 const PricesSchema = new mongoose_1.Schema({
     simulator: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'Simulators'
     },
-    prices: [
-        {
-            price: Number,
-            createdAt: Date,
-        }
-    ],
+    price: {
+        type: Number,
+    },
     createdAt: {
         type: Date,
         default: Date.now()
