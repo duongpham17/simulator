@@ -36,9 +36,9 @@ const trades = (id: string) => async (dispatch: Dispatch<ACTION_TRADES>) => {
     }
 };
 
-const trade = (strategy: IStrategies, simulator: ISimulator | null, order: IOrders | null) => async (dispatch: Dispatch<ACTION_TRADES>) => {
+const trade = (strategy: IStrategies, simulator: ISimulator | null, order: IOrders | null, price_previous: number) => async (dispatch: Dispatch<ACTION_TRADES>) => {
     try{
-        const res = await api.post(`/trades/trade`, {strategy, simulator, order});
+        const res = await api.post(`/trades/trade`, {strategy, simulator, order, price_previous});
         dispatch({
             type: TYPES_TRADES.TRADES_TRADING,
             payload: res.data.data

@@ -123,14 +123,9 @@ export const close = asyncBlock(async(req: InjectUserToRequest, res: Response, n
     });
 });
 
-
-///
-/// !remember to remove prices that are the same.
-///
-
 export const trade = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
 
-    const [strategy, order, simulator]:[IStrategiesInputs, IOrder, ISimulators] = [req.body.strategy, req.body.order, req.body.simulator];
+    const [strategy, order, simulator, price_previous]:[IStrategiesInputs, IOrder, ISimulators, number] = [req.body.strategy, req.body.order, req.body.simulator, req.body.price_previous];
     
     const kucoin_live = kucoin({
         symbol: strategy.market_id.toUpperCase(), 
@@ -168,7 +163,7 @@ export const trade = asyncBlock(async(req: InjectUserToRequest, res: Response, n
         })
     };
 
-    await Prices.create({...price, simulator: simulator._id});
+    if(price_previous !== price.price) await Prices.create({...price, simulator: simulator._id});
 
     const isOrderOpen = !order ? false : order.open;
 
