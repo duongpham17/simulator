@@ -8,15 +8,15 @@ const TradesGlobal = () => {
 
   const {strategy} = useAppSelector(state => state.strategies);
 
-  const {isTrading, inputs, orders_open, trading, price_latest} = useAppSelector(state => state.trades);
+  const {isTrading, orders_open, trading, price_latest} = useAppSelector(state => state.trades);
 
   useEffect(() => {
     let timeout: any;
 
-    if(!isTrading || !inputs || !strategy) return;
+    if(!isTrading || !strategy) return;
 
     const onRun = () => dispatch(Trades.trade(
-        {...strategy, ...inputs}, 
+        strategy, 
         trading || null, 
         orders_open ? orders_open.slice(-1)[0] : null, 
         price_latest
@@ -26,7 +26,7 @@ const TradesGlobal = () => {
     timeout = setTimeout(onRun, 1000);
   
     return () => clearTimeout(timeout);
-  }, [isTrading, orders_open, inputs, dispatch, trading, strategy, price_latest]);
+  }, [isTrading, orders_open, dispatch, trading, strategy, price_latest]);
 
   return (null)
 }

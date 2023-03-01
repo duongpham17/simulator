@@ -1,6 +1,6 @@
 import useOpen from '@hooks/useOpen';
 
-import Information from './help';
+import Help from './help';
 import Create from './create';
 
 const BuildIndex = () => {
@@ -10,7 +10,7 @@ const BuildIndex = () => {
   return (
     <>
       <Create onOpen={onOpen}/>
-      {open && <Information onClose={onOpen}/>}
+      {open && <Help onClose={onOpen}/>}
     </>
   )
 }

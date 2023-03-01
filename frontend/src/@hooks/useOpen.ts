@@ -6,7 +6,7 @@ const useOpen = <T>(initialState?: T) => {
 
     const [openValue, setOpenValue] = useState<T | null>(initialState || null);
 
-    const [openItems, setOpenItems] = useState<string[]>([])
+    const [openItems, setOpenItems] = useState<any[]>([initialState]);
 
     const onOpen = () => setOpen(!open);
 

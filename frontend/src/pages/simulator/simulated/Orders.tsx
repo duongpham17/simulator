@@ -27,8 +27,7 @@ const Orders = ({data}: Props) => {
 
     return (
         <>
-
-            <Openarrows onClick={onOpenAll} open={openItems.length >= 1 ? true : false} center />
+            {!!data.orders.length && <Openarrows onClick={onOpenAll} open={openItems.length >= 1 ? true : false} center />}
 
             <Pagination data={[...orders].reverse()}>
                 {(el) => 

@@ -44,16 +44,17 @@ const Run = () => {
 
     async function callback(){
         if(!simulator) return;
+        const default_value = Number(simulator.price_snapshot) / 10;
         const inputs = {
             ...values,
-            reset: Number(values.reset),
-            short: Number(values.short),
-            long: Number(values.long),
-            stop_loss: Number(values.stop_loss),
-            take_profit: Number(values.take_profit),
-            leverage: Number(values.leverage),
+            short: Number(values.short) !== 0 ? Number(values.short) : default_value,
+            long: Number(values.long) !== 0 ? Number(values.long) : default_value,
+            stop_loss: Number(values.stop_loss) !== 0 ? Number(values.stop_loss) : default_value,
+            take_profit: Number(values.take_profit) !== 0 ? Number(values.take_profit) : default_value,
+            leverage: Number(values.leverage) !== 0 ? Number(values.leverage) : 1,
             position_size: Number(values.position_size),
-        }
+            reset: Number(values.reset),
+        };
         await dispatch(Simulators.simulate(inputs, simulator._id));
         localSet("previous-simulator-inputs", inputs);
     };
@@ -75,7 +76,7 @@ const Run = () => {
                 </Select>
                 
                 <Flex>
-                    <Input type="number" label1="Leverage" label2={errors.leverage} error 
+                    <Input type="number" label1="Leverage" label2={errors.leverage} error placeholder='default 1'
                         name="leverage" value={values.leverage} onChange={onChange} 
                     />
                     <Input type="number" label1="Position size" label2={errors.position_size} error={errors.position_size} 
@@ -85,32 +86,32 @@ const Run = () => {
                 
                 { find_side(values.strategy) === "both" &&
                     <Flex>
-                        <Input type="number" label1="Long difference" placeholder='default 0'
+                        <Input type="number" label1="Long difference" placeholder='default 10% of current price'
                             name="long" value={values.long} onChange={onChange} 
                         />
-                        <Input type="number" label1="Short difference" placeholder='default 0'
+                        <Input type="number" label1="Short difference" placeholder='default 10% of current price'
                             name="short" value={values.short} onChange={onChange} 
                         />
                     </Flex>
                 }
 
                 { find_side(values.strategy) === "buy" &&
-                    <Input type="number" label1="Long difference" placeholder='default 0'
+                    <Input type="number" label1="Long difference" placeholder='default 10% of current price'
                         name="long" value={values.long} onChange={onChange} 
                     />
                 }
 
                 { find_side(values.strategy) === "sell" &&
-                    <Input type="number" label1="Short difference" placeholder='default 0'
+                    <Input type="number" label1="Short difference" placeholder='default 10% of current price'
                         name="short" value={values.short} onChange={onChange} 
                     />
                 }
 
                 <Flex>
-                    <Input type="number" label1="Take profit difference" label2={errors.trailing_take_profit} error 
+                    <Input type="number" label1="Take profit difference" placeholder='default 10% of current price'
                         name="take_profit" value={values.take_profit} onChange={onChange} 
                     />
-                    <Input type="number" label1="Stop loss difference" label2={errors.stop_loss} error 
+                    <Input type="number" label1="Stop loss difference" placeholder='default 10% of current price'
                         name="stop_loss" value={values.stop_loss} onChange={onChange} 
                     />
                 </Flex>

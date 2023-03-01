@@ -2,10 +2,6 @@ export interface Validation {
     strategy: string, 
     leverage: string,
     position_size: string,
-    long: string,
-    short: string,
-    take_profit: string,
-    stop_loss: string
 }
 
 export const validation = (values: Validation) => {
@@ -18,20 +14,7 @@ export const validation = (values: Validation) => {
             errors.strategy = "*";
         }
     } 
-    if(check("take_profit")){
-        if(!values.take_profit) {
-            errors.take_profit = "*";
-        }
-    } 
-    if(check("stop_loss")){
-        if(!values.stop_loss) {
-            errors.stop_loss = "*";
-        }
-    } 
     if(check("leverage")){
-        if(!values.leverage) {
-            errors.leverage = "*";
-        }
         if(Number(values.leverage) > 30 || Number(values.leverage) < 0){
             errors.leverage = "1 - 30";
         }

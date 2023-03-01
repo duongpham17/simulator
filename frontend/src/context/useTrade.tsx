@@ -41,13 +41,13 @@ export const UseTradeContext = ({children}: {children: React.ReactNode}) => {
     }, [setQuery, queryValue, localValue]);
 
     useEffect(() => {
-        if(strategy) dispatch(Trades.price(strategy));
-    }, [dispatch, strategy]);
-
-    useEffect(() => {
         dispatch(Strategies.get());
         dispatch(Strategies.state_clear("status", {}));
     }, [dispatch]);
+
+    useEffect(() => {
+        if(strategy) dispatch(Trades.price(strategy))
+    }, [strategy, dispatch])
 
     const value = {
 

@@ -11,7 +11,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 const Container = ({children, background, border, pointer,...props}: Props) => {
   return (
-    <div className={`${styles.container} ${styles[`background-${background}`]} ${styles[`border-${border}`]}`} {...props}>
+    <div className={`${styles.container} ${styles[`background-${background}`]} ${styles[`border-${border}`]} ${pointer && styles.pointer}`} {...props}>
       {children}
     </div>
   )

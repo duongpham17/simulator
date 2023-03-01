@@ -61,7 +61,7 @@ const Simulators = ({simulators}:Props) => {
       {simulators.map(el =>
         <Container key={el._id} selected={query === el._id} onClick={onQuickRun(el._id)} pointer background="dark" margin>
           <Text3 name={`${el.market_id} ${el.prices_count}`} value={loading ? <Spinner size={15}/> : <Dropdown open={openItems.includes(el._id)} onClick={(e) => onDropMenu(e, el._id)}/>} />
-          <Text3 name={date(el.createdAt)} value={el.live ? "Live" : "Test"} color='light' size={12}/>
+          <Text3 name={date(el.createdAt)} value={`${trading?._id === el._id ? "running |" : ""} ${el.live ? "Live" : "Test"}`} color='light' size={12}/>
           {openItems.includes(el._id) && 
           <>
             <Button label1="resync" color="dark" style={{padding: "0.3rem"}} onClick={() => onResync(el._id)} margin/>

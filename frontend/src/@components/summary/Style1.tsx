@@ -21,15 +21,17 @@ const Style1 = ({title, small, iconOpen, iconClose, section, open=false, childre
         <div className={`${styles.container} ${styles[selected ? "selected" : "default"]} ${styles[background || ""]}`} {...props} tabIndex={0}>
 
             <div onClick={() => setisOpen(!isOpen)} className={styles.btn}>
-                <div className={styles.flex}>
-                    <p>{title}</p>
-                    { (!iconOpen && !iconClose) && <span className={!isOpen ? styles.iconClosed : styles.iconOpen}>{<MdKeyboardArrowRight/> }</span>}
-                    { (iconOpen && !iconClose) && iconOpen}
-                    { (iconOpen && iconClose) && isOpen ? iconOpen : iconClose}
+                <div className={styles.header}>
+                    <div className={styles.flex}>
+                        <p>{title}</p>
+                        { (!iconOpen && !iconClose) && <span className={!isOpen ? styles.iconClosed : styles.iconOpen}>{<MdKeyboardArrowRight/> }</span>}
+                        { (iconOpen && !iconClose) && iconOpen}
+                        { (iconOpen && iconClose) && isOpen ? iconOpen : iconClose}
+                    </div>
+                    {small && <small>{small}</small>}
                 </div>
-                {small && <small>{small}</small>}
                {section && 
-                    <div>
+                    <div className={styles.section}>
                         {section}
                     </div>
                 }

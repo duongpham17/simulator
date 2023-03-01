@@ -45,12 +45,12 @@ export const trading = (state = initialState, action: ACTION_STRATEGIES) => {
         case TYPES_STRATEGIES.STRATEGIES_RESPONSE_STATUS:
             return{
                 ...state,
-                status: payload
+                status: {...state.status, ...payload}
             };
         case TYPES_STRATEGIES.STRATEGIES_RESPONSE_ERROR:
             return{
                 ...state,
-                errors: payload
+                errors: {...state.errors, ...payload}
             };
         case TYPES_STRATEGIES.STRATEGIES_RESPONSE_CLEAR:
             return{

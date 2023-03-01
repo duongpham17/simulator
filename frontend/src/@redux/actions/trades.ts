@@ -1,18 +1,18 @@
 import { api } from '@redux/api';
 import { Dispatch } from 'redux';
-import { IStrategies, IStrategiesInputsTrades } from '@redux/types/strategies';
+import { IStrategies } from '@redux/types/strategies';
 import { IOrders } from '@redux/types/orders';
 import { ACTION_TRADES, TYPES_TRADES, TradesObjectKeys} from '@redux/types/trades';
 import { ISimulator } from '@redux/types/simulators';
 
-const start = (inputs: IStrategiesInputsTrades) => async (dispatch: Dispatch<ACTION_TRADES>) => {
+const start = () => async (dispatch: Dispatch<ACTION_TRADES>) => {
     dispatch({
         type: TYPES_TRADES.TRADES_START,
-        payload: inputs,
+        payload: null,
     })
 };
 
-const price = (strategies: IStrategies ) => async (dispatch: Dispatch<ACTION_TRADES>) => {
+const price = (strategies: Partial<IStrategies> ) => async (dispatch: Dispatch<ACTION_TRADES>) => {
     try{
         const res = await api.post(`/trades/price`, strategies);
         dispatch({
@@ -20,7 +20,7 @@ const price = (strategies: IStrategies ) => async (dispatch: Dispatch<ACTION_TRA
             payload: res.data.data
         });
     } catch (error: any) {
-        console.log("Please reload")
+        console.log(error.response)
     }
 };
 

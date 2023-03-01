@@ -18,12 +18,12 @@ export const authentication = (state = initialState, action: ACTION_AUTHENTICATI
         case TYPES_AUTHENTICATION.AUTHENTICATION_RESPONSE_STATUS:
             return{
                 ...state,
-                status: payload
+                status: {...state.status, ...payload}
             }
         case TYPES_AUTHENTICATION.AUTHENTICATION_RESPONSE_ERROR:
             return{
                 ...state,
-                errors: payload,
+                errors: {...state.errors, ...payload},
             }
         case TYPES_AUTHENTICATION.AUTHENTICATION_RESPONSE_CLEAR:
             return{

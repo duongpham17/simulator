@@ -56,28 +56,31 @@ const Edit = ({strategy, query_strategy_id, setQuery}:Props) => {
             background="dark"
         >
             <>
-
+                <Line/>
+                
+                <Text name="Environment" value={strategy.live ? "live" : "test"} />
                 <Text name="Market id" value={strategy.market_id.toLowerCase()} />
                 <Text name="Exchange" value={strategy.exchange} />
                 <Text name="Strategy" value={strategy.strategy} />
 
                 <Line/>
 
+                <Text name="Usdt Balance" value={`$${strategy.usdt_balance}`} />
+                <Text name="Leverage" value={`${strategy.leverage}x`} />
+                <Text name="Position size" value={strategy.position_size} />
+
+                <Line/>
+
                 <Text name="Long" value={strategy.long} />
                 <Text name="Short" value={strategy.short} />
-
-                <Line/>
                 <Text name="Take profit" value={strategy.take_profit} />
                 <Text name="Stop loss" value={strategy.stop_loss} />
-
-                <Line/>
-
-                <Text name="Reset" value={strategy.reset >= 0 ? `${strategy.reset} minute` : "off"} />
+                <Text name="Reset" value={strategy.reset > 0 ? `${strategy.reset} minute` : "off"} />
                 <Text name="Trailing take profit" value={strategy.trailing_take_profit ? "on" : "off"} />
 
-                {!isTrading && <Line/>}
+                {(!isTrading && query_strategy_id !== strategy._id) && <Line/>}
 
-                {!isTrading && <Button label1="Select" onClick={onQuickRun} label2={<MdPlayArrow/>} color="blue" />}
+                {(!isTrading && query_strategy_id !== strategy._id) && <Button label1="Select" onClick={onQuickRun} label2={<MdPlayArrow/>} color="blue" />}
                     
             </>
 

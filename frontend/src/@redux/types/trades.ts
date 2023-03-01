@@ -1,6 +1,5 @@
 /*TYPES**************************************************************************************************************/
 import { ISimulator } from './simulators';
-import { IStrategiesInputsTrades } from './strategies';
 import { IOrders } from './orders';
 
 export interface IPrices {
@@ -14,7 +13,6 @@ export interface IPrices {
 
 export interface INITIALSTATE_TRADES{
     isTrading: boolean,
-    inputs: IStrategiesInputsTrades | null,
     trades: ISimulator[] | null,
     trading: ISimulator | null,
     orders_open: IOrders[] | null,
@@ -42,7 +40,7 @@ export enum TYPES_TRADES {
 
 interface Start {
     type: TYPES_TRADES.TRADES_START,
-    payload: IStrategiesInputsTrades
+    payload: null
 };
 
 interface Trades {

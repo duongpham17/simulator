@@ -13,17 +13,20 @@
         cursor: pointer;
         width: 100%;
         padding: 0.5rem;
-        .flex{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        svg{
-            display: flex;
-            align-items: center;
-        }
-        small{
-            color: var(--clr-light);
+
+        .header{
+            .flex{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            svg{
+                display: flex;
+                align-items: center;
+            }
+            small{
+                color: var(--clr-light);
+            }
         }
     }
 

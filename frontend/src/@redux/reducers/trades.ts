@@ -2,7 +2,6 @@ import { ACTION_TRADES, TYPES_TRADES, INITIALSTATE_TRADES} from '@redux/types/tr
 
 const initialState: INITIALSTATE_TRADES = {
     isTrading: false,
-    inputs: null ,
     trades: null,
     trading: null,
     prices: null,
@@ -20,7 +19,6 @@ export const trades = (state = initialState, action: ACTION_TRADES) => {
             return{
                 ...state,
                 isTrading: state.isTrading ? false : true,
-                inputs: payload,
             };
         case TYPES_TRADES.TRADES:
             return{

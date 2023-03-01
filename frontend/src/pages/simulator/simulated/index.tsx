@@ -5,7 +5,6 @@ import { date, generateid } from '@utils/functions';
 
 import Text3 from '@components/text/Style3';
 import Summary from '@components/summary/Style1';
-import Line from '@components/line/Style1';
 
 import Stats from './Stats';
 import Orders from './Orders';
@@ -25,12 +24,10 @@ const Simulated = () => {
                 <Summary 
                     key={generateid()}
                     background='dark'
-                    title={<>{el.strategy.strategy} &#x2022; {el.simulator.live ? "live" : "test"} &#x2022; {el.strategy.trailing_take_profit ? "trailing" : "take"}</>} 
+                    title={<>{el.strategy.strategy} &#x2022; {el.simulator.live ? "live" : "test"}</>} 
                     small={<Text3 name={el.simulator.market_id.toLowerCase()} value={date(el.simulator.createdAt)} color="light"/>} 
                     section={<Stats data={el}/>}
                 > 
-
-                    <Line />
 
                     <Orders data={el} />
 

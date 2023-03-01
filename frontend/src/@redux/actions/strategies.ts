@@ -53,15 +53,16 @@ const build = (data: Partial<IStrategies>) => async (dispatch: Dispatch<ACTION_S
     }
 };
 
-const checkapi = ({api_key, secret_key, passphrase}: {api_key: string, secret_key: string, passphrase: string}) => async (dispatch: Dispatch<ACTION_STRATEGIES>) => {
+const checkapi = ({api_key, secret_key, passphrase}: {api_key: string, secret_key: string, passphrase: string}) => async (dispatch: Dispatch<ACTION_STRATEGIES>): Promise<boolean> => {
     try{
-        const res = await api.post(`/strategies/check`, {api_key, secret_key, passphrase});
+        const res = await api.post(`/strategies/check/keys`, {api_key, secret_key, passphrase});
         dispatch({
             type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_STATUS,
             payload: {
                 check_api: res.data.data
             }
         });
+        return true;
     } catch(err: any){
         dispatch({
             type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_STATUS,
@@ -69,6 +70,29 @@ const checkapi = ({api_key, secret_key, passphrase}: {api_key: string, secret_ke
                 check_api: false
             }
         })
+        return false;
+    }
+};
+
+const checkMarketId = ({api_key, secret_key, passphrase, market_id}: {api_key: string, secret_key: string, passphrase: string, market_id: string}) => async (dispatch: Dispatch<ACTION_STRATEGIES>): Promise<boolean> => {
+    try{
+        const res = await api.post(`/strategies/check/market_id`, {api_key, secret_key, passphrase, market_id});
+        dispatch({
+            type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_STATUS,
+            payload: {
+                check_market_id: res.data.data
+            }
+        });
+        if(!res.data.data) return false;
+        return true;
+    } catch(err: any){
+        dispatch({
+            type: TYPES_STRATEGIES.STRATEGIES_RESPONSE_STATUS,
+            payload: {
+                check_market_id: null
+            }
+        })
+        return false;
     }
 };
 
@@ -134,6 +158,7 @@ const Strategies = {
     get,
     build,
     checkapi,
+    checkMarketId,
     remove,
     duplicate,
     update,

@@ -12,13 +12,6 @@ export interface IStrategiesInputsSimulate {
     reset: number
 };
 
-export interface IStrategiesInputsTrades {
-    usdt_balance: number,
-    position_size: number,
-    leverage: number,
-    live: boolean,
-};
-
 export interface IStrategies {
     _id: string,
     user: string,
@@ -28,14 +21,18 @@ export interface IStrategies {
     strategy: string,
     short: number,
     long: number,
-    trailing_take_profit: boolean,
     stop_loss: number,
+    trailing_take_profit: boolean,
     take_profit: number,
     api_key: string,
     secret_key: string,
-    passphrase: string, 
-    reset: number,
+    passphrase: string,
     favourite: boolean,
+    reset: number,
+    usdt_balance: number,
+    position_size: number,
+    leverage: number,
+    live: boolean,
     createdAt: Date,
 };
 

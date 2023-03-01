@@ -1,13 +1,10 @@
-import validation from '@validations/trading';
-import Strategies from '@redux/actions/strategies';
+import { useState } from 'react';
 import { IStrategies } from '@redux/types/strategies';
-import { useAppDispatch, useAppSelector } from '@redux/hooks/useRedux';
 
-import useForm from '@hooks/useForm';
+import { SummaryPageProps, Pages } from './@types';
+import { initialState, initialSummaryPage } from './@initialState';
 
 import Summary from '@components/summary/Style1';
-import Form from '@components/form/Form';
-import Button from '@components/buttons/Button';
 
 import {FaHammer} from 'react-icons/fa';
 import {AiOutlineInfo} from 'react-icons/ai';
@@ -15,75 +12,71 @@ import {AiOutlineInfo} from 'react-icons/ai';
 import Exchange from './Exchange';
 import General from './General';
 import Strategy from './Strategy';
+import Position from './Position';
+import MarketId from './MarketId';
+
+import Line from '@components/line/Style1';
 
 interface Props {
   onOpen: CallableFunction
-};
+}
 
 const Build = ({onOpen}: Props) => {
 
-  const dispatch = useAppDispatch();
+  const [buildData, setBuildData] = useState(initialState);
 
-  const {status} = useAppSelector(state => state.strategies); 
+  const [summaryPage, setSummaryPage] = useState<SummaryPageProps>(initialSummaryPage);
 
-  const initialState: Partial<IStrategies> = {
-    name: "",
-    strategy: "",
-    market_id: "",
-    short: 0,
-    long: 0,
-    stop_loss: 0,
-    take_profit: 0,
-    trailing_take_profit: false,
-    reset: 0,
-    exchange: "",
-    api_key: "",
-    secret_key: "",
-    passphrase: "",
+  const onSummaryPage = (page: Pages) => {
+    setSummaryPage(state => ({ 
+      exchange: {open: false, next: state["exchange"].next}, 
+      general:  {open: false, next: state["general"].next }, 
+      strategy: {open: false, next: state["strategy"].next}, 
+      position: {open: false, next: state["position"].next}, 
+      marketId: {open: false, next: state["marketId"].next}, 
+      [page]: { open: !state[page].open, next: true}
+    }));
   };
-  
-  const {onSubmit, values, onChange, errors, onSetValue, loading} = useForm(initialState, callback, validation, true);
 
-  //63f260d6cae7e0000188c449
-  //b296a905-8c36-49c8-9fa8-0180ff6c1d1b
-
-  async function callback(){
-    const data = {
-      ...values,
-      short: Number(values.short),
-      long: Number(values.long),
-      stop_loss: Number(values.stop_loss),
-      take_profit: Number(values.take_profit),
-    }
-    await dispatch(Strategies.build(data));
+  const addToBuildData = (data: Partial<IStrategies>) => {
+    setBuildData({...buildData, ...data});
   };
 
   const onExtendOpen = (e: any) => {
     e.stopPropagation()
-    onOpen()
+    onOpen() 
   };
 
-  const context = {
-    values, 
-    onChange, 
-    errors, 
-    onSetValue,
+  const onClearBuildData = () => {
+    setSummaryPage(initialSummaryPage);
+    setBuildData(initialState);
   }
+
+  const context = {
+    onClearBuildData,
+    buildData,
+    summaryPage, 
+    setSummaryPage,
+    onSummaryPage,
+    addToBuildData,
+  };
 
   return (
     <Summary title="Build trading bot" open={false} iconOpen={<AiOutlineInfo onClick={onExtendOpen}/>} iconClose={<FaHammer/>} background="dark">
 
-      <Form onSubmit={onSubmit} button={false}>
+      <Line/>
 
-        <Exchange {...context} />
-        
-        { status.check_api && <General {...context} /> }
+      <Exchange {...context} />
+      
+      <>
+        {summaryPage.marketId.next && <MarketId {...context} /> }
 
-        { values.strategy && <Strategy {...context} /> }
+        {summaryPage.general.next  && <General {...context} />  }
 
-        { values.strategy && <Button type="submit" label1="Build" label2={<FaHammer/>} color='blue' loading={loading} /> }
-          
-      </Form>
+        {summaryPage.strategy.next && <Strategy {...context} /> }
+      
+        {summaryPage.position.next && <Position {...context} /> }
+      </>
 
     </Summary>
   )

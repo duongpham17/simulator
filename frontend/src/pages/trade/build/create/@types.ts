@@ -1,8 +1,25 @@
 import {IStrategies} from '@redux/types/strategies';
 
+export interface Options {
+    open: boolean;
+    next: boolean;
+};
+
+export interface SummaryPageProps {
+    exchange: Options,
+    general:  Options,
+    marketId: Options,
+    strategy: Options,
+    position: Options,
+};
+
+export type Pages = keyof SummaryPageProps;
+
 export interface BuildProps {
-    values: Partial<IStrategies>,
-    errors: {[key: string]: any},
-    onSetValue: (v: Partial<Partial<IStrategies>>) => void,
-    onChange: (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void,
+    summaryPage: SummaryPageProps
+    setSummaryPage: React.Dispatch<React.SetStateAction<SummaryPageProps>>,
+    buildData: Partial<IStrategies>,
+    onSummaryPage: (page: Pages) => void,
+    addToBuildData: (data: Partial<IStrategies>) => void,
+    onClearBuildData: () => void,
 }

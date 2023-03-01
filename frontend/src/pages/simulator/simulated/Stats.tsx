@@ -1,10 +1,10 @@
 import { ISimulatorSimulated } from '@redux/types/simulators';
 
-import Text2 from '@components/text/Style2';
+import Text1 from '@components/text/Style1';
 import Text3 from '@components/text/Style3';
 import Flex from '@components/flex/Flex';
-import Line from '@components/line/Style1';
 import ProfitNLossProgress from '@components/progress/ProfitNLoss';
+import Container from '@components/container/Style1';
 
 interface Props {
     data: ISimulatorSimulated
@@ -40,25 +40,35 @@ const Stats = ({data}: Props) => {
 
     return (
         <>
-            <Line />
-            <Text3 name={<span>Profit &#x2022; {win_rate.percentage}%</span>} value={<span>{(100 - Number(win_rate.percentage)).toFixed(2)}% &#x2022; Loss</span>} />
-            <ProfitNLossProgress value={Number(win_rate.percentage)}/>
-            <Flex>
-                <p>${profit_loss.profit.toFixed(2)}</p>
-                <p>Trades {orders.length}</p>
-                <p>${profit_loss.loss.toFixed(2)}</p>
-            </Flex>
-            <Line />
-            <Flex>
-                <Text2 name="Reset" value={strategy.reset >= 0 ? strategy.reset : "off"}/>
-                <Text2 name="Long" value={strategy.long} />
-                <Text2 name="Short" value={strategy.short}/>
-            </Flex>
-            <Flex>
-                <Text2 name="Trailing" value={strategy.trailing_take_profit ? "on" : "off"}/>
-                <Text2 name="Take profit" value={strategy.take_profit}/>
-                <Text2 name="Stop Loss" value={strategy.stop_loss}/>
-            </Flex>
+            <Container noBorder background='dark' margin>
+                <Flex>
+                    <Text1 name="Position size" value={strategy.position_size} />
+                    <Text1 name="leverage" value={`${strategy.leverage}x`} />
+                </Flex>
+                <Flex>
+                    <Text1 name="Long" value={strategy.long} />
+                    <Text1 name="Take profit" value={strategy.take_profit}/>
+                </Flex>
+                <Flex>
+                    <Text1 name="Short" value={strategy.short}/>
+                    <Text1 name="Stop Loss" value={strategy.stop_loss}/>
+                </Flex>
+                <Flex>
+                <Text1 name="Reset" value={strategy.reset > 0 ? `${strategy.reset} min` : "off"}/>
+                    <Text1 name="Trailing" value={strategy.trailing_take_profit ? "on" : "off"}/>
+                </Flex>
+            </Container>
+
+            <Container noBorder background='dark' margin>
+                <Text3 name={<span>Profit &#x2022; {win_rate.percentage}%</span>} value={<span>{(100 - Number(win_rate.percentage)).toFixed(2)}% &#x2022; Loss</span>} />
+                <ProfitNLossProgress value={Number(win_rate.percentage)}/>
+                <Flex>
+                    <p>${profit_loss.profit.toFixed(2)}</p>
+                    <p>Trades {orders.length}</p>
+                    <p>${profit_loss.loss.toFixed(2)}</p>
+                </Flex>
+            </Container>
+            
         </>
     )
 }
