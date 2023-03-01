@@ -1,7 +1,7 @@
 import { ISimulator } from '@redux/types/simulators';
 import { IStrategies } from '@redux/types/strategies';
 
-import { timerGreater24 } from '@utils/functions';
+import { second_till_zero } from '@utils/functions';
 import { find_side } from '@data/strategies';
 
 import Container from '@components/container/Style1';
@@ -69,6 +69,7 @@ const Waiting = ({trading, strategy, price_latest}: PropsWaiting) => {
 
             <Flex>
                 <Text2 name="$Snapshot" value={trading.price_snapshot}/>
+
                 {side === "both" &&
                     <>
                         <Text2 name="$Buy" value={difference?.buy} color="green"/>
@@ -91,7 +92,7 @@ const Waiting = ({trading, strategy, price_latest}: PropsWaiting) => {
 
             {side === "both" && 
                 <Flex padding={{top: 5, bottom: 5}}>
-                    <Text2 name="Reset in" value={trading.reset ? timerGreater24(trading.reset) : "not set"} />
+                    <Text2 name="Reset in" value={strategy.reset > 0 ? `${second_till_zero(strategy.reset)}s` : "not set"} />
                     <Text2 name="Difference" value={buy_difference} color="green"/>
                     <Text2 name="Difference" value={sel_difference}  color="red"/>
                 </Flex>

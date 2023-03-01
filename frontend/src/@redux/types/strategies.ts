@@ -1,5 +1,4 @@
 /*TYPES**************************************************************************************************************/
-
 export interface IStrategiesInputsSimulate {
     strategy: string,
     short: number,

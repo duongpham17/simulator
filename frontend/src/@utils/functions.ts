@@ -66,4 +66,12 @@ export const timerGreater24 = (future_time: number) => {
     const minutes = `0${new Date(future_time - Date.now()).getMinutes()}`.slice(-2);
     const seconds = `0${new Date(future_time - Date.now()).getSeconds()}`.slice(-2);
     return `${hours}:${minutes}:${seconds}`;
-}
+};
+
+export const second_till_zero = (minute: number) => {
+    const current_hours_in_milliseconds : number = Number(Date.now().toString().slice(-7));
+    const mod = current_hours_in_milliseconds % (60000 * minute);
+    const convert_to_seconds = mod / 1000;
+    const second_to_zero = (minute * 60) - Math.trunc(convert_to_seconds);
+    return second_to_zero
+};
