@@ -2,6 +2,18 @@ import {Types, Schema, model, PopulatedDoc, Document} from 'mongoose';
 import {IStrategies} from './strategies';
 import {IUsers} from './users';
 
+export interface ISimulateInputs {
+    strategy: string,
+    short: number,
+    long: number,
+    stop_loss: number,
+    trailing_take_profit: boolean,
+    take_profit: number,
+    position_size: number,
+    leverage: number,
+    reset: number,
+};
+
 export interface ISimulators extends Partial<Document> {
     user: PopulatedDoc<Types.ObjectId & IUsers>,
     strategies: PopulatedDoc<Types.ObjectId & IStrategies>,
@@ -10,7 +22,6 @@ export interface ISimulators extends Partial<Document> {
     price_snapshot: number,
     market_id: string,
     price_open_snapshot: number,
-    reset: number,
     live: boolean,
     createdAt: Date,
 };
@@ -43,10 +54,6 @@ const SimulatorsSchema = new Schema<ISimulators>({
     },
     price_open_snapshot: {
         type: Number
-    },
-    reset: {
-        type: Number,
-        default: 0,
     },
     createdAt: {
         type: Date,

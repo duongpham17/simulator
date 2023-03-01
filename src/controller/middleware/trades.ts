@@ -1,11 +1,11 @@
-import Trades from '../../model/trades';
+import Trades from '../../model/botTrades';
 import Orders, {IOrder} from '../../model/orders';
-import Simulators, {ISimulators} from '../../model/simulators';
-import {IStrategies, IStrategiesInputs, IStrategiesInputsSimulate} from '../../model/strategies';
+import Simulators, {ISimulators, ISimulateInputs} from '../../model/simulators';
+import {IStrategies} from '../../model/strategies';
 
 interface OrderCreateTypes {
     simulator: ISimulators, 
-    strategy: IStrategiesInputs, 
+    strategy: IStrategies, 
     side: "buy" | "sell", 
     price_current: number,
     clientOid: string,
@@ -102,7 +102,7 @@ export const updateTrade = async ({strategy, order, price_current}: OrderUpdateT
 };
 
 interface TradingStrategy { 
-    strategy: IStrategies | IStrategiesInputsSimulate,
+    strategy: IStrategies | ISimulateInputs,
     price_snapshot: number,
     price_current: number,
 }

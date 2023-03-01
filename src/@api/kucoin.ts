@@ -7,7 +7,7 @@ interface Position {
   side: "buy" | "sell",
   price: number,
   leverage: number,
-  size?: number,
+  size: number,
 };
 
 interface CustomKucoinProps {
@@ -49,8 +49,7 @@ export const kucoin = ({api_key, secret_key, passphrase, symbol}: CustomKucoinPr
       }
     };
   
-    async placePosition(position: Position): Promise<string | null> {
-      const useAllUSDTBalanceSize = Math.trunc( (position.usdtBalance / position.price * position.leverage) / 10);
+    async placePosition(position: Position): Promise<any> {
       const params = {  
         clientOid: crypto.randomUUID(),
         type: "market",
@@ -58,17 +57,17 @@ export const kucoin = ({api_key, secret_key, passphrase, symbol}: CustomKucoinPr
         leverage: position.leverage,
         side: position.side,
         price: position.price,
-        size: position.size ?  Math.trunc(position.size) : useAllUSDTBalanceSize
+        size: Math.trunc(position.size / 10)
       };
       try{
         const r = await apiLive.placeOrder(params);
-        return r.data.orderId;
-      } catch(err){
+        return r.data
+      } catch(err: any){
         return null;
       };
     };
     
-    async closePosition(clientOid: string): Promise<string | null>{
+    async closePosition(clientOid: string): Promise<any>{
       const params = {
         clientOid,
         closeOrder: true,
@@ -77,7 +76,7 @@ export const kucoin = ({api_key, secret_key, passphrase, symbol}: CustomKucoinPr
       }
       try{
         const r = await apiLive.placeOrder(params);
-        return r.data.orderId;
+        return r.data;
       } catch(_){
         return null;
       }
@@ -86,7 +85,7 @@ export const kucoin = ({api_key, secret_key, passphrase, symbol}: CustomKucoinPr
     async getPosition(): Promise<any>{
       try{
         const r = await apiLive.getPosition({symbol: this.symbol});
-        return r;
+        return r.data;
       } catch(_){
         return null;
       };

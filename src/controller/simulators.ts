@@ -2,11 +2,10 @@ import { NextFunction, Response } from 'express';
 import { asyncBlock, appError } from '../@utils/helper';
 import { InjectUserToRequest } from '../@types/models';
 
-import Trades from '../model/trades';
+import Trades from '../model/botTrades';
 import Prices from '../model/prices';
-import Simulators, {ISimulators} from '../model/simulators';
+import Simulators, {ISimulators, ISimulateInputs} from '../model/simulators';
 import Orders, {IOrder} from '../model/orders';
-import {IStrategiesInputsSimulate} from '../model/strategies';
 
 import {strategyTrade} from './middleware/trades';
 
@@ -89,7 +88,7 @@ export const remove = asyncBlock(async(req: InjectUserToRequest, res: Response, 
 
 export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
 
-    const [strategy, simulatorId]: [IStrategiesInputsSimulate, string] = [req.body.strategy, req.body.simulatorId];
+    const [strategy, simulatorId]: [ISimulateInputs, string] = [req.body.strategy, req.body.simulatorId];
 
     const simulator = await Simulators.findById(simulatorId).populate("strategies");
 
@@ -211,7 +210,6 @@ export const simulate = asyncBlock(async(req: InjectUserToRequest, res: Response
         market_id: simulator.market_id,
         price_snapshot: prices[0].price,
         price_open_snapshot: prices[0].price,
-        reset: strategy.reset,
         live: simulator.live,
         prices_count: prices.length,
         used: false,

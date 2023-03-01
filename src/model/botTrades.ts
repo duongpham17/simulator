@@ -1,7 +1,7 @@
-import {Schema, model} from 'mongoose';
-import {IOrder} from './orders';
+import { Schema, model } from 'mongoose';
+import { IOrder } from './orders';
 
-const TradesSchema = new Schema<IOrder>({
+const BotTradesSchema = new Schema<IOrder>({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -77,4 +77,4 @@ const TradesSchema = new Schema<IOrder>({
     }
 });
 
-export default model<IOrder>('Trades', TradesSchema);
+export default model<IOrder>('BotTrades', BotTradesSchema);

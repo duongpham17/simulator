@@ -32,7 +32,7 @@ export const strategy = asyncBlock(async(req: InjectUserToRequest, res: Response
 
 });
 
-export const checkapi = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
+export const checkApiKeys = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
 
     const { api_key, secret_key, passphrase } = req.body;
 
@@ -50,6 +50,25 @@ export const checkapi = asyncBlock(async(req: InjectUserToRequest, res: Response
         data: account ? true : false
     });
 
+});
+
+export const checkMarketId = asyncBlock(async(req: InjectUserToRequest, res: Response, next: NextFunction) => {
+
+    const { api_key, secret_key, passphrase, market_id } = req.body;
+
+    const live = kucoin({
+        symbol: market_id,
+        api_key: encrypt(api_key),
+        secret_key: encrypt(secret_key), 
+        passphrase: encrypt(passphrase)
+    });
+
+    const price = await live.getPrice();
+
+    res.status(200).json({
+        status: "success",
+        data: price
+    });
 
 });
 

@@ -1,17 +1,5 @@
 import {Types, Schema, model, Document} from 'mongoose';
 
-export interface IStrategiesInputsSimulate {
-    strategy: string,
-    short: number,
-    long: number,
-    stop_loss: number,
-    trailing_take_profit: boolean,
-    take_profit: number,
-    position_size: number,
-    leverage: number,
-    reset: number,
-};
-
 export interface IStrategies extends Document {
     user: Types.ObjectId,
     market_id: string,
@@ -28,21 +16,20 @@ export interface IStrategies extends Document {
     passphrase: string,
     favourite: boolean,
     reset: number,
-    createdAt: Date,
-};
-
-export interface IStrategiesInputs extends IStrategies {
     usdt_balance: number,
     position_size: number,
     leverage: number,
-    reset: number,
     live: boolean,
+    createdAt: Date,
 };
 
 const strategiesSchema = new Schema<IStrategies>({
     user: {
         type: Schema.Types.ObjectId, 
         ref: 'User' 
+    },
+    live: {
+        type: Boolean
     },
     name: {
         type: String
@@ -67,6 +54,15 @@ const strategiesSchema = new Schema<IStrategies>({
     },
     trailing_take_profit: {
         type: Boolean
+    },
+    position_size: {
+        type: Number
+    },
+    usdt_balance: {
+        type: Number
+    },
+    leverage:{
+        type: Number,
     },
     take_profit: {
         type: Number
